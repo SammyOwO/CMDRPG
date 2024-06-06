@@ -5,16 +5,42 @@ using Newtonsoft.Json;
 public class GameIg
 {
     private static System.Timers.Timer skillTimer;
-
+    public static class Globals
+    {
+        public static string saveFileOutline = @"{
+        'Name': '',
+        //hp, strength, defense, mana, crit chance, crit damage, hp regen
+        'Stats': [100, 25, 0, 50, 20, 150, 25],
+        //combat, mining, farming, fishing, foraging, woodworking, enchanting, alchemy
+        'Levels': [1, 1, 1, 1, 1, 1, 1, 1],
+        //skill level exp in same order as skill
+        'Exp': [0, 0, 0, 0, 0, 0, 0, 0],
+        'Inventory': [],
+        'Quantity': [],
+        //equipped items
+        'Items': [],
+        //is the player new or not, duhh
+        'New': true
+        }";
+    }
+    public class Save
+    {
+        public static void save()
+        {
+            SaveFile saveFileMake = JsonConvert.DeserializeObject<SaveFile>(Globals.saveFileOutline);
+            string fullPath = @"C:\Users\hatma\source\repos\CMD-RPG\idkfr\Saves\" + saveFileMake.Name + ".json";
+            File.WriteAllText(fullPath, Globals.saveFileOutline);
+        }
+    }
     public class SaveFile
     {
         public string Name;
         public int[] Stats;
-        public byte[] Levels;
+        public int[] Levels;
         public int[] Exp;
-        public Int16[] Inventory;
-        public Int16[] ItemQuant;
-        public Int16[] Items;
+        public int[] Inventory;
+        public Int16[] Quantity;
+        public int[] Items;
         public bool New;
     }
 
@@ -24,34 +50,20 @@ public class GameIg
         public string Name;
         public string Description;
         public int Level;
+        public bool Equipable;
     }
 
     public static void Main()
     {
-        string saveFileOutline = @"{
-        'Name': '',
-        //hp, strength, defense, mana, crit chance, crit damage, hp regen
-        'Stats': [100, 25, 0, 50, 20, 150, 25],
-        //combat, mining, farming, fishing, foraging, woodworking, enchanting, alchemy
-        'Levels': [1, 1, 1, 1, 1, 1, 1, 1],
-        //skill level exp in same order as skill
-        'Exp': [ 0, 0, 0, 0, 0, 0, 0, 0 ],
-        'Inventory': [],
-        'ItemQuants': [],
-        //equipped items
-        'Items': [],
-        //is the player new or not, duhh
-        'New': true
-        }";
-        SaveFile saveFileMake = JsonConvert.DeserializeObject<SaveFile>(saveFileOutline);
+        SaveFile saveFileMake = JsonConvert.DeserializeObject<SaveFile>(Globals.saveFileOutline);
         SetTimer();
         skillTimer.Enabled = false;
         Console.WriteLine("Hewwo :3 \nPress any key to continue ^w^");
         Console.ReadKey();
         Console.Clear();
         Console.WriteLine("Load Game or start a new adventure? \nType 'New' or 'Load' to continue!");
-        string save = Console.ReadLine();
-        if (save == "New")
+        string load = Console.ReadLine();
+        if (load == "New")
         {
             Console.Clear();
             Console.WriteLine("Welcome 2 the game, hehe :3 \nYour goal is to just get better stuff! \nPress any key!");
@@ -72,11 +84,14 @@ public class GameIg
             Console.WriteLine("When you get higher skill levels you'll be able to use better tools and such. \nNow when you get to the first screen there might look like there's a lot to do, which there is, but it's not as scary as it seems. \nThere will be a few main buttons for your inventory and such, but it should all be pretty intuitive.");
             Console.WriteLine("Now, when you get in, your first objective will be to get some wood to craft your first tools! \nKind of reminds me of some other game, but I'm not sure, hehe :3 \nPress any key to continue to the main attraction!");
             Console.ReadKey();
+            Globals.saveFileOutline = JsonConvert.SerializeObject(saveFileMake);
+            Save.save();
+            Tutorial();
         }
-        else
+        else if (load == "Load")
         {
             Console.Clear();
-            string SaveTest = @"C:\Users\hatma\source\repos\idkfr\idkfr\Saves\";
+            string SaveTest = @"C:\Users\hatma\source\repos\CMD-RPG\idkfr\Saves\";
             string SaveDir = @".\Saves\";
             var SaveList = Directory.EnumerateFiles(SaveTest);
             Console.WriteLine("Select a save to continue:");
@@ -84,12 +99,32 @@ public class GameIg
             {
                 Console.WriteLine(Path.GetFileNameWithoutExtension(saves));
             }
-            Console.ReadLine();
+            Console.WriteLine();
+            string saveName = Console.ReadLine();
+            string fullName = saveName = ".json";
+            bool valid = File.Exists(SaveTest + fullName);
+        }
+        else
+        {
+            Console.Clear();
+            Console.WriteLine("Not a valid expression! Reopen the game to try again.");
         }
     }
 
     public static void SetTimer()
     {
         skillTimer = new System.Timers.Timer(250);
+    }
+
+    public static void Tutorial()
+    {
+        Console.Clear();
+        Console.WriteLine(Globals.saveFileOutline);
+        Console.ReadKey();
+    }
+
+    public static void menuMain()
+    {
+
     }
 }
