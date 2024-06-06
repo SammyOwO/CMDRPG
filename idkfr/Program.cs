@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Net.Security;
 using System.Reflection.Metadata.Ecma335;
 using System.Timers;
 using Newtonsoft.Json;
 
-public class GameIg
+public class Game
 {
     private static System.Timers.Timer skillTimer;
     public static class Globals
@@ -29,7 +30,11 @@ public class GameIg
         public static void save()
         {
             SaveFile saveData = JsonConvert.DeserializeObject<SaveFile>(Globals.saveFileOutline);
-            string fullPath = @"C:\Users\hatma\source\repos\CMD-RPG\idkfr\Saves\" + saveData.Name + ".json";
+            if (Directory.Exists(@"./Saves/") == false)
+            {
+                Directory.CreateDirectory(@"./Saves/");
+            }
+            string fullPath = @".\Saves\" + saveData.Name + ".json";
             File.WriteAllText(fullPath, Globals.saveFileOutline);
         }
     }
@@ -52,6 +57,11 @@ public class GameIg
         public string Description;
         public int Level;
         public bool Equipable;
+    }
+
+    public static void SetTimer()
+    {
+        skillTimer = new System.Timers.Timer(250);
     }
 
     public static void Main()
@@ -95,9 +105,8 @@ public class GameIg
 
                 case "Load":
                     Console.Clear();
-                    string saveTest = @"C:\Users\hatma\source\repos\CMD-RPG\idkfr\Saves\";
                     string saveDir = @".\Saves\";
-                    var saveList = Directory.EnumerateFiles(saveTest);
+                    var saveList = Directory.EnumerateFiles(saveDir);
                     Console.WriteLine("Select a save to continue:");
                     foreach (string saves in saveList)
                     {
@@ -107,11 +116,11 @@ public class GameIg
                     while (true)
                     {
                         string saveFile = Console.ReadLine();
-                        bool valid = File.Exists(saveTest + saveFile + ".json");
+                        bool valid = File.Exists(saveDir + saveFile + ".json");
                         if (valid == true)
                         {
                             Console.Clear();
-                            using (StreamReader r = new StreamReader(saveTest + saveFile + ".json"))
+                            using (StreamReader r = new StreamReader(saveDir + saveFile + ".json"))
                             {
                                 string loadFile = r.ReadToEnd();
                                 SaveFile loadFromJson = JsonConvert.DeserializeObject<SaveFile>(loadFile);
@@ -147,6 +156,7 @@ public class GameIg
         {
             while (true)
             {
+                Console.Clear();
                 Console.WriteLine("Hold up, it looks like you didn't complete the tutorial yet? \nJust in case as a refresher I'll have you restart it. \nUnless you want to skip that of course. \n \nPress T for tutorial or N for no tutorial.");
                 string tutorial = Console.ReadLine();
                 if (tutorial == "t" || tutorial == "T")
@@ -174,21 +184,16 @@ public class GameIg
         }
     }
 
-    public static void SetTimer()
-    {
-        skillTimer = new System.Timers.Timer(250);
-    }
-
     public static void Tutorial()
     {
         Console.Clear();
-        Console.WriteLine(Globals.saveFileOutline);
+        Console.WriteLine("");
         Console.ReadKey();
     }
 
     public static void MenuMain()
     {
         Console.Clear();
-        Console.WriteLine("Testy Westy UwU");
+        Console.WriteLine("");
     }
 }
