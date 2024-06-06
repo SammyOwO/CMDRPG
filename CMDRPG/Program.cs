@@ -49,7 +49,6 @@ public class Game
         public int[] Items;
         public bool New;
     }
-
     public class ItemData
     {
         public Int16 Id;
@@ -58,12 +57,10 @@ public class Game
         public int Level;
         public bool Equipable;
     }
-
     public static void SetTimer()
     {
         skillTimer = new System.Timers.Timer(250);
     }
-
     public static void Main()
     {
         SaveFile saveData = JsonConvert.DeserializeObject<SaveFile>(Globals.saveFileOutline);
@@ -145,7 +142,6 @@ public class Game
             break;
         }
     }
-
     public static void Welcome()
     {
         SaveFile saveData = JsonConvert.DeserializeObject<SaveFile>(Globals.saveFileOutline);
@@ -183,14 +179,12 @@ public class Game
             MenuMain();
         }
     }
-
     public static void Tutorial()
     {
         Console.Clear();
         Console.WriteLine("");
         Console.ReadKey();
     }
-
     public static void MenuMain()
     {
         Console.Clear();
