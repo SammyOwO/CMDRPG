@@ -9,31 +9,16 @@ public class Game
     private static System.Timers.Timer skillTimer;
     public class Data
     {
-        static string saveFileOutline = @"{
-        'Name': '',
-        //hp, strength, defense, mana, crit chance, crit damage, hp regen
-        'Stats': [100, 25, 0, 50, 20, 150, 25],
-        //combat, mining, farming, fishing, foraging, woodworking, enchanting, alchemy
-        'Levels': [1, 1, 1, 1, 1, 1, 1, 1],
-        //skill level exp in same order as skill
-        'Exp': [0, 0, 0, 0, 0, 0, 0, 0],
-        'Inventory': [],
-        'Quantity': [],
-        //equipped items
-        'Items': [],
-        //is the player new or not, duhh
-        'New': true
-        }";
-        public static SaveFile saveData = JsonConvert.DeserializeObject<SaveFile>(saveFileOutline);
+        public static SaveFile saveData = new();
         public static void save()
         {
-            Data.saveFileOutline = JsonConvert.SerializeObject(saveData);
+            var json = JsonConvert.SerializeObject(saveData);
             if (Directory.Exists(@"./Saves/") == false)
             {
                 Directory.CreateDirectory(@"./Saves/");
             }
             string fullPath = @".\Saves\" + saveData.Name + ".json";
-            File.WriteAllText(fullPath, Data.saveFileOutline);
+            File.WriteAllText(fullPath, json);
         }
         public static void load()
         {
@@ -56,8 +41,7 @@ public class Game
                     using (StreamReader r = new StreamReader(saveDir + saveFile + ".json"))
                     {
                         string loadFile = r.ReadToEnd();
-                        SaveFile loadFromJson = JsonConvert.DeserializeObject<SaveFile>(loadFile);
-                        saveFileOutline = JsonConvert.SerializeObject(loadFromJson);
+                        saveData = JsonConvert.DeserializeObject<SaveFile>(loadFile);
                     }
                     Welcome();
                 }
@@ -73,14 +57,14 @@ public class Game
     }
     public class SaveFile
     {
-        public string Name;
-        public int[] Stats;
-        public int[] Levels;
-        public int[] Exp;
-        public int[] Inventory;
-        public Int16[] Quantity;
-        public int[] Items;
-        public bool New;
+        public string Name = "";
+        public int[] Stats = [100, 25, 0, 50, 20, 150, 25];
+        public int[] Levels = [1, 1, 1, 1, 1, 1, 1, 1];
+        public int[] Exp = [0, 0, 0, 0, 0, 0, 0, 0];
+        public int[] Inventory = [];
+        public Int16[] Quantity = [];
+        public int[] Items = [];
+        public bool New = true;
     }
     public class ItemData
     {
