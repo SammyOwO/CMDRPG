@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Net.Security;
 using System.Reflection.Metadata.Ecma335;
 using System.Timers;
@@ -7,16 +8,13 @@ using Newtonsoft.Json;
 public class Game
 {
     private static System.Timers.Timer skillTimer;
+    public static Dictionary<short, ItemData> Items = new Dictionary<short, ItemData>();
     public class Data
     {
         public static SaveFile saveData = new();
         public static void save()
         {
             var json = JsonConvert.SerializeObject(saveData);
-            if (Directory.Exists(@"./Saves/") == false)
-            {
-                Directory.CreateDirectory(@"./Saves/");
-            }
             string fullPath = @".\Saves\" + saveData.Name + ".json";
             File.WriteAllText(fullPath, json);
         }
@@ -61,26 +59,50 @@ public class Game
         public int[] Stats = [100, 25, 0, 50, 20, 150, 25];
         public int[] Levels = [1, 1, 1, 1, 1, 1, 1, 1];
         public int[] Exp = [0, 0, 0, 0, 0, 0, 0, 0];
-        public int[] Inventory = [];
-        public Int16[] Quantity = [];
-        public int[] Items = [];
+        public short[] Inventory = new short[2000];
+        public short[] Quantity = new short[2000];
+        public short[] Items = new short[2000];
         public bool New = true;
     }
     public class ItemData
     {
-        public Int16 Id;
+        public short Id;
         public string Name;
         public string Description;
         public int Level;
         public bool Equipable;
+
+        public ItemData(short Id, string Name, string Description, int Level, bool Equipable)
+        {
+            this.Id = Id;
+            this.Name = Name;
+            this.Description = Description;
+            this.Level = Level;
+            this.Equipable = Equipable;
+        }
     }
     public static void SetTimer()
     {
         skillTimer = new System.Timers.Timer(250);
     }
+    public static void DictAdd()
+    {
+        ItemData[] items = {
+        new ItemData(1,"Oak Wood","A simple material for crafting.",0,false),
+        new ItemData(11,"Stone","A simple material for crafting.",0,false),
+        new ItemData(26,"Ore 1","The first ore used for crafting simple metal items.",0,false),
+        new ItemData(51,"Ore 1 Bar","An ingot form of the first ore",0,false)
+        };
+        foreach (ItemData item in items)
+        {
+            Items.Add(item.Id, item);
+        }
+    }
     public static void Main()
     {
+        Directory.CreateDirectory(@"./Saves/");
         SetTimer();
+        DictAdd();
         skillTimer.Enabled = false;
         Console.WriteLine("Hewwo :3 \nPress any key to continue ^w^");
         Console.ReadKey();
