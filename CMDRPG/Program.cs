@@ -2,18 +2,18 @@
 using System.Data;
 using System.Net.Security;
 using System.Timers;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 public class Game
 {
-    private static System.Timers.Timer skillTimer;
+    public static System.Timers.Timer skillTimer = new System.Timers.Timer(250);
     public static Dictionary<short, ItemData> Items = new Dictionary<short, ItemData>();
     public class Data
     {
         public static SaveFile saveData = new();
         public static void save()
         {
-            var json = JsonConvert.SerializeObject(saveData);
+            var json = JsonSerializer.Serialize(saveData, new JsonSerializerOptions(){IncludeFields = true});
             string fullPath = @".\Saves\" + saveData.Name + ".json";
             File.WriteAllText(fullPath, json);
         }
@@ -38,7 +38,7 @@ public class Game
                     using (StreamReader r = new StreamReader(saveDir + saveFile + ".json"))
                     {
                         string loadFile = r.ReadToEnd();
-                        saveData = JsonConvert.DeserializeObject<SaveFile>(loadFile);
+                        saveData = JsonSerializer.Deserialize<SaveFile>(loadFile, new JsonSerializerOptions(){IncludeFields = true});
                     }
                     Welcome();
                 }
@@ -56,11 +56,10 @@ public class Game
     {
         public string Name = "";
         public int[] Stats = [100, 25, 0, 50, 20, 150, 25];
-        public int[] Levels = [1, 1, 1, 1, 1, 1, 1, 1];
+        public short[] Levels = [1, 1, 1, 1, 1, 1, 1, 1];
         public int[] Exp = [0, 0, 0, 0, 0, 0, 0, 0];
-        public short[] Inventory = new short[2000];
-        public short[] Quantity = new short[2000];
-        public short[] Items = new short[2000];
+        public short[] Inventory = new short[5000];
+        public short[] Items = new short[10];
         public bool New = true;
     }
     public class ItemData
@@ -68,10 +67,10 @@ public class Game
         public short Id;
         public string Name;
         public string Description;
-        public int Level;
+        public short Level;
         public bool Equipable;
 
-        public ItemData(short Id, string Name, string Description, int Level, bool Equipable)
+        public ItemData(short Id, string Name, string Description, short Level, bool Equipable)
         {
             this.Id = Id;
             this.Name = Name;
@@ -79,10 +78,6 @@ public class Game
             this.Level = Level;
             this.Equipable = Equipable;
         }
-    }
-    public static void SetTimer()
-    {
-        skillTimer = new System.Timers.Timer(250);
     }
     public static void DictAdd()
     {
@@ -100,7 +95,6 @@ public class Game
     public static void Main()
     {
         Directory.CreateDirectory(@"./Saves/");
-        SetTimer();
         DictAdd();
         skillTimer.Enabled = false;
         Console.WriteLine("Hewwo :3 \nPress any key to continue ^w^");
