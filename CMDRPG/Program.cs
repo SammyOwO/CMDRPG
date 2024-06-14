@@ -13,7 +13,7 @@ public class Game
         public static SaveFile saveData = new();
         public static void save()
         {
-            var json = JsonSerializer.Serialize(saveData, new JsonSerializerOptions(){IncludeFields = true});
+            var json = JsonSerializer.Serialize(saveData);
             string fullPath = @".\Saves\" + saveData.Name + ".json";
             File.WriteAllText(fullPath, json);
         }
@@ -38,7 +38,7 @@ public class Game
                     using (StreamReader r = new StreamReader(saveDir + saveFile + ".json"))
                     {
                         string loadFile = r.ReadToEnd();
-                        saveData = JsonSerializer.Deserialize<SaveFile>(loadFile, new JsonSerializerOptions(){IncludeFields = true});
+                        saveData = JsonSerializer.Deserialize<SaveFile>(loadFile);
                     }
                     Welcome();
                 }
@@ -54,13 +54,13 @@ public class Game
     }
     public class SaveFile
     {
-        public string Name = "";
-        public int[] Stats = [100, 25, 0, 50, 20, 150, 25];
-        public short[] Levels = [1, 1, 1, 1, 1, 1, 1, 1];
-        public int[] Exp = [0, 0, 0, 0, 0, 0, 0, 0];
-        public short[] Inventory = new short[5000];
-        public short[] Items = new short[10];
-        public bool New = true;
+        public string Name { get; set; } = "";
+        public int[] Stats { get; set; } = [100, 25, 0, 50, 20, 150, 25];
+        public int[] Levels { get; set; } = [1, 1, 1, 1, 1, 1, 1, 1];
+        public int[] Exp { get; set; } = [0, 0, 0, 0, 0, 0, 0, 0];
+        public short[] Inventory { get; set; } = new short[5000];
+        public short[] Items { get; set; } = new short[12];
+        public bool New { get; set; } = true;
     }
     public class ItemData
     {
@@ -102,11 +102,11 @@ public class Game
         Console.Clear();
         while (true)
         {
-            Console.WriteLine("Load Game or start a new adventure? \nType 'New' or 'Load' to continue! (Case sensitive)");
+            Console.WriteLine("Load Game or start a new adventure? \nType 'New' or 'Load' to continue!");
             string load = Console.ReadLine();
-            switch (load)
+            switch (load.ToLower())
             {
-                case "New":
+                case "new":
                     Console.Clear();
                     Console.WriteLine("Welcome 2 the game, hehe :3 \nYour goal is to just get better stuff! \nPress any key!");
                     Console.ReadKey();
@@ -130,7 +130,7 @@ public class Game
                     Tutorial();
                     break;
 
-                case "Load":
+                case "load":
                     Data.load();
                     break;
                 default:
@@ -152,24 +152,19 @@ public class Game
             {
                 Console.Clear();
                 Console.WriteLine("Hold up, it looks like you didn't complete the tutorial yet? \nJust in case as a refresher I'll have you restart it. \nUnless you want to skip that of course. \n \nPress T for tutorial or N for no tutorial.");
-                string tutorial = Console.ReadLine();
-                if (tutorial == "t" || tutorial == "T")
+                var tutorial = Console.ReadKey();
+                switch (tutorial.Key)
                 {
-                    Tutorial();
-                    break;
+                    case ConsoleKey.T:
+                        Tutorial(); break;
+                    case ConsoleKey.N:
+                        Main(); break;
+                    default:
+                        Console.Clear();
+                        Console.WriteLine($"{tutorial.Key} is an invalid input, try again. \n");
+                        continue;  
                 }
-                else if (tutorial == "n" || tutorial == "N")
-                {
-                    MenuMain();
-                    break;
-                }
-                else
-                {
-                    Console.Clear();
-                    Console.WriteLine(tutorial);
-                    Console.WriteLine("Invalid input, try again. \n");
-                    continue;
-                }
+                break;
             }
         }
         else
@@ -188,11 +183,11 @@ public class Game
             Console.WriteLine("Here you will see a mock up of the main menu to get you used to the main controls.");
             Console.WriteLine("After that you can explore around for yourself. For now go to places and go to the woods in the village to chop some trees. \n");
             Console.WriteLine("Main Menu: \n");
-            Console.WriteLine("P: Places \nI: Inventory \nA: Achievements \nX: Exit \n");
-            string next = Console.ReadLine();
-            switch (next)
+            Console.WriteLine("P: Places \nI: Inventory \nA: Quests \nX: Exit \n");
+            var next = Console.ReadKey();
+            switch (next.Key)
             {
-                case "p": case "P":
+                case ConsoleKey.P:
                     
                     while(true)
                     {
@@ -200,32 +195,38 @@ public class Game
                         Console.WriteLine("Where would you like to go? \n \nPlaces:");
                         Console.WriteLine("1. Village (Lvl 0-5) \n2. Caves (Lvl 5-15) \n3. Mines (Lvl 15-25) \n4. Mountains (Lvl 25-40) \n");
                         Console.WriteLine("Type the number of where you would like to go below:");
-                        string place = Console.ReadLine();
-                        switch (place)
+                        var place = Console.ReadKey(true);
+                        switch (place.Key)
                         {
-                            case "1":
+                            case ConsoleKey.D1: 
+                            case ConsoleKey.NumPad1:
                                 Console.Clear();
-                                Console.WriteLine(); break;
-                            case "2": 
+                                Console.WriteLine("You arrive in the town square.");
+                                Console.WriteLine("Where would you like to go? \n \nPlaces:"); 
+                                break;
+                            case ConsoleKey.D2:
+                            case ConsoleKey.NumPad2:
                                 Console.Clear();
                                 Console.WriteLine("Not unlocked yet! Level is too low (Also it's the still tutorial silly). \n"); continue;
-                            case "3":
+                            case ConsoleKey.D3:
+                            case ConsoleKey.NumPad3:
                                 Console.Clear();
                                 Console.WriteLine("Not unlocked yet! Level is too low (Also it's the still tutorial silly). \n"); continue;
-                            case "4":
+                            case ConsoleKey.D4:
+                            case ConsoleKey.NumPad4:
                                 Console.Clear();
                                 Console.WriteLine("Not unlocked yet! Level is too low (Also it's the still tutorial silly). \n"); continue;
                         }
                         break;
                     }
                     break;
-                case "i": case "I":
+                case ConsoleKey.I:
                     Console.Clear();
                     Console.WriteLine("Wait until after the tutorial goober. :3 \n"); continue;
-                case "a": case "A":
+                case ConsoleKey.Q:
                     Console.Clear();
                     Console.WriteLine("Wait until after the tutorial goober. :3 \n"); continue;
-                case "x": case "X":
+                case ConsoleKey.X:
                     Exit(); break;
                 default:
                     Console.Clear();
@@ -239,22 +240,22 @@ public class Game
     {
         Console.Clear();
         Console.WriteLine("Main Menu: \n");
-        Console.WriteLine("P: Places \nI: Inventory \nA: Achievements \nX: Exit");
-        string next = Console.ReadLine();
+        Console.WriteLine("P: Places \nI: Inventory \nA: Quests \nX: Exit");
+        var next = Console.ReadKey(true);
         while (true)
         {
-            switch(next)
+            switch(next.Key)
             {
-                case "p": case "P":
+                case ConsoleKey.P:
                     MenuPlaces(); break;
-                case "i": case "I":
+                case ConsoleKey.I:
                     MenuInventory(); break;
-                case "a": case "A":
-                    MenuAchievements(); break;
-                case "x": case "X":
+                case ConsoleKey.Q:
+                    MenuQuests(); break;
+                case ConsoleKey.X:
                     Exit(); break;
                 default:
-                    Console.WriteLine("Not a valid key, try again.");
+                    Console.WriteLine($"{next.Key} is not a valid key, try again.");
                     continue;
             }
             break;
@@ -268,7 +269,7 @@ public class Game
     {
 
     }
-    public static void MenuAchievements()
+    public static void MenuQuests()
     {
 
     }
