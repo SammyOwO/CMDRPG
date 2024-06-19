@@ -3,6 +3,7 @@ using System.Data;
 using System.Net.Security;
 using System.Timers;
 using System.Text.Json;
+using System.Dynamic;
 
 public class Game
 {
@@ -55,7 +56,9 @@ public class Game
     public class SaveFile
     {
         public string Name { get; set; } = "";
+        //HP, Strength, Defense, Mana, Crit Chance, Crit Damage, HP Regen
         public int[] Stats { get; set; } = [100, 25, 0, 50, 20, 150, 25];
+        //Combat, Mining, Farming, Fishing, Foraging, Woodworking, Enchanting and Alchemy
         public int[] Levels { get; set; } = [1, 1, 1, 1, 1, 1, 1, 1];
         public int[] Exp { get; set; } = [0, 0, 0, 0, 0, 0, 0, 0];
         public short[] Inventory { get; set; } = new short[5000];
@@ -158,7 +161,7 @@ public class Game
                     case ConsoleKey.T:
                         Tutorial(); break;
                     case ConsoleKey.N:
-                        Main(); break;
+                        MenuMain(); break;
                     default:
                         Console.Clear();
                         Console.WriteLine($"{tutorial.Key} is an invalid input, try again. \n");
@@ -188,11 +191,10 @@ public class Game
             switch (next.Key)
             {
                 case ConsoleKey.P:
-                    
-                    while(true)
+                    Console.Clear();
+                    while (true)
                     {
-                        Console.Clear();
-                        Console.WriteLine("Where would you like to go? \n \nPlaces:");
+                        Console.WriteLine("Where would you like to go? \n \nPlaces: \n");
                         Console.WriteLine("1. Village (Lvl 0-5) \n2. Caves (Lvl 5-15) \n3. Mines (Lvl 15-25) \n4. Mountains (Lvl 25-40) \n");
                         Console.WriteLine("Type the number of where you would like to go below:");
                         var place = Console.ReadKey(true);
@@ -201,8 +203,41 @@ public class Game
                             case ConsoleKey.D1: 
                             case ConsoleKey.NumPad1:
                                 Console.Clear();
-                                Console.WriteLine("You arrive in the town square.");
-                                Console.WriteLine("Where would you like to go? \n \nPlaces:"); 
+                                while(true)
+                                {
+                                    Console.WriteLine("You arrive in the town square.");
+                                    Console.WriteLine("Where would you like to go? \n \nPlaces: \n");
+                                    Console.WriteLine("1. Forge \n2. Workbench \n3. Armourer \n4. Weaponsmith \n5. Tavern \n6. Woods");
+                                    var place2 = Console.ReadKey();
+                                    switch (place2.Key)
+                                    {
+                                        case ConsoleKey.D1:
+                                        case ConsoleKey.NumPad1:
+                                            Console.Clear();
+                                            Console.WriteLine("Wait until after the tutorial. \n"); continue;
+                                        case ConsoleKey.D2:
+                                        case ConsoleKey.NumPad2:
+                                            Console.Clear();
+                                            Console.WriteLine("This comes at a later part of the tutorial. :3 \n"); continue;
+                                        case ConsoleKey.D3:
+                                        case ConsoleKey.NumPad3:
+                                            Console.Clear();
+                                            Console.WriteLine("Wait until after the tutorial. \n"); continue;
+                                        case ConsoleKey.D4:
+                                        case ConsoleKey.NumPad4:
+                                            Console.Clear();
+                                            Console.WriteLine("Wait until after the tutorial. \n"); continue;
+                                        case ConsoleKey.D5:
+                                        case ConsoleKey.NumPad5:
+                                            Console.Clear();
+                                            Console.WriteLine("Wait until after the tutorial. \n"); continue;
+                                        case ConsoleKey.D6:
+                                        case ConsoleKey.NumPad6:
+                                            Console.Clear();
+                                            break;
+                                    }
+                                    break;
+                                }
                                 break;
                             case ConsoleKey.D2:
                             case ConsoleKey.NumPad2:
@@ -216,6 +251,10 @@ public class Game
                             case ConsoleKey.NumPad4:
                                 Console.Clear();
                                 Console.WriteLine("Not unlocked yet! Level is too low (Also it's the still tutorial silly). \n"); continue;
+                            default:
+                                Console.Clear();
+                                Console.WriteLine($"{place.Key} is an invalid input, try again. \n");
+                                continue;
                         }
                         break;
                     }
@@ -239,12 +278,12 @@ public class Game
     public static void MenuMain()
     {
         Console.Clear();
-        Console.WriteLine("Main Menu: \n");
-        Console.WriteLine("P: Places \nI: Inventory \nA: Quests \nX: Exit");
-        var next = Console.ReadKey(true);
         while (true)
         {
-            switch(next.Key)
+            Console.WriteLine("Main Menu: \n");
+            Console.WriteLine("P: Places \nI: Inventory \nA: Quests \nX: Exit");
+            var next = Console.ReadKey(true);
+            switch (next.Key)
             {
                 case ConsoleKey.P:
                     MenuPlaces(); break;
@@ -263,7 +302,87 @@ public class Game
     }
     public static void MenuPlaces()
     {
-
+        Console.Clear();
+        while (true)
+        {
+            Console.WriteLine("Where would you like to go? \n \nPlaces: \n");
+            Console.WriteLine("1. Village (Lvl 0-5) \n2. Caves (Lvl 5-15) \n3. Mines (Lvl 15-25) \n4. Mountains (Lvl 25-40) \n \n0. Go back");
+            var place = Console.ReadKey(true);
+            switch (place.Key)
+            {
+                case ConsoleKey.D1:
+                case ConsoleKey.NumPad1:
+                    MenuVillage(); break;
+                case ConsoleKey.D2:
+                case ConsoleKey.NumPad2:
+                    Console.Clear();
+                    Console.WriteLine("Not unlocked yet! Level is too low (Also it's the still tutorial silly). \n"); continue;
+                case ConsoleKey.D3:
+                case ConsoleKey.NumPad3:
+                    Console.Clear();
+                    Console.WriteLine("Not unlocked yet! Level is too low (Also it's the still tutorial silly). \n"); continue;
+                case ConsoleKey.D4:
+                case ConsoleKey.NumPad4:
+                    Console.Clear();
+                    Console.WriteLine("Not unlocked yet! Level is too low (Also it's the still tutorial silly). \n"); continue;
+                case ConsoleKey.D0:
+                case ConsoleKey.NumPad0:
+                    MenuMain(); break;
+            }
+            break;
+        }
+    }
+    public static void MenuVillage()
+    {
+        Console.Clear();
+        while (true)
+        {
+            Console.WriteLine("You arrive in the town square.");
+            Console.WriteLine("Where would you like to go? \n \nPlaces: \n");
+            Console.WriteLine("1. Forge \n2. Workbench \n3. Armourer \n4. Weaponsmith \n5. Tavern \n6. Woods \n \n0. Go back \n");
+            var place2 = Console.ReadKey();
+            switch (place2.Key)
+            {
+                case ConsoleKey.D1:
+                case ConsoleKey.NumPad1:
+                    Console.Clear();
+                    break;
+                case ConsoleKey.D2:
+                case ConsoleKey.NumPad2:
+                    Console.Clear();
+                    break;
+                case ConsoleKey.D3:
+                case ConsoleKey.NumPad3:
+                    Console.Clear();
+                    break;
+                case ConsoleKey.D4:
+                case ConsoleKey.NumPad4:
+                    Console.Clear();
+                    break;
+                case ConsoleKey.D5:
+                case ConsoleKey.NumPad5:
+                    Console.Clear();
+                    break;
+                case ConsoleKey.D6:
+                case ConsoleKey.NumPad6:
+                    Console.Clear();
+                    break;
+                case ConsoleKey.D0:
+                case ConsoleKey.NumPad0:
+                    MenuPlaces();
+                    break;
+            }
+            break;
+        }
+    }
+    public static void MenuVillageWoods()
+    {
+        Console.Clear();
+        while (true)
+        {
+            Console.WriteLine("Wandering in the woods you think of what to do: \n");
+            Console.WriteLine("1. Chop an Oak Tree \n2. Chop a Birch Tree \n3. Gather Sticks \n4. Pick up Stones \n5. Travel Deeper \n \n0. Go Back \n");
+        }
     }
     public static void MenuInventory()
     {
