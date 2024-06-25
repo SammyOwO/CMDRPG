@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Timers;
 using System.Text.Json;
-using System.Security.Cryptography.X509Certificates;
 
 public class Game
 {
@@ -108,7 +107,7 @@ public class Game
     }
     public class Menu
     {
-        public static void Main()
+        public static void MainM()
         {
             Console.Clear();
             while (true)
@@ -127,6 +126,7 @@ public class Game
                     case ConsoleKey.X:
                         Exit(); break;
                     default:
+                        Console.Clear();
                         Console.WriteLine($"{next.Key} is not a valid key, try again.");
                         continue;
                 }
@@ -141,7 +141,13 @@ public class Game
                 Console.WriteLine("Where would you like to go? \n \nPlaces: \n");
                 Console.WriteLine("1. Village (Lvl 0-5) \n2. Caves (Lvl 5-15) \n3. Mines (Lvl 15-25) \n4. Mountains (Lvl 25-40) \n \n0. Go back");
                 var place = Console.ReadKey(true);
-                switch (menuOption[place.Key])
+                if (!menuOption.TryGetValue(place.Key, out var option))
+                {
+                    Console.Clear();
+                    Console.WriteLine($"{place.Key} is not a valid key, try again.");
+                    continue;
+                }
+                switch (option)
                 {
                     case 1:
                         Village.Square(); break;
@@ -152,7 +158,11 @@ public class Game
                     case 4:
                         Mountains.Base(); break;
                     case 0:
-                        Menu.Main(); break;
+                        Menu.MainM(); break;
+                    default:
+                        Console.Clear();
+                        Console.WriteLine($"{place.Key} is not a valid key, try again.");
+                        continue;
                 }
                 break;
             }
@@ -177,22 +187,32 @@ public class Game
                 Console.WriteLine("Where would you like to go? \n \nPlaces: \n");
                 Console.WriteLine("1. Forge \n2. Workbench \n3. Armourer \n4. Weaponsmith \n5. Tavern \n6. Woods \n \n0. Go back \n");
                 var place = Console.ReadKey();
-                switch (menuOption[place.Key])
+                if (!menuOption.TryGetValue(place.Key, out var option))
+                {
+                    Console.Clear();
+                    Console.WriteLine($"{place.Key} is not a valid key, try again.");
+                    continue;
+                }
+                switch (option)
                 {
                     case 1:
-                        break;
+                        Forge(); break;
                     case 2:
-                        break;
+                        Workbench(); break;
                     case 3:
-                        break;
+                        Armour(); break;
                     case 4:
-                        break;
+                        Weapons();  break;
                     case 5:
-                        break;
+                        Tavern();  break;
                     case 6:
-                        break;
+                        Woods(); break;
                     case 0:
                         Menu.Places(); break;
+                    default:
+                        Console.Clear();
+                        Console.WriteLine($"{place.Key} is not a valid key, try again.");
+                        continue;
                 }
                 break;
             }
@@ -209,7 +229,7 @@ public class Game
         {
             Console.Clear();
         }
-        public static void Weapon()
+        public static void Weapons()
         {
             Console.Clear();
         }
@@ -224,6 +244,32 @@ public class Game
             {
                 Console.WriteLine("Wandering in the woods you think of what to do: \n");
                 Console.WriteLine("1. Chop an Oak Tree \n2. Chop a Birch Tree \n3. Gather Sticks \n4. Pick up Stones \n5. Travel Deeper \n \n0. Go Back \n");
+                var act = Console.ReadKey(true);
+                if (!menuOption.TryGetValue(act.Key, out var option))
+                {
+                    Console.Clear();
+                    Console.WriteLine($"{act.Key} is not a valid key, try again.");
+                    continue;
+                }
+                switch (option)
+                {
+                    case 1:
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        break;
+                    case 5:
+                        break;
+                    case 0:
+                        Square(); break;
+                    default:
+                        Console.Clear();
+                        Console.WriteLine($"{act.Key} is not a valid key, try again.");
+                        continue;
+                }
             }
         }
     }
@@ -327,7 +373,7 @@ public class Game
                     case ConsoleKey.T:
                         Tutorial(); break;
                     case ConsoleKey.N:
-                        Menu.Main(); break;
+                        Menu.MainM(); break;
                     default:
                         Console.Clear();
                         Console.WriteLine($"{tutorial.Key} is an invalid input, try again. \n");
@@ -338,7 +384,7 @@ public class Game
         }
         else
         {
-            Menu.Main();
+            Menu.MainM();
         }
     }
     public static void Tutorial()
@@ -364,7 +410,13 @@ public class Game
                         Console.WriteLine("1. Village (Lvl 0-5) \n2. Caves (Lvl 5-15) \n3. Mines (Lvl 15-25) \n4. Mountains (Lvl 25-40) \n");
                         Console.WriteLine("Type the number of where you would like to go below:");
                         var place = Console.ReadKey(true);
-                        switch (menuOption[place.Key])
+                        if (menuOption.TryGetValue(place.Key, out var option))
+                        {
+                            Console.Clear();
+                            Console.WriteLine($"{place.Key} is an invalid input, try again. \n");
+                            continue;
+                        }
+                        switch (option)
                         {
                             case 1:
                                 Console.Clear();
@@ -374,7 +426,13 @@ public class Game
                                     Console.WriteLine("Where would you like to go? \n \nPlaces: \n");
                                     Console.WriteLine("1. Forge \n2. Workbench \n3. Armourer \n4. Weaponsmith \n5. Tavern \n6. Woods");
                                     var place2 = Console.ReadKey();
-                                    switch (menuOption[place2.Key])
+                                    if (menuOption.TryGetValue(place2.Key, out var option2))
+                                    {
+                                        Console.Clear();
+                                        Console.WriteLine($"{place2.Key} is an invalid input, try again. \n");
+                                        continue;
+                                    }
+                                    switch (option2)
                                     {
                                         case 1:
                                             Console.Clear();
@@ -394,6 +452,10 @@ public class Game
                                         case 6:
                                             Console.Clear();
                                             break;
+                                        default:
+                                            Console.Clear();
+                                            Console.WriteLine($"{place2.Key} is an invalid input, try again. \n");
+                                            continue;
                                     }
                                     break;
                                 }
