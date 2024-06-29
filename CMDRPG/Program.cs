@@ -52,7 +52,7 @@ public class Game
             Console.WriteLine();
             while (true)
             {
-                string saveFile = Console.ReadLine();
+                var saveFile = Console.ReadLine();
                 bool valid = File.Exists(saveDir + saveFile + ".json");
                 if (valid == true)
                 {
@@ -270,6 +270,7 @@ public class Game
                         Console.WriteLine($"{act.Key} is not a valid key, try again.");
                         continue;
                 }
+                break;
             }
         }
     }
@@ -317,17 +318,23 @@ public class Game
         Console.Clear();
         while (true)
         {
-            Console.WriteLine("Load Game or start a new adventure? \nType 'New' or 'Load' to continue!");
-            string load = Console.ReadLine();
-            switch (load.ToLower())
+            Console.WriteLine("Load Game or start a new adventure? \n \n 1. New Game \n2. Load Game");
+            var load = Console.ReadKey();
+            if (!menuOption.TryGetValue(load.Key, out var option))
             {
-                case "new":
+                Console.Clear();
+                Console.WriteLine($"{load.Key} is not a valid key, try again.");
+                continue;
+            }
+            switch (option)
+            {
+                case 1:
                     Console.Clear();
                     Console.WriteLine("Welcome 2 the game, hehe :3 \nYour goal is to just get better stuff! \nPress any key!");
                     Console.ReadKey();
                     Console.Clear();
                     Console.WriteLine("First, let's get started by making a name for yourself! \nType your name below to continue:");
-                    string name = Console.ReadLine();
+                    var name = Console.ReadLine();
                     Console.Clear();
                     Data.saveData.Name = name;
                     Console.Write("Hi " + Data.saveData.Name + "! \nWelcome to CMD RPG \nPress any key!");
@@ -345,7 +352,7 @@ public class Game
                     Tutorial();
                     break;
 
-                case "load":
+                case 2:
                     Data.load();
                     break;
                 default:
@@ -361,7 +368,7 @@ public class Game
         Console.WriteLine("Welcome back " + Data.saveData.Name + "! \nPress any key to continue UwU");
         Console.ReadKey();
         bool newPlayer = Data.saveData.New;
-        if (newPlayer == true)
+        if (newPlayer)
         {
             while (true)
             {
@@ -451,6 +458,91 @@ public class Game
                                             Console.WriteLine("Wait until after the tutorial. \n"); continue;
                                         case 6:
                                             Console.Clear();
+                                            while (true)
+                                            {
+                                                Console.WriteLine("Good, now go chop and Oak Tree. \n");
+                                                Console.WriteLine("Wandering in the woods you think of what to do: \n");
+                                                Console.WriteLine("1. Chop an Oak Tree \n2. Chop a Birch Tree \n3. Gather Sticks \n4. Pick up Stones \n5. Travel Deeper \n \n0. Go Back \n");
+                                                var act = Console.ReadKey(true);
+                                                if (!menuOption.TryGetValue(act.Key, out var option3))
+                                                {
+                                                    Console.Clear();
+                                                    Console.WriteLine($"{act.Key} is not a valid key, try again.");
+                                                    continue;
+                                                }
+                                                switch (option)
+                                                {
+                                                    case 1:
+                                                        break;
+                                                    case 2:
+                                                        Console.Clear();
+                                                        Console.WriteLine("Wait until after the tutorial. \n"); continue;
+                                                    case 3:
+                                                        Console.Clear();
+                                                        Console.WriteLine("Wait until after the tutorial. \n"); continue;
+                                                    case 4:
+                                                        Console.Clear();
+                                                        Console.WriteLine("Wait until after the tutorial. \n"); continue;
+                                                    case 5:
+                                                        Console.Clear();
+                                                        Console.WriteLine("Wait until after the tutorial. \n"); continue;
+                                                    case 0:
+                                                        Console.Clear();
+                                                        if (Data.saveData.Inventory[1] > 0)
+                                                        {
+                                                            while (true)
+                                                            {
+                                                                Console.WriteLine("Now that you're back, go to the work bench and craft ");
+                                                                Console.WriteLine("You arrive in the town square.");
+                                                                Console.WriteLine("Where would you like to go? \n \nPlaces: \n");
+                                                                Console.WriteLine("1. Forge \n2. Workbench \n3. Armourer \n4. Weaponsmith \n5. Tavern \n6. Woods");
+                                                                var place3 = Console.ReadKey();
+                                                                if (menuOption.TryGetValue(place3.Key, out var option4))
+                                                                {
+                                                                    Console.Clear();
+                                                                    Console.WriteLine($"{place3.Key} is an invalid input, try again. \n");
+                                                                    continue;
+                                                                }
+                                                                switch (option4)
+                                                                {
+                                                                    case 1:
+                                                                        Console.Clear();
+                                                                        Console.WriteLine("Wait until after the tutorial. \n"); continue;
+                                                                    case 2:
+                                                                        Console.Clear();
+                                                                        Console.WriteLine("This comes at a later part of the tutorial. :3 \n"); break;
+                                                                    case 3:
+                                                                        Console.Clear();
+                                                                        Console.WriteLine("Wait until after the tutorial. \n"); continue;
+                                                                    case 4:
+                                                                        Console.Clear();
+                                                                        Console.WriteLine("Wait until after the tutorial. \n"); continue;
+                                                                    case 5:
+                                                                        Console.Clear();
+                                                                        Console.WriteLine("Wait until after the tutorial. \n"); continue;
+                                                                    case 6:
+                                                                        Console.Clear();
+                                                                        Console.WriteLine("You were just here, silly/"); continue;
+                                                                    default:
+                                                                        Console.Clear();
+                                                                        Console.WriteLine($"{place3.Key} is an invalid input, try again. \n");
+                                                                        continue;
+                                                                }
+                                                                break;
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            Console.WriteLine("Chop some wood first :3 \n"); continue;
+                                                        }
+                                                        break;
+                                                    default:
+                                                        Console.Clear();
+                                                        Console.WriteLine($"{act.Key} is not a valid key, try again.");
+                                                        continue;
+                                                }
+                                                break;
+                                            }
                                             break;
                                         default:
                                             Console.Clear();
