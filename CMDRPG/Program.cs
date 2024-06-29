@@ -4,6 +4,7 @@ using System.Text.Json;
 
 public class Game
 {
+    public static Thread threadK = new Thread(new ThreadStart(Threaded.Keys));
     public static System.Timers.Timer skillTimer = new System.Timers.Timer(250);
     public static Dictionary<short, ItemData> Items = new Dictionary<short, ItemData>();
     public static Dictionary<ConsoleKey, int> menuOption = new Dictionary<ConsoleKey, int>()
@@ -29,7 +30,67 @@ public class Game
         { ConsoleKey.D0, 0 },
         { ConsoleKey.NumPad0, 0 }
     };
-
+    public class Threaded
+    {
+        static Thread threadI = new Thread(new ThreadStart(Inventory));
+        static Thread threadQ = new Thread(new ThreadStart(Quests));
+        public static void Keys()
+        {
+            var key = Console.ReadKey(true);
+            while (true)
+            {
+                switch(key.Key)
+                {
+                    case ConsoleKey.I:
+                        threadI.Start();
+                        threadK.Interrupt(); break;
+                    case ConsoleKey.Q:
+                        threadQ.Start();
+                        threadK.Interrupt(); break;
+                    default:
+                        continue;
+                }    
+            }
+        }
+        public static void Inventory()
+        {
+            Console.WriteLine("Inventory:");
+            var key = Console.ReadKey(true);
+            while (true)
+            {
+                switch (key.Key)
+                {
+                    case ConsoleKey.Q:
+                        threadQ.Start();
+                        threadI.Interrupt(); break;
+                    case ConsoleKey.B:
+                        threadK.Start();
+                        threadI.Interrupt(); break;
+                    default:
+                        continue;
+                }
+            }
+        }
+        public static void Quests()
+        {
+            Console.WriteLine("Quests:");
+            var key = Console.ReadKey(true);
+            while (true)
+            {
+                switch (key.Key)
+                {
+                    case ConsoleKey.I:
+                        threadI.Start();
+                        threadQ.Interrupt(); break;
+                    case ConsoleKey.B:
+                        threadK.Start();
+                        threadQ.Interrupt(); break;
+                    default:
+                        continue;
+                }
+            }
+        }
+    }
     public class Data
     {
         public static SaveFile saveData = new();
@@ -109,6 +170,7 @@ public class Game
     {
         public static void MainM()
         {
+            threadK.Start();
             Console.Clear();
             while (true)
             {
@@ -318,7 +380,7 @@ public class Game
         Console.Clear();
         while (true)
         {
-            Console.WriteLine("Load Game or start a new adventure? \n \n 1. New Game \n2. Load Game");
+            Console.WriteLine("Load Game or start a new adventure? \n \n1. New Game \n2. Load Game");
             var load = Console.ReadKey();
             if (!menuOption.TryGetValue(load.Key, out var option))
             {
