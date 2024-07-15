@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Timers;
 using System.Text.Json;
-using System.Security.Cryptography.X509Certificates;
 
 public class Game
 {
@@ -86,6 +85,20 @@ public class Game
                     Menu.MainM(); break;
                 case 1:
                     Menu.Places(); break;
+                case 2:
+                    Village.Square(); break;
+                case 3:
+                    Village.Forge(); break;
+                case 4:
+                    Village.Workbench(); break;
+                case 5:
+                    Village.Armour(); break;
+                case 6:
+                    Village.Weapons(); break;
+                case 7:
+                    Village.Tavern(); break;
+                case 8:
+                    Village.Woods(); break;
             }
         }
     }
@@ -215,6 +228,7 @@ public class Game
     {
         public static void Square()
         {
+            MenuID = 2;
             Console.Clear();
             while (true)
             {
@@ -254,26 +268,32 @@ public class Game
         }
         public static void Forge()
         {
+            MenuID = 3;
             Console.Clear();
         }
         public static void Workbench()
         {
+            MenuID = 4;
             Console.Clear();
         }
         public static void Armour()
         {
+            MenuID = 5;
             Console.Clear();
         }
         public static void Weapons()
         {
+            MenuID = 6;
             Console.Clear();
         }
         public static void Tavern()
         {
+            MenuID = 7;
             Console.Clear();
         }
         public static void Woods()
         {
+            MenuID = 8;
             Console.Clear();
             while (true)
             {
