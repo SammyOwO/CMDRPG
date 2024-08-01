@@ -5,7 +5,7 @@ using System.Text.Json;
 public class Game
 {
     public static int MenuID = 0;
-    public static System.Timers.Timer skillTimer = new System.Timers.Timer(250);
+    public static Random rnd = new Random();
     public static Dictionary<short, ItemData> Items = new Dictionary<short, ItemData>();
     public static Dictionary<ConsoleKey, int> menuOption = new Dictionary<ConsoleKey, int>()
     {
@@ -73,6 +73,47 @@ public class Game
                 break;
             }
         }
+        public static async Task Skill(byte Skill, int Duration, short ID, short Min, short Max, int EMin, int EMax)
+        {
+            Items.TryGetValue(ID, out var itemName);
+            var Item = itemName.Name;
+            var Time = Duration - ((Duration * saveData.Levels[Skill]) / 100) + (Duration / 100);
+            switch (Skill)
+            {
+                case 1:
+                    Console.WriteLine("Mining...");
+                    break;
+                case 2:
+                    Console.WriteLine("Farming...");
+                    break;
+                case 3:
+                    Console.WriteLine("Fishing...");
+                    break;
+                case 4:
+                    Console.WriteLine("Foraging...");
+                    break;
+                case 5:
+                    Console.WriteLine("Crafting...");
+                    break;
+                case 6:
+                    Console.WriteLine("Enchanting...");
+                    break;
+                case 7:
+                    Console.WriteLine("Brewing...");
+                    break;
+            }
+            await Task.Delay(Time);
+            Reward(Skill, ID, Min, Max, EMin, EMax);
+            Console.WriteLine("Done! You now have {0} {1}.", saveData.Inventory[ID], Item);
+        }
+        public static void Reward(byte Skill, short ID, short Min, short Max, int EMin, int EMax)
+        {
+            if (Items.ContainsKey(ID))
+            {
+                saveData.Inventory[ID] += (short)rnd.Next(Min, Max + 1);
+            }
+            saveData.Exp[Skill] += rnd.Next(EMin, EMax + 1);
+        }
         public static void BattleData()
         {
 
@@ -108,7 +149,7 @@ public class Game
         //HP, Strength, Defense, Mana, Crit Chance, Crit Damage, HP Regen
         public int[] Stats { get; set; } = [100, 25, 0, 50, 20, 150, 25];
         //Combat, Mining, Farming, Fishing, Foraging, Woodworking, Enchanting and Alchemy
-        public int[] Levels { get; set; } = [1, 1, 1, 1, 1, 1, 1, 1];
+        public short[] Levels { get; set; } = [1, 1, 1, 1, 1, 1, 1, 1];
         public int[] Exp { get; set; } = [0, 0, 0, 0, 0, 0, 0, 0];
         //Quantities of which item IDs the player has.
         public short[] Inventory { get; set; } = new short[5000];
@@ -354,9 +395,10 @@ public class Game
     {
         ItemData[] items = {
         new ItemData(1,"Oak Wood","A simple material for crafting.",0,false),
-        new ItemData(11,"Stone","A simple material for crafting.",0,false),
-        new ItemData(26,"Ore 1","The first ore used for crafting simple metal items.",0,false),
-        new ItemData(51,"Ore 1 Bar","An ingot form of the first ore",0,false)
+        new ItemData(11,"Oak Stick","A simple stick from the first available wood in the game.",0,false),
+        new ItemData(21,"Stone","A simple material for crafting.",0,false),
+        new ItemData(36,"Ore 1","The first ore used for crafting simple metal items.",0,false),
+        new ItemData(61,"Ore 1 Bar","An ingot form of the first ore",0,false)
         };
         foreach (ItemData item in items)
         {
@@ -365,9 +407,9 @@ public class Game
     }
     public static void Main()
     {
+        Console.Title = "CMDRPG";
         Directory.CreateDirectory(@"./Saves/");
         DictAdd();
-        skillTimer.Enabled = false;
         Console.WriteLine("Hewwo :3 \nPress any key to continue ^w^");
         Console.ReadKey();
         Console.Clear();
@@ -420,7 +462,7 @@ public class Game
     }
     public static void Welcome()
     {
-        Console.WriteLine("Welcome back " + Data.saveData.Name + "! \nPress any key to continue UwU");
+        Console.WriteLine($"Welcome back {Data.saveData.Name}! \nPress any key to continue UwU");
         Console.ReadKey();
         bool newPlayer = Data.saveData.New;
         if (newPlayer)
@@ -460,7 +502,7 @@ public class Game
             Console.WriteLine("Here you will see a mock up of the main menu to get you used to the main controls.");
             Console.WriteLine("After that you can explore around for yourself. For now go to places and go to the woods in the village to chop some trees. \n");
             Console.WriteLine("Main Menu: \n");
-            Console.WriteLine("P: Places \nI: Inventory \nA: Quests \nX: Exit \n");
+            Console.WriteLine("P: Places \nI: Inventory \nQ: Quests \nX: Exit \n");
             var next = Console.ReadKey();
             switch (next.Key)
             {
@@ -472,7 +514,7 @@ public class Game
                         Console.WriteLine("1. Village (Lvl 0-5) \n2. Caves (Lvl 5-15) \n3. Mines (Lvl 15-25) \n4. Mountains (Lvl 25-40) \n");
                         Console.WriteLine("Type the number of where you would like to go below:");
                         var place = Console.ReadKey(true);
-                        if (menuOption.TryGetValue(place.Key, out var option))
+                        if (!menuOption.TryGetValue(place.Key, out var option))
                         {
                             Console.Clear();
                             Console.WriteLine($"{place.Key} is an invalid input, try again. \n");
@@ -488,7 +530,7 @@ public class Game
                                     Console.WriteLine("Where would you like to go? \n \nPlaces: \n");
                                     Console.WriteLine("1. Forge \n2. Workbench \n3. Armourer \n4. Weaponsmith \n5. Tavern \n6. Woods");
                                     var place2 = Console.ReadKey();
-                                    if (menuOption.TryGetValue(place2.Key, out var option2))
+                                    if (!menuOption.TryGetValue(place2.Key, out var option2))
                                     {
                                         Console.Clear();
                                         Console.WriteLine($"{place2.Key} is an invalid input, try again. \n");
@@ -513,9 +555,9 @@ public class Game
                                             Console.WriteLine("Wait until after the tutorial. \n"); continue;
                                         case 6:
                                             Console.Clear();
+                                            Console.WriteLine("Good, now go chop and Oak Tree. \n");
                                             while (true)
                                             {
-                                                Console.WriteLine("Good, now go chop and Oak Tree. \n");
                                                 Console.WriteLine("Wandering in the woods you think of what to do: \n");
                                                 Console.WriteLine("1. Chop an Oak Tree \n2. Chop a Birch Tree \n3. Gather Sticks \n4. Pick up Stones \n5. Travel Deeper \n \n0. Go Back \n");
                                                 var act = Console.ReadKey(true);
@@ -525,10 +567,11 @@ public class Game
                                                     Console.WriteLine($"{act.Key} is not a valid key, try again.");
                                                     continue;
                                                 }
-                                                switch (option)
+                                                switch (option3)
                                                 {
                                                     case 1:
-                                                        break;
+                                                        Console.Clear();
+                                                        Task.Run(() => Data.Skill(4, 10000, 1, 1, 3, 10, 15)).Wait(); continue;
                                                     case 2:
                                                         Console.Clear();
                                                         Console.WriteLine("Wait until after the tutorial. \n"); continue;
@@ -547,12 +590,12 @@ public class Game
                                                         {
                                                             while (true)
                                                             {
-                                                                Console.WriteLine("Now that you're back, go to the work bench and craft ");
+                                                                Console.WriteLine("Now that you're back, go to the work bench and craft a bushel of sticks.");
                                                                 Console.WriteLine("You arrive in the town square.");
                                                                 Console.WriteLine("Where would you like to go? \n \nPlaces: \n");
                                                                 Console.WriteLine("1. Forge \n2. Workbench \n3. Armourer \n4. Weaponsmith \n5. Tavern \n6. Woods");
                                                                 var place3 = Console.ReadKey();
-                                                                if (menuOption.TryGetValue(place3.Key, out var option4))
+                                                                if (!menuOption.TryGetValue(place3.Key, out var option4))
                                                                 {
                                                                     Console.Clear();
                                                                     Console.WriteLine($"{place3.Key} is an invalid input, try again. \n");
@@ -565,7 +608,51 @@ public class Game
                                                                         Console.WriteLine("Wait until after the tutorial. \n"); continue;
                                                                     case 2:
                                                                         Console.Clear();
-                                                                        Console.WriteLine("This comes at a later part of the tutorial. :3 \n"); break;
+                                                                        Console.WriteLine("Now that you're here, you can craft a bushel of sticks. \n");
+                                                                        while(true)
+                                                                        {
+                                                                            Console.WriteLine("Sitting in front of the workbench you think of what to craft:");
+                                                                            Console.WriteLine("Oak Wood: {0}, Oak Sticks: {1}, Stone: {2}, Metal 1: {3} \n", Data.saveData.Inventory[1], Data.saveData.Inventory[11], Data.saveData.Inventory[21], Data.saveData.Inventory[61]);
+                                                                            Console.WriteLine("1. Oak Sticks (Oak Wood: 1, Yield: 5) \nNo other options until after the tutorial. \n \n0. Go back");
+                                                                            var craft = Console.ReadKey(true);
+                                                                            if(!menuOption.TryGetValue(craft.Key, out var option5))
+                                                                            {
+                                                                                Console.Clear();
+                                                                                Console.WriteLine($"{craft.Key} is an invalid input, try again. \n");
+                                                                            }
+                                                                            switch(option5)
+                                                                            {
+                                                                                case 1:
+                                                                                    Console.Clear();
+                                                                                    Data.saveData.Inventory[1] -= 1;
+                                                                                    Task.Run(() => Data.Skill(5, 5000, 11, 5, 5, 10, 10)).Wait();
+                                                                                    continue;
+                                                                                case 0:
+                                                                                    Console.Clear();
+                                                                                    if (Data.saveData.Inventory[11] >= 5)
+                                                                                    {
+                                                                                        Console.WriteLine("Great Job, you finished the tutorial! \nNow time to play the real game, good luck and have fun.");
+                                                                                        Console.WriteLine("Press any key to go to the main menu!");
+                                                                                        Data.saveData.New = false;
+                                                                                        Console.ReadKey(true);
+                                                                                        Console.Clear();
+                                                                                        Data.save();
+                                                                                        Welcome();
+                                                                                        break;
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        Console.WriteLine("Craft some sticks first silly! \n");
+                                                                                        continue;
+                                                                                    }
+                                                                                default:
+                                                                                    Console.Clear();
+                                                                                    Console.WriteLine($"{craft.Key} is an invalid input, try again. \n");
+                                                                                    continue;
+                                                                            }
+                                                                            break;
+                                                                        }
+                                                                        break;
                                                                     case 3:
                                                                         Console.Clear();
                                                                         Console.WriteLine("Wait until after the tutorial. \n"); continue;
@@ -577,7 +664,7 @@ public class Game
                                                                         Console.WriteLine("Wait until after the tutorial. \n"); continue;
                                                                     case 6:
                                                                         Console.Clear();
-                                                                        Console.WriteLine("You were just here, silly/"); continue;
+                                                                        Console.WriteLine("You were just here, silly. :3 \n"); continue;
                                                                     default:
                                                                         Console.Clear();
                                                                         Console.WriteLine($"{place3.Key} is an invalid input, try again. \n");
