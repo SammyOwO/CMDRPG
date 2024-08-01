@@ -104,7 +104,7 @@ public class Game
             }
             await Task.Delay(Time);
             Reward(Skill, ID, Min, Max, EMin, EMax);
-            Console.WriteLine("Done! You now have {0} {1}.", saveData.Inventory[ID], Item);
+            Console.WriteLine("Done! You now have {0} {1}. \n", saveData.Inventory[ID], Item);
         }
         public static void Reward(byte Skill, short ID, short Min, short Max, int EMin, int EMax)
         {
@@ -624,8 +624,15 @@ public class Game
                                                                             {
                                                                                 case 1:
                                                                                     Console.Clear();
-                                                                                    Data.saveData.Inventory[1] -= 1;
-                                                                                    Task.Run(() => Data.Skill(5, 5000, 11, 5, 5, 10, 10)).Wait();
+                                                                                    if (Data.saveData.Inventory[1] != 0)
+                                                                                    {
+                                                                                        Data.saveData.Inventory[1] -= 1;
+                                                                                        Task.Run(() => Data.Skill(5, 5000, 11, 5, 5, 10, 10)).Wait();
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        Console.WriteLine("Not enough materials to craft... \n");
+                                                                                    }
                                                                                     continue;
                                                                                 case 0:
                                                                                     Console.Clear();
@@ -634,9 +641,9 @@ public class Game
                                                                                         Console.WriteLine("Great Job, you finished the tutorial! \nNow time to play the real game, good luck and have fun.");
                                                                                         Console.WriteLine("Press any key to go to the main menu!");
                                                                                         Data.saveData.New = false;
+                                                                                        Data.save();
                                                                                         Console.ReadKey(true);
                                                                                         Console.Clear();
-                                                                                        Data.save();
                                                                                         Welcome();
                                                                                         break;
                                                                                     }
