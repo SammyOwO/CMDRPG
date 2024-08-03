@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Timers;
+using System.Security.Claims;
 using System.Text.Json;
 
 public class Game
@@ -28,7 +28,13 @@ public class Game
         { ConsoleKey.D9, 9 },
         { ConsoleKey.NumPad9, 9 },
         { ConsoleKey.D0, 0 },
-        { ConsoleKey.NumPad0, 0 }
+        { ConsoleKey.NumPad0, 0 },
+        { ConsoleKey.P, 10 },
+        { ConsoleKey.I, 11 },
+        { ConsoleKey.Q, 12 },
+        { ConsoleKey.T, 13 },
+        { ConsoleKey.N, 14 },
+        { ConsoleKey.X, 99 }
     };
     public class Data
     {
@@ -183,22 +189,24 @@ public class Game
             while (true)
             {
                 Console.WriteLine("Main Menu: \n");
-                Console.WriteLine("P: Places \nI: Inventory \nA: Quests \nX: Exit");
+                Console.WriteLine("P: Places \nI: Inventory \nA: Quests \nX: Exit \n");
                 var next = Console.ReadKey(true);
-                switch (next.Key)
+                if (!menuOption.TryGetValue(next.Key, out var place))
                 {
-                    case ConsoleKey.P:
+                    Console.Clear();
+                    Console.WriteLine($"{next.Key} is not a valid key, try again.");
+                    continue;
+                }
+                switch (place)
+                {
+                    case 10:
                         Places(); break;
-                    case ConsoleKey.I:
+                    case 11:
                         Inventory(); break;
-                    case ConsoleKey.Q:
+                    case 12:
                         Quests(); break;
-                    case ConsoleKey.X:
+                    case 99:
                         Exit(); break;
-                    default:
-                        Console.Clear();
-                        Console.WriteLine($"{next.Key} is not a valid key, try again.");
-                        continue;
                 }
                 break;
             }
@@ -210,7 +218,7 @@ public class Game
             while (true)
             {
                 Console.WriteLine("Where would you like to go? \n \nPlaces: \n");
-                Console.WriteLine("1. Village (Lvl 0-5) \n2. Caves (Lvl 5-15) \n3. Mines (Lvl 15-25) \n4. Mountains (Lvl 25-40) \n \n0. Go back");
+                Console.WriteLine("1. Village (Lvl 0-5) \n2. Caves (Lvl 5-15) \n3. Mines (Lvl 15-25) \n4. Mountains (Lvl 25-40) \n \n0. Go back | I: Inventory \n");
                 var place = Console.ReadKey(true);
                 if (!menuOption.TryGetValue(place.Key, out var option))
                 {
@@ -220,6 +228,8 @@ public class Game
                 }
                 switch (option)
                 {
+                    case 0:
+                        MainM(); break;
                     case 1:
                         Village.Square(); break;
                     case 2:
@@ -228,12 +238,8 @@ public class Game
                         Mines.Town(); break;
                     case 4:
                         Mountains.Base(); break;
-                    case 0:
-                        Menu.MainM(); break;
-                    default:
-                        Console.Clear();
-                        Console.WriteLine($"{place.Key} is not a valid key, try again.");
-                        continue;
+                    case 11:
+                        Inventory(); break;
                 }
                 break;
             }
@@ -251,18 +257,21 @@ public class Game
                 }
                 switch(option)
                 {
+                    case 0:
+                        Data.Back(); break;
                     case 1:
                         Console.WriteLine("Stuff"); break;
-                    case 0:
-                        //the method I want to go back to
-                        //example: MainM() or Village.Square() or Village.Woods()
-                    continue;
+                    case 99:
+                        Exit(); break;
                 }
             }
         }
         public static void Quests()
         {
-
+            Console.Clear();
+            Console.WriteLine("This doesn't exist, probably never will.");
+            Console.ReadKey();
+            MainM();
         }
     }
     public class Village
@@ -275,7 +284,7 @@ public class Game
             {
                 Console.WriteLine("You arrive in the town square.");
                 Console.WriteLine("Where would you like to go? \n \nPlaces: \n");
-                Console.WriteLine("1. Forge \n2. Workbench \n3. Armourer \n4. Weaponsmith \n5. Tavern \n6. Woods \n \n0. Go back \n");
+                Console.WriteLine("1. Forge \n2. Workbench \n3. Armourer \n4. Weaponsmith \n5. Tavern \n6. Woods \n \n0. Go back | I: Inventory \n");
                 var place = Console.ReadKey();
                 if (!menuOption.TryGetValue(place.Key, out var option))
                 {
@@ -285,6 +294,8 @@ public class Game
                 }
                 switch (option)
                 {
+                    case 0:
+                        Menu.Places(); break;
                     case 1:
                         Forge(); break;
                     case 2:
@@ -297,12 +308,8 @@ public class Game
                         Tavern();  break;
                     case 6:
                         Woods(); break;
-                    case 0:
-                        Menu.Places(); break;
-                    default:
-                        Console.Clear();
-                        Console.WriteLine($"{place.Key} is not a valid key, try again.");
-                        continue;
+                    case 11:
+                        Menu.Inventory(); break;
                 }
                 break;
             }
@@ -339,7 +346,7 @@ public class Game
             while (true)
             {
                 Console.WriteLine("Wandering in the woods you think of what to do: \n");
-                Console.WriteLine("1. Chop an Oak Tree \n2. Chop a Birch Tree \n3. Gather Sticks \n4. Pick up Stones \n5. Travel Deeper \n \n0. Go Back \n");
+                Console.WriteLine("1. Chop an Oak Tree \n2. Chop a Birch Tree \n3. Gather Sticks \n4. Pick up Stones \n5. Travel Deeper \n \n0. Go Back | I: Inventory \n");
                 var act = Console.ReadKey(true);
                 if (!menuOption.TryGetValue(act.Key, out var option))
                 {
@@ -349,6 +356,8 @@ public class Game
                 }
                 switch (option)
                 {
+                    case 0:
+                        Square(); break;
                     case 1:
                         break;
                     case 2:
@@ -359,12 +368,8 @@ public class Game
                         break;
                     case 5:
                         break;
-                    case 0:
-                        Square(); break;
-                    default:
-                        Console.Clear();
-                        Console.WriteLine($"{act.Key} is not a valid key, try again.");
-                        continue;
+                    case 11:
+                        Menu.Inventory(); break;
                 }
                 break;
             }
@@ -415,7 +420,7 @@ public class Game
         Console.Clear();
         while (true)
         {
-            Console.WriteLine("Load Game or start a new adventure? \n \n1. New Game \n2. Load Game");
+            Console.WriteLine("Load Game or start a new adventure? \n \n1. New Game \n2. Load Game \n");
             var load = Console.ReadKey();
             if (!menuOption.TryGetValue(load.Key, out var option))
             {
@@ -427,42 +432,37 @@ public class Game
             {
                 case 1:
                     Console.Clear();
-                    Console.WriteLine("Welcome 2 the game, hehe :3 \nYour goal is to just get better stuff! \nPress any key!");
+                    Console.WriteLine("Welcome 2 the game, hehe :3 \nYour goal is to just get better stuff! \nPress any key! \n");
                     Console.ReadKey();
                     Console.Clear();
-                    Console.WriteLine("First, let's get started by making a name for yourself! \nType your name below to continue:");
+                    Console.WriteLine("First, let's get started by making a name for yourself! \nType your name below to continue: \n");
                     var name = Console.ReadLine();
                     Console.Clear();
                     Data.saveData.Name = name;
-                    Console.Write("Hi " + Data.saveData.Name + "! \nWelcome to CMD RPG \nPress any key!");
+                    Console.Write("Hi " + Data.saveData.Name + "! \nWelcome to CMD RPG \nPress any key! \n \n");
                     Console.ReadKey();
                     Console.Clear();
-                    Console.WriteLine("In this game you have 7 main stats. HP or Hit/health Points, Strength which determines your damage, Defense for how much incoming damage you block and Mana for magic weapons. \nThen there is Crit Chance for how likely you are to score a critical hit and Crit Damage for how much more damage that hit does. \nLast but not least there is HP regen for how much HP you get back per turn.");
-                    Console.WriteLine("\nBeyond that you also have to work on leveling skills. There are 8 of them: Combat, Mining, Farming, Fishing, Foraging, Woodworking, Enchanting and Alchemy \nPress any key!");
+                    Console.WriteLine("In this game you have 7 main stats. HP or Hit/health Points, Strength which determines your damage, Defense for how much incoming damage you block and Mana for magic weapons. \nThen there is Crit Chance for how likely you are to score a critical hit and Crit Damage for how much more damage that hit does. \nLast but not least there is HP regen for how much HP you get back per turn. \n");
+                    Console.WriteLine("Beyond that you also have to work on leveling skills. There are 8 of them: Combat, Mining, Farming, Fishing, Foraging, Woodworking, Enchanting and Alchemy \nPress any key! \n");
                     Console.ReadKey();
                     Console.Clear();
-                    Console.WriteLine("Now, you might be asking, how do I get these skills leveled up? Good Question! It'll come with time to master, but starting off it's gonna be pretty easy. \nTo start off there will be basic tasks you can do in the first area, from there you'll be able to go and grind skills in their respective areas.");
-                    Console.WriteLine("When you get higher skill levels you'll be able to use better tools and such. \nNow when you get to the first screen there might look like there's a lot to do, which there is, but it's not as scary as it seems. \nThere will be a few main buttons for your inventory and such, but it should all be pretty intuitive.");
-                    Console.WriteLine("Now, when you get in, your first objective will be to get some wood to craft your first tools! \nKind of reminds me of some other game, but I'm not sure, hehe :3 \nPress any key to continue to the main attraction!");
-                    Console.ReadKey();
+                    Console.WriteLine("Now, you might be asking, how do I get these skills leveled up? Good Question! It'll come with time to master, but starting off it's gonna be pretty easy. \nTo start off there will be basic tasks you can do in the first area, from there you'll be able to go and grind skills in their respective areas. \n");
+                    Console.WriteLine("When you get higher skill levels you'll be able to use better tools and such. \nNow when you get to the first screen there might look like there's a lot to do, which there is, but it's not as scary as it seems. \nThere will be a few main buttons for your inventory and such, but it should all be pretty intuitive. \n");
+                    Console.WriteLine("Now, when you get in, your first objective will be to get some wood to craft your first tools! \nKind of reminds me of some other game, but I'm not sure, hehe :3 \nPress any key to continue to the main attraction! \n");
                     Data.save();
-                    Tutorial();
-                    break;
-
+                    Console.ReadKey();
+                    Tutorial(); break;
                 case 2:
-                    Data.load();
-                    break;
-                default:
-                    Console.Clear();
-                    Console.WriteLine("Invalid expression, try again. \n");
-                    continue;
+                    Data.load(); break;
+                case 11:
+                    Console.WriteLine("How did you find this...? \n"); continue;
             }
             break;
         }
     }
     public static void Welcome()
     {
-        Console.WriteLine($"Welcome back {Data.saveData.Name}! \nPress any key to continue UwU");
+        Console.WriteLine($"Welcome back {Data.saveData.Name}! \nPress any key to continue UwU \n");
         Console.ReadKey();
         bool newPlayer = Data.saveData.New;
         if (newPlayer)
@@ -470,13 +470,19 @@ public class Game
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine("Hold up, it looks like you didn't complete the tutorial yet? \nJust in case as a refresher I'll have you restart it. \nUnless you want to skip that of course. \n \nPress T for tutorial or N for no tutorial.");
+                Console.WriteLine("Hold up, it looks like you didn't complete the tutorial yet? \nJust in case as a refresher I'll have you restart it. \nUnless you want to skip that of course. \n \nPress T for tutorial or N for no tutorial. \n");
                 var tutorial = Console.ReadKey();
-                switch (tutorial.Key)
+                if (menuOption.TryGetValue(tutorial.Key, out var option))
                 {
-                    case ConsoleKey.T:
+                    Console.Clear();
+                    Console.WriteLine($"{tutorial.Key} is not a valid key, try again.");
+                    continue;
+                }
+                switch (option)
+                {
+                    case 13:
                         Tutorial(); break;
-                    case ConsoleKey.N:
+                    case 14:
                         Menu.MainM(); break;
                     default:
                         Console.Clear();
@@ -494,7 +500,7 @@ public class Game
     public static void Tutorial()
     {
         Console.Clear();
-        Console.WriteLine("Welcome to the tutorial. \nThe first task is to get wood and craft your first set of tools. \nPress any key to continue.");
+        Console.WriteLine("Welcome to the tutorial. \nThe first task is to get wood and craft your first set of tools. \nPress any key to continue. \n");
         Console.ReadKey();
         Console.Clear();
         while (true)
@@ -504,9 +510,15 @@ public class Game
             Console.WriteLine("Main Menu: \n");
             Console.WriteLine("P: Places \nI: Inventory \nQ: Quests \nX: Exit \n");
             var next = Console.ReadKey();
-            switch (next.Key)
+            if (!menuOption.TryGetValue(next.Key, out var optionM))
             {
-                case ConsoleKey.P:
+                Console.Clear();
+                Console.WriteLine($"{next.Key} is not a valid key, try again.");
+                continue;
+            }
+            switch (optionM)
+            {
+                case 10:
                     Console.Clear();
                     while (true)
                     {
@@ -528,7 +540,7 @@ public class Game
                                 {
                                     Console.WriteLine("You arrive in the town square.");
                                     Console.WriteLine("Where would you like to go? \n \nPlaces: \n");
-                                    Console.WriteLine("1. Forge \n2. Workbench \n3. Armourer \n4. Weaponsmith \n5. Tavern \n6. Woods");
+                                    Console.WriteLine("1. Forge \n2. Workbench \n3. Armourer \n4. Weaponsmith \n5. Tavern \n6. Woods \n");
                                     var place2 = Console.ReadKey();
                                     if (!menuOption.TryGetValue(place2.Key, out var option2))
                                     {
@@ -569,31 +581,16 @@ public class Game
                                                 }
                                                 switch (option3)
                                                 {
-                                                    case 1:
-                                                        Console.Clear();
-                                                        Task.Run(() => Data.Skill(4, 10000, 1, 1, 3, 10, 15)).Wait(); continue;
-                                                    case 2:
-                                                        Console.Clear();
-                                                        Console.WriteLine("Wait until after the tutorial. \n"); continue;
-                                                    case 3:
-                                                        Console.Clear();
-                                                        Console.WriteLine("Wait until after the tutorial. \n"); continue;
-                                                    case 4:
-                                                        Console.Clear();
-                                                        Console.WriteLine("Wait until after the tutorial. \n"); continue;
-                                                    case 5:
-                                                        Console.Clear();
-                                                        Console.WriteLine("Wait until after the tutorial. \n"); continue;
                                                     case 0:
                                                         Console.Clear();
                                                         if (Data.saveData.Inventory[1] > 0)
                                                         {
                                                             while (true)
                                                             {
-                                                                Console.WriteLine("Now that you're back, go to the work bench and craft a bushel of sticks.");
+                                                                Console.WriteLine("Now that you're back, go to the work bench and craft a bushel of sticks. \n");
                                                                 Console.WriteLine("You arrive in the town square.");
                                                                 Console.WriteLine("Where would you like to go? \n \nPlaces: \n");
-                                                                Console.WriteLine("1. Forge \n2. Workbench \n3. Armourer \n4. Weaponsmith \n5. Tavern \n6. Woods");
+                                                                Console.WriteLine("1. Forge \n2. Workbench \n3. Armourer \n4. Weaponsmith \n5. Tavern \n6. Woods \n");
                                                                 var place3 = Console.ReadKey();
                                                                 if (!menuOption.TryGetValue(place3.Key, out var option4))
                                                                 {
@@ -609,18 +606,18 @@ public class Game
                                                                     case 2:
                                                                         Console.Clear();
                                                                         Console.WriteLine("Now that you're here, you can craft a bushel of sticks. \n");
-                                                                        while(true)
+                                                                        while (true)
                                                                         {
                                                                             Console.WriteLine("Sitting in front of the workbench you think of what to craft:");
                                                                             Console.WriteLine("Oak Wood: {0}, Oak Sticks: {1}, Stone: {2}, Metal 1: {3} \n", Data.saveData.Inventory[1], Data.saveData.Inventory[11], Data.saveData.Inventory[21], Data.saveData.Inventory[61]);
-                                                                            Console.WriteLine("1. Oak Sticks (Oak Wood: 1, Yield: 5) \nNo other options until after the tutorial. \n \n0. Go back");
+                                                                            Console.WriteLine("1. Oak Sticks (Oak Wood: 1, Yield: 5) \nNo other options until after the tutorial. \n \n0. Go back \n");
                                                                             var craft = Console.ReadKey(true);
-                                                                            if(!menuOption.TryGetValue(craft.Key, out var option5))
+                                                                            if (!menuOption.TryGetValue(craft.Key, out var option5))
                                                                             {
                                                                                 Console.Clear();
                                                                                 Console.WriteLine($"{craft.Key} is an invalid input, try again. \n");
                                                                             }
-                                                                            switch(option5)
+                                                                            switch (option5)
                                                                             {
                                                                                 case 1:
                                                                                     Console.Clear();
@@ -639,7 +636,7 @@ public class Game
                                                                                     if (Data.saveData.Inventory[11] >= 5)
                                                                                     {
                                                                                         Console.WriteLine("Great Job, you finished the tutorial! \nNow time to play the real game, good luck and have fun.");
-                                                                                        Console.WriteLine("Press any key to go to the main menu!");
+                                                                                        Console.WriteLine("Press any key to go to the main menu! \n");
                                                                                         Data.saveData.New = false;
                                                                                         Data.save();
                                                                                         Console.ReadKey(true);
@@ -672,10 +669,6 @@ public class Game
                                                                     case 6:
                                                                         Console.Clear();
                                                                         Console.WriteLine("You were just here, silly. :3 \n"); continue;
-                                                                    default:
-                                                                        Console.Clear();
-                                                                        Console.WriteLine($"{place3.Key} is an invalid input, try again. \n");
-                                                                        continue;
                                                                 }
                                                                 break;
                                                             }
@@ -685,18 +678,25 @@ public class Game
                                                             Console.WriteLine("Chop some wood first :3 \n"); continue;
                                                         }
                                                         break;
-                                                    default:
+                                                    case 1:
                                                         Console.Clear();
-                                                        Console.WriteLine($"{act.Key} is not a valid key, try again.");
-                                                        continue;
+                                                        Task.Run(() => Data.Skill(4, 10000, 1, 1, 3, 10, 15)).Wait(); continue;
+                                                    case 2:
+                                                        Console.Clear();
+                                                        Console.WriteLine("Wait until after the tutorial. \n"); continue;
+                                                    case 3:
+                                                        Console.Clear();
+                                                        Console.WriteLine("Wait until after the tutorial. \n"); continue;
+                                                    case 4:
+                                                        Console.Clear();
+                                                        Console.WriteLine("Wait until after the tutorial. \n"); continue;
+                                                    case 5:
+                                                        Console.Clear();
+                                                        Console.WriteLine("Wait until after the tutorial. \n"); continue;
                                                 }
                                                 break;
                                             }
                                             break;
-                                        default:
-                                            Console.Clear();
-                                            Console.WriteLine($"{place2.Key} is an invalid input, try again. \n");
-                                            continue;
                                     }
                                     break;
                                 }
@@ -710,26 +710,18 @@ public class Game
                             case 4:
                                 Console.Clear();
                                 Console.WriteLine("Not unlocked yet! Level is too low (Also it's the still tutorial silly). \n"); continue;
-                            default:
-                                Console.Clear();
-                                Console.WriteLine($"{place.Key} is an invalid input, try again. \n");
-                                continue;
                         }
                         break;
                     }
                     break;
-                case ConsoleKey.I:
+                case 11:
                     Console.Clear();
                     Console.WriteLine("Wait until after the tutorial goober. :3 \n"); continue;
-                case ConsoleKey.Q:
+                case 12:
                     Console.Clear();
                     Console.WriteLine("Wait until after the tutorial goober. :3 \n"); continue;
-                case ConsoleKey.X:
+                case 99:
                     Exit(); break;
-                default:
-                    Console.Clear();
-                    Console.WriteLine("Not a valid key, try again. \n");
-                    continue;
             }
             break;
         }
@@ -738,7 +730,7 @@ public class Game
     {
         Console.Clear();
         Data.save();
-        Console.WriteLine("Game saved! Press any key to exit. :3");
+        Console.WriteLine("Game saved! Press any key to exit. :3 \n");
         Console.ReadKey();
     }
 }
