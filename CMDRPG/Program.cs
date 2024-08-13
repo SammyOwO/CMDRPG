@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Security.Claims;
 using System.Text.Json;
 
 public class Game
@@ -29,12 +28,7 @@ public class Game
         { ConsoleKey.NumPad9, 9 },
         { ConsoleKey.D0, 0 },
         { ConsoleKey.NumPad0, 0 },
-        { ConsoleKey.P, 10 },
-        { ConsoleKey.I, 11 },
-        { ConsoleKey.Q, 12 },
-        { ConsoleKey.T, 13 },
-        { ConsoleKey.N, 14 },
-        { ConsoleKey.X, 99 }
+        { ConsoleKey.I, 11 }
     };
     public class Data
     {
@@ -189,24 +183,21 @@ public class Game
             while (true)
             {
                 Console.WriteLine("Main Menu: \n");
-                Console.WriteLine("P: Places \nI: Inventory \nA: Quests \nX: Exit \n");
+                Console.WriteLine("P: Places \nI: Inventory \nQ: Quests \nX: Exit \n");
                 var next = Console.ReadKey(true);
-                if (!menuOption.TryGetValue(next.Key, out var place))
+                switch (next.Key)
                 {
-                    Console.Clear();
-                    Console.WriteLine($"{next.Key} is not a valid key, try again.");
-                    continue;
-                }
-                switch (place)
-                {
-                    case 10:
+                    case ConsoleKey.P:
                         Places(); break;
-                    case 11:
+                    case ConsoleKey.I:
                         Inventory(); break;
-                    case 12:
+                    case ConsoleKey.Q:
                         Quests(); break;
-                    case 99:
+                    case ConsoleKey.X:
                         Exit(); break;
+                    default:
+                        Console.Clear();
+                        Console.WriteLine($"{next.Key} is an invalid input, try again. \n"); continue;
                 }
                 break;
             }
@@ -472,17 +463,11 @@ public class Game
                 Console.Clear();
                 Console.WriteLine("Hold up, it looks like you didn't complete the tutorial yet? \nJust in case as a refresher I'll have you restart it. \nUnless you want to skip that of course. \n \nPress T for tutorial or N for no tutorial. \n");
                 var tutorial = Console.ReadKey();
-                if (menuOption.TryGetValue(tutorial.Key, out var option))
+                switch (tutorial.Key)
                 {
-                    Console.Clear();
-                    Console.WriteLine($"{tutorial.Key} is not a valid key, try again.");
-                    continue;
-                }
-                switch (option)
-                {
-                    case 13:
+                    case ConsoleKey.T:
                         Tutorial(); break;
-                    case 14:
+                    case ConsoleKey.N:
                         Menu.MainM(); break;
                     default:
                         Console.Clear();
@@ -510,15 +495,9 @@ public class Game
             Console.WriteLine("Main Menu: \n");
             Console.WriteLine("P: Places \nI: Inventory \nQ: Quests \nX: Exit \n");
             var next = Console.ReadKey();
-            if (!menuOption.TryGetValue(next.Key, out var optionM))
+            switch (next.Key)
             {
-                Console.Clear();
-                Console.WriteLine($"{next.Key} is not a valid key, try again.");
-                continue;
-            }
-            switch (optionM)
-            {
-                case 10:
+                case ConsoleKey.P:
                     Console.Clear();
                     while (true)
                     {
@@ -669,6 +648,9 @@ public class Game
                                                                     case 6:
                                                                         Console.Clear();
                                                                         Console.WriteLine("You were just here, silly. :3 \n"); continue;
+                                                                    default:
+                                                                        Console.Clear();
+                                                                        Console.WriteLine($"{place3.Key} is an invalid input, try again. \n"); continue;
                                                                 }
                                                                 break;
                                                             }
@@ -693,10 +675,16 @@ public class Game
                                                     case 5:
                                                         Console.Clear();
                                                         Console.WriteLine("Wait until after the tutorial. \n"); continue;
+                                                    default:
+                                                        Console.Clear();
+                                                        Console.WriteLine($"{act.Key} is an invalid input, try again. \n"); continue;
                                                 }
                                                 break;
                                             }
                                             break;
+                                        default:
+                                            Console.Clear();
+                                            Console.WriteLine($"{place2.Key} is an invalid input, try again. \n"); continue;
                                     }
                                     break;
                                 }
@@ -710,18 +698,24 @@ public class Game
                             case 4:
                                 Console.Clear();
                                 Console.WriteLine("Not unlocked yet! Level is too low (Also it's the still tutorial silly). \n"); continue;
+                            default:
+                                Console.Clear();
+                                Console.WriteLine($"{place.Key} is an invalid input, try again. \n"); continue;
                         }
                         break;
                     }
                     break;
-                case 11:
+                case ConsoleKey.I:
                     Console.Clear();
                     Console.WriteLine("Wait until after the tutorial goober. :3 \n"); continue;
-                case 12:
+                case ConsoleKey.Q:
                     Console.Clear();
                     Console.WriteLine("Wait until after the tutorial goober. :3 \n"); continue;
-                case 99:
+                case ConsoleKey.X:
                     Exit(); break;
+                default:
+                    Console.Clear();
+                    Console.WriteLine($"{next.Key} is an invalid input, try again. \n"); continue;
             }
             break;
         }
