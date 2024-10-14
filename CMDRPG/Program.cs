@@ -1,11 +1,11 @@
-﻿using System;
-using System.Text.Json;
+﻿using System.Text.Json;
 
 public class Game
 {
     public static int MenuID = 0;
     public static Random rnd = new Random();
-    public static Dictionary<short, ItemData> Items = new Dictionary<short, ItemData>();
+    public static Dictionary<int, EnemyData> Enemies = new Dictionary<int, EnemyData>();
+    public static Dictionary<int, ItemData> Items = new Dictionary<int, ItemData>();
     public static Dictionary<ConsoleKey, int> menuOption = new Dictionary<ConsoleKey, int>()
     {
         { ConsoleKey.D1, 1 },
@@ -45,7 +45,7 @@ public class Game
             Console.Clear();
             string saveDir = @".\Saves\";
             var saveList = Directory.EnumerateFiles(saveDir);
-            Console.WriteLine("Select a save to continue:");
+            Console.WriteLine("Select a save to continue: \n");
             foreach (string saves in saveList)
             {
                 Console.WriteLine(Path.GetFileNameWithoutExtension(saves));
@@ -74,7 +74,7 @@ public class Game
                 break;
             }
         }
-        public static async Task Skill(byte Skill, int Duration, short ID, short Min, short Max, int EMin, int EMax)
+        public static async Task Skill(int Skill, int Duration, int ID, int Min, int Max, int EMin, int EMax)
         {
             Items.TryGetValue(ID, out var itemName);
             var Item = itemName.Name;
@@ -104,20 +104,16 @@ public class Game
                     break;
             }
             await Task.Delay(Time);
-            Reward(Skill, ID, Min, Max, EMin, EMax);
-            Console.WriteLine("Done! You now have {0} {1}. \n", saveData.Inventory[ID], Item);
-        }
-        public static void Reward(byte Skill, short ID, short Min, short Max, int EMin, int EMax)
-        {
             if (Items.ContainsKey(ID))
             {
-                saveData.Inventory[ID] += (short)rnd.Next(Min, Max + 1);
+                saveData.Inventory[ID] += rnd.Next(Min, Max + 1);
             }
             saveData.Exp[Skill] += rnd.Next(EMin, EMax + 1);
+            Console.WriteLine("Done! You now have {0} {1}. \n", saveData.Inventory[ID], Item);
         }
-        public static void BattleData()
+        public static void BattleData(int EId, int Level, int Items)
         {
-
+            
         }
         public static void Back()
         {
@@ -150,23 +146,40 @@ public class Game
         //HP, Strength, Defense, Mana, Crit Chance, Crit Damage, HP Regen
         public int[] Stats { get; set; } = [100, 25, 0, 50, 20, 150, 25];
         //Combat, Mining, Farming, Fishing, Foraging, Woodworking, Enchanting and Alchemy
-        public short[] Levels { get; set; } = [1, 1, 1, 1, 1, 1, 1, 1];
+        public int[] Levels { get; set; } = [1, 1, 1, 1, 1, 1, 1, 1];
         public int[] Exp { get; set; } = [0, 0, 0, 0, 0, 0, 0, 0];
         //Quantities of which item IDs the player has.
-        public short[] Inventory { get; set; } = new short[5000];
+        public int[] Inventory { get; set; } = new int[5000];
         //Equipped Items
-        public short[] Items { get; set; } = new short[12];
+        public int[] Items { get; set; } = new int[12];
         public bool New { get; set; } = true;
+    }
+    public class EnemyData
+    {
+        public int EId;
+        public string Name;
+        public int Level;
+        public int[] Stats;
+        public int[] Items;
+
+        public EnemyData(int EId, string Name, int Level, int[] Stats, int[] Items)
+        {
+            this.EId = EId;
+            this.Name = Name;
+            this.Level = Level;
+            this.Stats = Stats;
+            this.Items = Items;
+        }
     }
     public class ItemData
     {
-        public short Id;
+        public int Id;
         public string Name;
         public string Description;
-        public short Level;
+        public int Level;
         public bool Equipable;
 
-        public ItemData(short Id, string Name, string Description, short Level, bool Equipable)
+        public ItemData(int Id, string Name, string Description, int Level, bool Equipable)
         {
             this.Id = Id;
             this.Name = Name;
@@ -239,10 +252,20 @@ public class Game
         public static void Inventory()
         {
             Console.Clear();
+            Console.WriteLine("Inventory \n");
             while (true)
             {
-                Console.WriteLine("Inventory Test \n");
-                Console.WriteLine("1. Stuff | 0. Go Back | X: Exit");
+                Console.WriteLine("1. Stuff | 0. Go Back | X: Exit \n");
+                for (int i = 0;  i < Data.saveData.Inventory.Length; i++)
+                {
+                    if (Data.saveData.Inventory[i] > 0)
+                    {
+                        if (Items.TryGetValue(i, out var item))
+                        {
+                            Console.WriteLine("{0}: {1}", item.Name, Data.saveData.Inventory[i]);
+                        }
+                    }
+                }
                 var key = Console.ReadKey(true);
                 if (!menuOption.TryGetValue(key.Key, out var option))
                 {
@@ -400,12 +423,20 @@ public class Game
     }
     public static void DictAdd()
     {
+        EnemyData[] enemies = {
+        new EnemyData(0, "Dummy", 1, [1,1,1,1,1,1,1,1], [])
+        };
+        foreach (EnemyData enemy in enemies)
+        {
+            Enemies.Add(enemy.EId, enemy);
+        }
         ItemData[] items = {
         new ItemData(1,"Oak Wood","A simple material for crafting.",0,false),
         new ItemData(11,"Oak Stick","A simple stick from the first available wood in the game.",0,false),
         new ItemData(21,"Stone","A simple material for crafting.",0,false),
         new ItemData(36,"Ore 1","The first ore used for crafting simple metal items.",0,false),
-        new ItemData(61,"Ore 1 Bar","An ingot form of the first ore",0,false)
+        new ItemData(61,"Ore 1 Bar","An ingot form of the first ore",0,false),
+        new ItemData(69420, "Dummy's Defense", "+1,000,000 HP", 1000000, true)
         };
         foreach (ItemData item in items)
         {
@@ -417,7 +448,7 @@ public class Game
         Console.Title = "CMDRPG";
         Directory.CreateDirectory(@"./Saves/");
         DictAdd();
-        Console.WriteLine("Hewwo :3 \nPress any key to continue ^w^");
+        Console.WriteLine("Hewwo :3 \nPress any key to continue ^w^ \n");
         Console.ReadKey();
         Console.Clear();
         while (true)
