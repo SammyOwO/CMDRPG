@@ -121,7 +121,7 @@ public class Game
     public static void Tutorial()
     {
         Console.Clear();
-        Console.WriteLine("Welcome to the tutorial. \nThe first task is to get wood and craft your first set of tools. \nPress any key to continue. \n");
+        Console.WriteLine("Welcome to the tutorial. \nThe first task is to get wood and craft your first item: some sticks. \nPress any key to continue. \n");
         Console.ReadKey(true);
         Console.Clear();
         while (true)
@@ -182,7 +182,7 @@ public class Game
                                             Console.WriteLine("Wait until after the tutorial. \n"); continue;
                                         case 6:
                                             Console.Clear();
-                                            Console.WriteLine("Good, now go chop and Oak Tree. \n");
+                                            Console.WriteLine("Good, now go chop an Oak Tree. \n");
                                             while (true)
                                             {
                                                 Console.WriteLine("Wandering in the woods you think of what to do: \n");
