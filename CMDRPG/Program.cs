@@ -7,6 +7,25 @@ public class Game
     public static Random rnd = new Random();
     public static Dictionary<int, EnemyData> Enemies = new Dictionary<int, EnemyData>();
     public static Dictionary<int, ItemData> Items = new Dictionary<int, ItemData>();
+    public static Dictionary<int, string> slotName = new Dictionary<int, string>()
+    {
+        { 0, "N/A" },
+        { 1, "Head" },
+        { 2, "Neck" },
+        { 3, "Chest" },
+        { 4, "Belt" },
+        { 5, "Pants" },
+        { 6, "Boots" },
+        { 7, "Gloves" },
+        { 8, "Tool/Weapon" },
+        { 9, "Special" },
+        { 10, "Bracelet 1" },
+        { 11, "Bracelet 2" },
+        { 12, "Ring 1" },
+        { 13, "Ring 2" },
+        { 14, "Ring 3" },
+        { 15, "Ring 4" },
+    };
     public static Dictionary<ConsoleKey, int> menuOption = new Dictionary<ConsoleKey, int>()
     {
         { ConsoleKey.D1, 1 },
@@ -32,12 +51,33 @@ public class Game
         { ConsoleKey.I, 11 },
         { ConsoleKey.X, 99 },
     };
+    public static void DictAdd()
+    {
+        EnemyData[] enemies = {
+                new EnemyData(0, "Dummy", 1, [1,1,1,1,1,1,1,1], [0])
+            };
+        foreach (EnemyData enemy in enemies)
+        {
+            Enemies.Add(enemy.EId, enemy);
+        }
+        ItemData[] items = {
+                new ItemData(0, "Dummy's Defense", "+1,000,000 HP", 1000000, 1),
+                new ItemData(1,"Oak Wood","A simple material for crafting.",0,0),
+                new ItemData(11,"Oak Stick","A simple stick from the first available wood in the game.",0,0),
+                new ItemData(21,"Stone","A simple material for crafting.",0,0),
+                new ItemData(36,"Ore 1","The first ore used for crafting simple metal items.",0,0),
+                new ItemData(61,"Ore 1 Bar","An ingot form of the first ore",0,0)
+            };
+        foreach (ItemData item in items)
+        {
+            Items.Add(item.Id, item);
+        }
+    }
     public static void Main()
     {
+        DictAdd();
         Console.Title = "CMDRPG";
         Directory.CreateDirectory(@"./Saves/");
-        Directory.CreateDirectory(@"./Data/");
-        Data.DictAdd();
         Console.WriteLine("Hewwo :3 \nPress any key to continue ^w^ \n");
         Console.ReadKey();
         Console.Clear();
@@ -81,6 +121,10 @@ public class Game
                     Console.WriteLine("How did you find this...? \n"); continue;
                 case 99:
                     Exit(); break;
+                default:
+                    Console.Clear();
+                    Console.WriteLine($"{load.Key} is not a valid key, try again.");
+                    continue;
             }
             break;
         }

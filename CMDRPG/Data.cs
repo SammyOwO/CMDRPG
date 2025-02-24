@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Security.Cryptography.X509Certificates;
+using System.Text.Json;
 using static Game;
 
 namespace CMDRPG
@@ -47,28 +48,6 @@ namespace CMDRPG
                     continue;
                 }
                 break;
-            }
-        }
-        public static void DictAdd()
-        {
-            EnemyData[] enemies = {
-                new EnemyData(0, "Dummy", 1, [1,1,1,1,1,1,1,1], [0])
-            };
-            foreach (EnemyData enemy in enemies)
-            {
-                Enemies.Add(enemy.EId, enemy);
-            }
-            ItemData[] items = {
-                new ItemData(0, "Dummy's Defense", "+1,000,000 HP", 1000000, true),
-                new ItemData(1,"Oak Wood","A simple material for crafting.",0,false),
-                new ItemData(11,"Oak Stick","A simple stick from the first available wood in the game.",0,false),
-                new ItemData(21,"Stone","A simple material for crafting.",0,false),
-                new ItemData(36,"Ore 1","The first ore used for crafting simple metal items.",0,false),
-                new ItemData(61,"Ore 1 Bar","An ingot form of the first ore",0,false)
-            };
-            foreach (ItemData item in items)
-            {
-                Items.Add(item.Id, item);
             }
         }
         public static async Task Skill(int Skill, int Duration, int ID, int Min, int Max, int EMin, int EMax)
@@ -136,6 +115,314 @@ namespace CMDRPG
                     Village.Woods(); break;
             }
         }
+        public static async Task Equip(int Id, int Type)
+        {
+            int Slot = Type - 1;
+            switch (Type)
+            {
+                case < 11:
+                    if (saveData.Items[Slot] > 0)
+                    {
+                        while (true)
+                        {
+                            if (Items.TryGetValue(saveData.Items[Slot], out var Item))
+                            {
+                                string Name = Item.Name;
+                                Console.WriteLine("You already have {0} equipped in that slot. Would you like to replace it? \n \n1. Yes \n2. No", Name);
+                            }
+                            var confirm = Console.ReadKey();
+                            if (!menuOption.TryGetValue(confirm.Key, out var option))
+                            {
+                                Console.Clear();
+                                Console.WriteLine($"{confirm.Key} is not a valid key, try again. \n");
+                                continue;
+                            }
+                            switch (option)
+                            {
+                                case 1:
+                                    saveData.Items[Slot] = Id;
+                                    break;
+                                case 2:
+                                    break;
+                                default:
+                                    Console.Clear();
+                                    Console.WriteLine($"{confirm.Key} is not a valid key, try again. \n");
+                                    continue;
+                            }
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        saveData.Items[Slot] = Id;
+                    }
+                    break;
+                case 11:
+                    while (true)
+                    {
+                        Console.WriteLine("Equip in which slot, 1 or 2? \n");
+                        var eslot = Console.ReadKey();
+                        if (!menuOption.TryGetValue(eslot.Key, out var option))
+                        {
+                            Console.Clear();
+                            Console.WriteLine($"{eslot.Key} is not a valid key, try again. \n");
+                            continue;
+                        }
+                        switch (option)
+                        {
+                            case 1:
+                                if (saveData.Items[Slot] > 0)
+                                {
+                                    while (true)
+                                    {
+                                        if (Items.TryGetValue(saveData.Items[Slot], out var Item))
+                                        {
+                                            string Name = Item.Name;
+                                            Console.WriteLine("You already have {0} equipped in that slot. Would you like to replace it? \n \n1. Yes \n2. No", Name);
+                                        }
+                                        var confirm = Console.ReadKey();
+                                        if (!menuOption.TryGetValue(confirm.Key, out var bracelet))
+                                        {
+                                            Console.Clear();
+                                            Console.WriteLine($"{confirm.Key} is not a valid key, try again. \n");
+                                            continue;
+                                        }
+                                        switch (bracelet)
+                                        {
+                                            case 1:
+                                                saveData.Items[Slot] = Id;
+                                                break;
+                                            case 2:
+                                                break;
+                                            default:
+                                                Console.Clear();
+                                                Console.WriteLine($"{confirm.Key} is not a valid key, try again. \n");
+                                                continue;
+                                        }
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    saveData.Items[Slot] = Id;
+                                }
+                                break;
+                            case 2:
+                                if (saveData.Items[Slot + 1] > 0)
+                                {
+                                    while (true)
+                                    {
+                                        if (Items.TryGetValue(saveData.Items[Slot + 1], out var Item))
+                                        {
+                                            string Name = Item.Name;
+                                            Console.WriteLine("You already have {0} equipped in that slot. Would you like to replace it? \n \n1. Yes \n2. No", Name);
+                                        }
+                                        var confirm = Console.ReadKey();
+                                        if (!menuOption.TryGetValue(confirm.Key, out var bracelet))
+                                        {
+                                            Console.Clear();
+                                            Console.WriteLine($"{confirm.Key} is not a valid key, try again. \n");
+                                            continue;
+                                        }
+                                        switch (bracelet)
+                                        {
+                                            case 1:
+                                                saveData.Items[Slot + 1] = Id;
+                                                break;
+                                            case 2:
+                                                break;
+                                            default:
+                                                Console.Clear();
+                                                Console.WriteLine($"{confirm.Key} is not a valid key, try again. \n");
+                                                continue;
+                                        }
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    saveData.Items[Slot + 1] = Id;
+                                }
+                                break;
+                            default:
+                                Console.Clear();
+                                Console.WriteLine($"{eslot.Key} is not a valid key, try again. \n");
+                                continue;
+                        }
+                        break;
+                    }
+                    break;
+                case 12:
+                    while (true)
+                    {
+                        Console.WriteLine("Equip in which slot, 1 or 2? \n");
+                        var eslot = Console.ReadKey();
+                        if (!menuOption.TryGetValue(eslot.Key, out var option))
+                        {
+                            Console.Clear();
+                            Console.WriteLine($"{eslot.Key} is not a valid key, try again. \n");
+                            continue;
+                        }
+                        switch (option)
+                        {
+                            case 1:
+                                if (saveData.Items[Slot] > 0)
+                                {
+                                    while (true)
+                                    {
+                                        if (Items.TryGetValue(saveData.Items[Slot], out var Item))
+                                        {
+                                            string Name = Item.Name;
+                                            Console.WriteLine("You already have {0} equipped in that slot. Would you like to replace it? \n \n1. Yes \n2. No", Name);
+                                        }
+                                        var confirm = Console.ReadKey();
+                                        if (!menuOption.TryGetValue(confirm.Key, out var ring))
+                                        {
+                                            Console.Clear();
+                                            Console.WriteLine($"{confirm.Key} is not a valid key, try again. \n");
+                                            continue;
+                                        }
+                                        switch (ring)
+                                        {
+                                            case 1:
+                                                saveData.Items[Slot] = Id;
+                                                break;
+                                            case 2:
+                                                break;
+                                            default:
+                                                Console.Clear();
+                                                Console.WriteLine($"{confirm.Key} is not a valid key, try again. \n");
+                                                continue;
+                                        }
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    saveData.Items[Slot] = Id;
+                                }
+                                break;
+                            case 2:
+                                if (saveData.Items[Slot + 1] > 0)
+                                {
+                                    while (true)
+                                    {
+                                        if (Items.TryGetValue(saveData.Items[Slot + 1], out var Item))
+                                        {
+                                            string Name = Item.Name;
+                                            Console.WriteLine("You already have {0} equipped in that slot. Would you like to replace it? \n \n1. Yes \n2. No", Name);
+                                        }
+                                        var confirm = Console.ReadKey();
+                                        if (!menuOption.TryGetValue(confirm.Key, out var ring))
+                                        {
+                                            Console.Clear();
+                                            Console.WriteLine($"{confirm.Key} is not a valid key, try again. \n");
+                                            continue;
+                                        }
+                                        switch (ring)
+                                        {
+                                            case 1:
+                                                saveData.Items[Slot + 1] = Id;
+                                                break;
+                                            case 2:
+                                                break;
+                                            default:
+                                                Console.Clear();
+                                                Console.WriteLine($"{confirm.Key} is not a valid key, try again. \n");
+                                                continue;
+                                        }
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    saveData.Items[Slot + 1] = Id;
+                                }
+                                break;
+                            case 3:
+                                if (saveData.Items[Slot + 2] > 0)
+                                {
+                                    while (true)
+                                    {
+                                        if (Items.TryGetValue(saveData.Items[Slot + 2], out var Item))
+                                        {
+                                            string Name = Item.Name;
+                                            Console.WriteLine("You already have {0} equipped in that slot. Would you like to replace it? \n \n1. Yes \n2. No", Name);
+                                        }
+                                        var confirm = Console.ReadKey();
+                                        if (!menuOption.TryGetValue(confirm.Key, out var ring))
+                                        {
+                                            Console.Clear();
+                                            Console.WriteLine($"{confirm.Key} is not a valid key, try again. \n");
+                                            continue;
+                                        }
+                                        switch (ring)
+                                        {
+                                            case 1:
+                                                saveData.Items[Slot + 2] = Id;
+                                                break;
+                                            case 2:
+                                                break;
+                                            default:
+                                                Console.Clear();
+                                                Console.WriteLine($"{confirm.Key} is not a valid key, try again. \n");
+                                                continue;
+                                        }
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    saveData.Items[Slot + 2] = Id;
+                                }
+                                break;
+                            case 4:
+                                if (saveData.Items[Slot + 3] > 0)
+                                {
+                                    while (true)
+                                    {
+                                        if (Items.TryGetValue(saveData.Items[Slot + 3], out var Item))
+                                        {
+                                            string Name = Item.Name;
+                                            Console.WriteLine("You already have {0} equipped in that slot. Would you like to replace it? \n \n1. Yes \n2. No", Name);
+                                        }
+                                        var confirm = Console.ReadKey();
+                                        if (!menuOption.TryGetValue(confirm.Key, out var ring))
+                                        {
+                                            Console.Clear();
+                                            Console.WriteLine($"{confirm.Key} is not a valid key, try again. \n");
+                                            continue;
+                                        }
+                                        switch (ring)
+                                        {
+                                            case 1:
+                                                saveData.Items[Slot + 3] = Id;
+                                                break;
+                                            case 2:
+                                                break;
+                                            default:
+                                                Console.Clear();
+                                                Console.WriteLine($"{confirm.Key} is not a valid key, try again. \n");
+                                                continue;
+                                        }
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    saveData.Items[Slot + 3] = Id;
+                                }
+                                break;
+                            default:
+                                Console.Clear();
+                                Console.WriteLine($"{eslot.Key} is not a valid key, try again. \n");
+                                continue;
+                        }
+                        break;
+                    }
+                    break;
+            }
+        }
     }
 
     public class SaveFile
@@ -149,7 +436,7 @@ namespace CMDRPG
         //Quantities of which item IDs the player has.
         public int[] Inventory { get; set; } = new int[5001];
         //Equipped Items
-        public int[] Items { get; set; } = new int[12];
+        public int[] Items { get; set; } = new int[15];
         public bool New { get; set; } = true;
     }
     public class EnemyData
@@ -175,15 +462,19 @@ namespace CMDRPG
         public string Name;
         public string Description;
         public int Level;
-        public bool Equipable;
+        //Armour Type Key:
+        //max of 1 unless otherwise stated
+        //0 none/not equipable, 1 helmet, 2 necklace, 3 chestpiece, 4 belt, 5 pants, 6 boots, 7 gloves, 8 gauntlets (same as gloves but disables wearing rings)
+        //9 tool/weapon, 10 special, 11 bracelets (max 2), 12 rings (max 4)
+        public int ArmourType;
 
-        public ItemData(int Id, string Name, string Description, int Level, bool Equipable)
+        public ItemData(int Id, string Name, string Description, int Level, int ArmourType)
         {
             this.Id = Id;
             this.Name = Name;
             this.Description = Description;
             this.Level = Level;
-            this.Equipable = Equipable;
+            this.ArmourType = ArmourType;
         }
     }
 }
