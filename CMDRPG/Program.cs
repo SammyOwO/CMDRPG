@@ -61,7 +61,7 @@ public class Game
             Enemies.Add(enemy.EId, enemy);
         }
         ItemData[] items = {
-                new ItemData(0, "Dummy's Defense", "+1,000,000 HP", 1000000, 1),
+                new ItemData(0,"Dummy's Defense","+1,000,000 HP",1000000,1),
                 new ItemData(1,"Oak Wood","A simple material for crafting.",0,0),
                 new ItemData(11,"Oak Stick","A simple stick from the first available wood in the game.",0,0),
                 new ItemData(21,"Stone","A simple material for crafting.",0,0),

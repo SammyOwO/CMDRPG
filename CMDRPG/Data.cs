@@ -117,6 +117,7 @@ namespace CMDRPG
         }
         public static async Task Equip(int Id, int Type)
         {
+            await Task.Run(() => Equip(Id, Type));
             int Slot = Type - 1;
             switch (Type)
             {
@@ -462,10 +463,6 @@ namespace CMDRPG
         public string Name;
         public string Description;
         public int Level;
-        //Armour Type Key:
-        //max of 1 unless otherwise stated
-        //0 none/not equipable, 1 helmet, 2 necklace, 3 chestpiece, 4 belt, 5 pants, 6 boots, 7 gloves, 8 gauntlets (same as gloves but disables wearing rings)
-        //9 tool/weapon, 10 special, 11 bracelets (max 2), 12 rings (max 4)
         public int ArmourType;
 
         public ItemData(int Id, string Name, string Description, int Level, int ArmourType)

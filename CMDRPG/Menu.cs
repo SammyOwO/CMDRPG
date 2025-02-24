@@ -64,12 +64,12 @@ namespace CMDRPG
                 break;
             }
         }
-        public static async void Inventory()
+        public static void Inventory()
         {
             Console.Clear();
-            Console.WriteLine("Inventory \n");
             while (true)
             {
+                Console.WriteLine("Inventory \n");
                 Console.WriteLine("1. Select Item \n2. Show Equipped Items \n0. Go Back | X: Exit \n");
                 for (int i = 0; i < Data.saveData.Inventory.Length; i++)
                 {
@@ -77,10 +77,11 @@ namespace CMDRPG
                     {
                         if (Items.TryGetValue(i, out var item))
                         {
-                            Console.WriteLine("{0}: {1}", item.Name, Data.saveData.Inventory[i]);
+                            Console.WriteLine("{0}: {1} ID: {2}", item.Name, Data.saveData.Inventory[i], item.Id);
                         }
                     }
                 }
+                Console.WriteLine();
                 var key = Console.ReadKey(true);
                 if (!menuOption.TryGetValue(key.Key, out var option))
                 {
@@ -93,8 +94,19 @@ namespace CMDRPG
                     case 0:
                         Data.Back(); break;
                     case 1:
-                        Console.WriteLine("Select which item?:");
-                        string select = Console.ReadLine();
+                        Console.Clear();
+                        Console.WriteLine("Select which item?: \n");
+                        for (int i = 0; i < Data.saveData.Inventory.Length; i++)
+                        {
+                            if (Data.saveData.Inventory[i] > 0)
+                            {
+                                if (Items.TryGetValue(i, out var item))
+                                {
+                                    Console.WriteLine("{0}: {1}", item.Name, Data.saveData.Inventory[i]);
+                                }
+                            }
+                        }
+                        Console.WriteLine();
                         while (true)
                         {
                             for (int i = 0; i < Data.saveData.Inventory.Length; i++)
@@ -103,15 +115,17 @@ namespace CMDRPG
                                 {
                                     if (Items.TryGetValue(i, out var item))
                                     {
-                                        if (select == item.Name || Convert.ToInt32(select) == item.Id)
+                                        string select = Console.ReadLine();
+                                        if (select.ToLower() == item.Name.ToLower())
                                         {
-                                            Console.WriteLine("What would you like to do with {0}?", item.Name);
+                                            Console.Clear();
                                             if (item.ArmourType > 0)
                                             {
-                                                Console.WriteLine("1. Activate \n2. Inspect \n3. Delete \n4. Equip \n 0. Cancel");
-                                                var action = Console.ReadKey(true);
                                                 while (true)
                                                 {
+                                                    Console.WriteLine("What would you like to do with {0}? \n", item.Name);
+                                                    Console.WriteLine("1. Activate \n2. Inspect \n3. Delete \n4. Equip \n \n 0. Cancel \n");
+                                                    var action = Console.ReadKey(true);
                                                     if (!menuOption.TryGetValue(action.Key, out var option2))
                                                     {
                                                         Console.Clear();
@@ -121,13 +135,16 @@ namespace CMDRPG
                                                     switch (option2) 
                                                     {
                                                         case 0:
+                                                            Console.Clear();
                                                             break;
                                                         case 1:
                                                             break;
                                                         case 2:
+                                                            Console.Clear();
                                                             Console.WriteLine("Level: {0}", item.Level);
                                                             Console.WriteLine("Name: {0}", item.Name);
                                                             Console.WriteLine("Description: {0}", item.Description);
+                                                            Console.WriteLine();
                                                             continue;
                                                         case 3:
                                                             Console.Clear();
@@ -137,11 +154,13 @@ namespace CMDRPG
                                                             if (Data.saveData.Inventory[item.Id] - delamount <= 0)
                                                             {
                                                                 Data.saveData.Inventory[item.Id] = 0;
+                                                                Console.Clear();
                                                                 Console.WriteLine("You deleted all of your {0}! \n", item.Name);
                                                             }
                                                             else
                                                             {
                                                                 Data.saveData.Inventory[item.Id] -= delamount;
+                                                                Console.Clear();
                                                                 Console.WriteLine("You deleted {0} of your {1}! \n", delamount, item.Name);
                                                             }
                                                             break;
@@ -154,13 +173,15 @@ namespace CMDRPG
                                                     }
                                                     break;
                                                 }
+                                                break;
                                             }
                                             else
                                             {
-                                                Console.WriteLine("1. Activate \n2. Inspect \n3. Delete \n0. Cancel");
-                                                var action = Console.ReadKey(true);
                                                 while (true)
                                                 {
+                                                    Console.WriteLine("What would you like to do with {0}? \n", item.Name);
+                                                    Console.WriteLine("1. Activate \n2. Inspect \n3. Delete \n \n0. Cancel \n");
+                                                    var action = Console.ReadKey(true);
                                                     if (!menuOption.TryGetValue(action.Key, out var option2))
                                                     {
                                                         Console.Clear();
@@ -170,11 +191,16 @@ namespace CMDRPG
                                                     switch (option2)
                                                     {
                                                         case 0:
+                                                            Console.Clear();
                                                             break;
                                                         case 1:
                                                             break;
                                                         case 2:
-                                                            Console.WriteLine(item.Description);
+                                                            Console.Clear();
+                                                            Console.WriteLine("Level: {0}", item.Level);
+                                                            Console.WriteLine("Name: {0}", item.Name);
+                                                            Console.WriteLine("Description: {0}", item.Description);
+                                                            Console.WriteLine();
                                                             continue;
                                                         case 3:
                                                             Console.Clear();
@@ -184,11 +210,13 @@ namespace CMDRPG
                                                             if (Data.saveData.Inventory[item.Id] - delamount <= 0)
                                                             {
                                                                 Data.saveData.Inventory[item.Id] = 0;
+                                                                Console.Clear();
                                                                 Console.WriteLine("You deleted all of your {0}! \n", item.Name);
                                                             }
                                                             else
                                                             {
                                                                 Data.saveData.Inventory[item.Id] -= delamount;
+                                                                Console.Clear();
                                                                 Console.WriteLine("You deleted {0} of your {1}! \n", delamount, item.Name);
                                                             }
                                                             break;
@@ -199,11 +227,13 @@ namespace CMDRPG
                                                     }
                                                     break;
                                                 }
+                                                break;
                                             }
                                         }
                                         else
                                         {
-                                            Console.WriteLine("{0} is not a valid option, try again. \n", select); continue;
+                                            Console.Clear();
+                                            Console.WriteLine("{0} is not a valid option or you have no {1}, try again. \n", select, item.Name); continue;
                                         }
                                     }
                                 }
@@ -246,7 +276,7 @@ namespace CMDRPG
                     }
                 }
             }
-            Console.WriteLine("\n Press any key to go back.");
+            Console.WriteLine("\nPress any key to go back.");
             Console.ReadKey();
             Inventory();
         }
