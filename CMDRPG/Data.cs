@@ -1,14 +1,10 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using System.Text.Json;
+﻿using System.Text.Json;
 using static Game;
 
 namespace CMDRPG
 {
     internal class Data
     {
-
-        public static Dictionary<int, EnemyData> Enemies = new Dictionary<int, EnemyData>();
-        public static Dictionary<int, ItemData> Items = new Dictionary<int, ItemData>();
         public static SaveFile saveData = new();
         public static void save()
         {
