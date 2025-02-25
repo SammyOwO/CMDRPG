@@ -1,5 +1,4 @@
-﻿
-using CMDRPG;
+﻿using CMDRPG;
 
 public class Game
 {
@@ -78,6 +77,10 @@ public class Game
         DictAdd();
         Console.Title = "CMDRPG";
         Directory.CreateDirectory(@"./Saves/");
+        StartUp();
+    }
+    public static void StartUp()
+    {
         Console.WriteLine("Hewwo :3 \nPress any key to continue ^w^ \n");
         Console.ReadKey();
         Console.Clear();

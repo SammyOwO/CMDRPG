@@ -1,5 +1,4 @@
-﻿using System.Xml.Linq;
-using static Game;
+﻿using static Game;
 
 namespace CMDRPG
 {
@@ -73,12 +72,10 @@ namespace CMDRPG
                 Console.WriteLine("1. Select Item \n2. Show Equipped Items \n0. Go Back | X: Exit \n");
                 for (int i = 0; i < Data.saveData.Inventory.Length; i++)
                 {
-                    if (Data.saveData.Inventory[i] > 0)
+                    if (Data.saveData.Inventory[i] <= 0) continue;
+                    if (Items.TryGetValue(i, out var item))
                     {
-                        if (Items.TryGetValue(i, out var item))
-                        {
-                            Console.WriteLine("{0}: {1} ID: {2}", item.Name, Data.saveData.Inventory[i], item.Id);
-                        }
+                        Console.WriteLine("{0}: {1} ID: {2}", item.Name, Data.saveData.Inventory[i], item.Id);
                     }
                 }
                 Console.WriteLine();
@@ -98,12 +95,10 @@ namespace CMDRPG
                         Console.WriteLine("Select which item?: \n");
                         for (int i = 0; i < Data.saveData.Inventory.Length; i++)
                         {
-                            if (Data.saveData.Inventory[i] > 0)
+                            if (Data.saveData.Inventory[i] <= 0) continue;
+                            if (Items.TryGetValue(i, out var item))
                             {
-                                if (Items.TryGetValue(i, out var item))
-                                {
-                                    Console.WriteLine("{0}: {1}", item.Name, Data.saveData.Inventory[i]);
-                                }
+                                Console.WriteLine("{0}: {1}", item.Name, Data.saveData.Inventory[i]);
                             }
                         }
                         Console.WriteLine();
