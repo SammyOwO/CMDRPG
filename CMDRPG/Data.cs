@@ -83,6 +83,18 @@ namespace CMDRPG
             saveData.Exp[Skill] += rnd.Next(EMin, EMax + 1);
             Console.WriteLine("Done! You now have {0} {1}. \n", saveData.Inventory[ID], Item);
         }
+        public static void InvList()
+        {
+            for (int i = 0; i < saveData.Inventory.Length; i++)
+            {
+                if (saveData.Inventory[i] <= 0) continue;
+                if (Items.TryGetValue(i, out var item))
+                {
+                    Console.WriteLine("{0}: {1}", item.Name, saveData.Inventory[i]);
+                }
+            }
+            Console.WriteLine();
+        }
         public static void BattleData(int EId, int Level, int Items)
         {
 
@@ -111,14 +123,13 @@ namespace CMDRPG
                     Village.Woods(); break;
             }
         }
-        public static async Task Equip(int Id, int Type)
+        public static void Equip(int Id, int Type)
         {
-            await Task.Run(() => Equip(Id, Type));
             int Slot = Type - 1;
             switch (Type)
             {
                 case < 11:
-                    if (saveData.Items[Slot] > 0)
+                    if (saveData.Items[Slot] < 99999)
                     {
                         while (true)
                         {
@@ -168,7 +179,7 @@ namespace CMDRPG
                         switch (option)
                         {
                             case 1:
-                                if (saveData.Items[Slot] > 0)
+                                if (saveData.Items[Slot] < 99999)
                                 {
                                     while (true)
                                     {
@@ -205,7 +216,7 @@ namespace CMDRPG
                                 }
                                 break;
                             case 2:
-                                if (saveData.Items[Slot + 1] > 0)
+                                if (saveData.Items[Slot + 1] < 99999)
                                 {
                                     while (true)
                                     {
@@ -263,7 +274,7 @@ namespace CMDRPG
                         switch (option)
                         {
                             case 1:
-                                if (saveData.Items[Slot] > 0)
+                                if (saveData.Items[Slot] < 99999)
                                 {
                                     while (true)
                                     {
@@ -300,7 +311,7 @@ namespace CMDRPG
                                 }
                                 break;
                             case 2:
-                                if (saveData.Items[Slot + 1] > 0)
+                                if (saveData.Items[Slot + 1] < 99999)
                                 {
                                     while (true)
                                     {
@@ -337,7 +348,7 @@ namespace CMDRPG
                                 }
                                 break;
                             case 3:
-                                if (saveData.Items[Slot + 2] > 0)
+                                if (saveData.Items[Slot + 2] < 99999)
                                 {
                                     while (true)
                                     {
@@ -374,7 +385,7 @@ namespace CMDRPG
                                 }
                                 break;
                             case 4:
-                                if (saveData.Items[Slot + 3] > 0)
+                                if (saveData.Items[Slot + 3] < 99999)
                                 {
                                     while (true)
                                     {

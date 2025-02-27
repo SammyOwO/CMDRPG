@@ -65,20 +65,12 @@ namespace CMDRPG
         }
         public static void Inventory()
         {
-            Console.Clear();
             while (true)
             {
+                Console.Clear();
                 Console.WriteLine("Inventory \n");
                 Console.WriteLine("1. Select Item \n2. Show Equipped Items \n0. Go Back | X: Exit \n");
-                for (int i = 0; i < Data.saveData.Inventory.Length; i++)
-                {
-                    if (Data.saveData.Inventory[i] <= 0) continue;
-                    if (Items.TryGetValue(i, out var item))
-                    {
-                        Console.WriteLine("{0}: {1} ID: {2}", item.Name, Data.saveData.Inventory[i], item.Id);
-                    }
-                }
-                Console.WriteLine();
+                Data.InvList();
                 var key = Console.ReadKey(true);
                 if (!menuOption.TryGetValue(key.Key, out var option))
                 {
@@ -91,151 +83,7 @@ namespace CMDRPG
                     case 0:
                         Data.Back(); break;
                     case 1:
-                        Console.Clear();
-                        Console.WriteLine("Select which item?: \n");
-                        for (int i = 0; i < Data.saveData.Inventory.Length; i++)
-                        {
-                            if (Data.saveData.Inventory[i] <= 0) continue;
-                            if (Items.TryGetValue(i, out var item))
-                            {
-                                Console.WriteLine("{0}: {1}", item.Name, Data.saveData.Inventory[i]);
-                            }
-                        }
-                        Console.WriteLine();
-                        while (true)
-                        {
-                            for (int i = 0; i < Data.saveData.Inventory.Length; i++)
-                            {
-                                if (Data.saveData.Inventory[i] > 0)
-                                {
-                                    if (Items.TryGetValue(i, out var item))
-                                    {
-                                        string select = Console.ReadLine();
-                                        if (select.ToLower() == item.Name.ToLower())
-                                        {
-                                            Console.Clear();
-                                            if (item.ArmourType > 0)
-                                            {
-                                                while (true)
-                                                {
-                                                    Console.WriteLine("What would you like to do with {0}? \n", item.Name);
-                                                    Console.WriteLine("1. Activate \n2. Inspect \n3. Delete \n4. Equip \n \n 0. Cancel \n");
-                                                    var action = Console.ReadKey(true);
-                                                    if (!menuOption.TryGetValue(action.Key, out var option2))
-                                                    {
-                                                        Console.Clear();
-                                                        Console.WriteLine($"{key.Key} is not a valid key, try again. \n");
-                                                        continue;
-                                                    }
-                                                    switch (option2) 
-                                                    {
-                                                        case 0:
-                                                            Console.Clear();
-                                                            break;
-                                                        case 1:
-                                                            break;
-                                                        case 2:
-                                                            Console.Clear();
-                                                            Console.WriteLine("Level: {0}", item.Level);
-                                                            Console.WriteLine("Name: {0}", item.Name);
-                                                            Console.WriteLine("Description: {0}", item.Description);
-                                                            Console.WriteLine();
-                                                            continue;
-                                                        case 3:
-                                                            Console.Clear();
-                                                            Console.WriteLine("Delete how many?: \n");
-                                                            string delamounts = Console.ReadLine();
-                                                            int delamount = Convert.ToInt32(delamounts);
-                                                            if (Data.saveData.Inventory[item.Id] - delamount <= 0)
-                                                            {
-                                                                Data.saveData.Inventory[item.Id] = 0;
-                                                                Console.Clear();
-                                                                Console.WriteLine("You deleted all of your {0}! \n", item.Name);
-                                                            }
-                                                            else
-                                                            {
-                                                                Data.saveData.Inventory[item.Id] -= delamount;
-                                                                Console.Clear();
-                                                                Console.WriteLine("You deleted {0} of your {1}! \n", delamount, item.Name);
-                                                            }
-                                                            break;
-                                                        case 4:
-                                                            Task.Run(() => Data.Equip(item.Id, item.ArmourType)).Wait(); break;
-                                                        default:
-                                                            Console.Clear();
-                                                            Console.WriteLine($"{key.Key} is not a valid key, try again. \n");
-                                                            continue;
-                                                    }
-                                                    break;
-                                                }
-                                                break;
-                                            }
-                                            else
-                                            {
-                                                while (true)
-                                                {
-                                                    Console.WriteLine("What would you like to do with {0}? \n", item.Name);
-                                                    Console.WriteLine("1. Activate \n2. Inspect \n3. Delete \n \n0. Cancel \n");
-                                                    var action = Console.ReadKey(true);
-                                                    if (!menuOption.TryGetValue(action.Key, out var option2))
-                                                    {
-                                                        Console.Clear();
-                                                        Console.WriteLine($"{key.Key} is not a valid key, try again. \n");
-                                                        continue;
-                                                    }
-                                                    switch (option2)
-                                                    {
-                                                        case 0:
-                                                            Console.Clear();
-                                                            break;
-                                                        case 1:
-                                                            break;
-                                                        case 2:
-                                                            Console.Clear();
-                                                            Console.WriteLine("Level: {0}", item.Level);
-                                                            Console.WriteLine("Name: {0}", item.Name);
-                                                            Console.WriteLine("Description: {0}", item.Description);
-                                                            Console.WriteLine();
-                                                            continue;
-                                                        case 3:
-                                                            Console.Clear();
-                                                            Console.WriteLine("Delete how many?: \n");
-                                                            string delamounts = Console.ReadLine();
-                                                            int delamount = Convert.ToInt32(delamounts);
-                                                            if (Data.saveData.Inventory[item.Id] - delamount <= 0)
-                                                            {
-                                                                Data.saveData.Inventory[item.Id] = 0;
-                                                                Console.Clear();
-                                                                Console.WriteLine("You deleted all of your {0}! \n", item.Name);
-                                                            }
-                                                            else
-                                                            {
-                                                                Data.saveData.Inventory[item.Id] -= delamount;
-                                                                Console.Clear();
-                                                                Console.WriteLine("You deleted {0} of your {1}! \n", delamount, item.Name);
-                                                            }
-                                                            break;
-                                                        default:
-                                                            Console.Clear();
-                                                            Console.WriteLine($"{key.Key} is not a valid key, try again. \n");
-                                                            continue;
-                                                    }
-                                                    break;
-                                                }
-                                                break;
-                                            }
-                                        }
-                                        else
-                                        {
-                                            Console.Clear();
-                                            Console.WriteLine("{0} is not a valid option or you have no {1}, try again. \n", select, item.Name); continue;
-                                        }
-                                    }
-                                }
-                            }
-                            break;
-                        }
-                        continue;
+                        SelectItems(); continue;
                     case 2:
                         EqippedItems(); break;
                     case 99:
@@ -247,13 +95,144 @@ namespace CMDRPG
                 break;
             }
         }
+        public static void SelectItems()
+        {
+            Console.Clear();
+            for (int i = 0; i < Data.saveData.Inventory.Length; i++)
+            {
+                Console.WriteLine("Select which item?: \n");
+                Data.InvList();
+                if (Data.saveData.Inventory[i] > 0)
+                {
+                    if (Items.TryGetValue(i, out var item))
+                    {
+                        string select = Console.ReadLine();
+                        if (select.ToLower() == item.Name.ToLower())
+                        {
+                            Console.Clear();
+                            if (item.ArmourType > 0)
+                            {
+                                while (true)
+                                {
+                                    Console.WriteLine("What would you like to do with {0}? \n", item.Name);
+                                    Console.WriteLine("1. Inspect \n2. Delete \n3. Equip \n \n0. Cancel \n");
+                                    var action = Console.ReadKey(true);
+                                    if (!menuOption.TryGetValue(action.Key, out var option2))
+                                    {
+                                        Console.Clear();
+                                        Console.WriteLine($"{action.Key} is not a valid key, try again. \n");
+                                        continue;
+                                    }
+                                    switch (option2)
+                                    {
+                                        case 0:
+                                            Console.Clear();
+                                            break;
+                                        case 1:
+                                            Console.Clear();
+                                            Console.WriteLine("Level: {0}", item.Level);
+                                            Console.WriteLine("Name: {0}", item.Name);
+                                            Console.WriteLine("Description: {0}", item.Description);
+                                            Console.WriteLine();
+                                            continue;
+                                        case 2:
+                                            Console.Clear();
+                                            Console.WriteLine("Delete how many?: \n");
+                                            string delamounts = Console.ReadLine();
+                                            int delamount = Convert.ToInt32(delamounts);
+                                            if (Data.saveData.Inventory[item.Id] - delamount <= 0)
+                                            {
+                                                Data.saveData.Inventory[item.Id] = 0;
+                                                Console.Clear();
+                                                Console.WriteLine("You deleted all of your {0}! \n", item.Name);
+                                            }
+                                            else
+                                            {
+                                                Data.saveData.Inventory[item.Id] -= delamount;
+                                                Console.Clear();
+                                                Console.WriteLine("You deleted {0} of your {1}! \n", delamount, item.Name);
+                                            }
+                                            break;
+                                        case 3:
+                                            Data.Equip(item.Id, item.ArmourType); break;
+                                        default:
+                                            Console.Clear();
+                                            Console.WriteLine($"{action.Key} is not a valid key, try again. \n");
+                                            continue;
+                                    }
+                                    break;
+                                }
+                                break;
+                            }
+                            else
+                            {
+                                while (true)
+                                {
+                                    Console.WriteLine("What would you like to do with {0}? \n", item.Name);
+                                    Console.WriteLine("1. Inspect \n2. Delete \n \n0. Cancel \n");
+                                    var action = Console.ReadKey(true);
+                                    if (!menuOption.TryGetValue(action.Key, out var option2))
+                                    {
+                                        Console.Clear();
+                                        Console.WriteLine($"{action.Key} is not a valid key, try again. \n");
+                                        continue;
+                                    }
+                                    switch (option2)
+                                    {
+                                        case 0:
+                                            Console.Clear();
+                                            break;
+                                        case 1:
+                                            Console.Clear();
+                                            Console.WriteLine("Level: {0}", item.Level);
+                                            Console.WriteLine("Name: {0}", item.Name);
+                                            Console.WriteLine("Description: {0}", item.Description);
+                                            Console.WriteLine();
+                                            continue;
+                                        case 2:
+                                            Console.Clear();
+                                            Console.WriteLine("Delete how many?: \n");
+                                            string delamounts = Console.ReadLine();
+                                            int delamount = Convert.ToInt32(delamounts);
+                                            if (Data.saveData.Inventory[item.Id] - delamount <= 0)
+                                            {
+                                                Data.saveData.Inventory[item.Id] = 0;
+                                                Console.Clear();
+                                                Console.WriteLine("You deleted all of your {0}! \n", item.Name);
+                                            }
+                                            else
+                                            {
+                                                Data.saveData.Inventory[item.Id] -= delamount;
+                                                Console.Clear();
+                                                Console.WriteLine("You deleted {0} of your {1}! \n", delamount, item.Name);
+                                            }
+                                            break;
+                                        default:
+                                            Console.Clear();
+                                            Console.WriteLine($"{action.Key} is not a valid key, try again. \n");
+                                            continue;
+                                    }
+                                    break;
+                                }
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            Console.Clear();
+                            Console.WriteLine("{0} is not a valid option, try again. \n", select, item.Name); continue;
+                        }
+                    }
+                }
+            }
+        }
         public static void EqippedItems()
         {
             Console.Clear();
             Console.WriteLine("Equipped Items: \n");
             for (int i = 0; i < Data.saveData.Items.Length; i++)
             {
-                if (Data.saveData.Items[i] > 0)
+                if (Data.saveData.Items[i] < 99999)
                 {
                     if (Items.TryGetValue(Data.saveData.Items[i], out var item))
                     {

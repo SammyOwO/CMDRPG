@@ -79,6 +79,13 @@ public class Game
         Directory.CreateDirectory(@"./Saves/");
         StartUp();
     }
+    public static void MakeNone()
+    {
+        for (int i = 0; i < Data.saveData.Items.Length; i++)
+        {
+            Data.saveData.Items[i] = 99999;
+        }
+    }
     public static void StartUp()
     {
         Console.WriteLine("Hewwo :3 \nPress any key to continue ^w^ \n");
@@ -97,6 +104,7 @@ public class Game
             switch (option)
             {
                 case 1:
+                    MakeNone();
                     Console.Clear();
                     Console.WriteLine("Welcome 2 the game, hehe :3 \nYour goal is to just get better stuff! \nPress any key! \n");
                     Console.ReadKey();
