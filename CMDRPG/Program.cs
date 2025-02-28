@@ -89,18 +89,13 @@ public class Game
     public static void StartUp()
     {
         Console.WriteLine("Hewwo :3 \nPress any key to continue ^w^ \n");
-        Console.ReadKey();
+        Console.ReadKey(true);
         Console.Clear();
         while (true)
         {
             Console.WriteLine("Load Game or start a new adventure? \n \n1. New Game \n2. Load Game \n");
-            var load = Console.ReadKey();
-            if (!menuOption.TryGetValue(load.Key, out var option))
-            {
-                Console.Clear();
-                Console.WriteLine($"{load.Key} is not a valid key, try again.");
-                continue;
-            }
+            var load = Console.ReadKey(true);
+            var option = Data.MenuCheck(load.Key);
             switch (option)
             {
                 case 1:
@@ -143,7 +138,7 @@ public class Game
     public static void Welcome()
     {
         Console.WriteLine($"Welcome back {Data.saveData.Name}! \nPress any key to continue UwU \n");
-        Console.ReadKey();
+        Console.ReadKey(true);
         bool newPlayer = Data.saveData.New;
         if (newPlayer)
         {
@@ -196,12 +191,7 @@ public class Game
                         Console.WriteLine("1. Village (Lvl 0-5) \n2. Caves (Lvl 5-15) \n3. Mines (Lvl 15-25) \n4. Mountains (Lvl 25-40) \n");
                         Console.WriteLine("Type the number of where you would like to go below:");
                         var place = Console.ReadKey(true);
-                        if (!menuOption.TryGetValue(place.Key, out var option))
-                        {
-                            Console.Clear();
-                            Console.WriteLine($"{place.Key} is an invalid input, try again. \n");
-                            continue;
-                        }
+                        var option = Data.MenuCheck(place.Key);
                         switch (option)
                         {
                             case 1:
@@ -212,12 +202,7 @@ public class Game
                                     Console.WriteLine("Where would you like to go? \n \nPlaces: \n");
                                     Console.WriteLine("1. Forge \n2. Workbench \n3. Armourer \n4. Weaponsmith \n5. Tavern \n6. Woods \n");
                                     var place2 = Console.ReadKey(true);
-                                    if (!menuOption.TryGetValue(place2.Key, out var option2))
-                                    {
-                                        Console.Clear();
-                                        Console.WriteLine($"{place2.Key} is an invalid input, try again. \n");
-                                        continue;
-                                    }
+                                    var option2 = Data.MenuCheck(place2.Key);
                                     switch (option2)
                                     {
                                         case 1:
@@ -242,13 +227,8 @@ public class Game
                                             {
                                                 Console.WriteLine("Wandering in the woods you think of what to do: \n");
                                                 Console.WriteLine("1. Chop an Oak Tree \n2. Chop a Birch Tree \n3. Gather Sticks \n4. Pick up Stones \n5. Travel Deeper \n \n0. Go Back \n");
-                                                var act = Console.ReadKey(true);
-                                                if (!menuOption.TryGetValue(act.Key, out var option3))
-                                                {
-                                                    Console.Clear();
-                                                    Console.WriteLine($"{act.Key} is not a valid key, try again.");
-                                                    continue;
-                                                }
+                                                var action = Console.ReadKey(true);
+                                                var option3 = Data.MenuCheck(action.Key);
                                                 switch (option3)
                                                 {
                                                     case 0:
@@ -262,12 +242,7 @@ public class Game
                                                                 Console.WriteLine("Where would you like to go? \n \nPlaces: \n");
                                                                 Console.WriteLine("1. Forge \n2. Workbench \n3. Armourer \n4. Weaponsmith \n5. Tavern \n6. Woods \n");
                                                                 var place3 = Console.ReadKey(true);
-                                                                if (!menuOption.TryGetValue(place3.Key, out var option4))
-                                                                {
-                                                                    Console.Clear();
-                                                                    Console.WriteLine($"{place3.Key} is an invalid input, try again. \n");
-                                                                    continue;
-                                                                }
+                                                                var option4 = Data.MenuCheck(place3.Key);
                                                                 switch (option4)
                                                                 {
                                                                     case 1:
@@ -282,11 +257,7 @@ public class Game
                                                                             Console.WriteLine("Oak Wood: {0}, Oak Sticks: {1}, Stone: {2}, Metal 1: {3} \n", Data.saveData.Inventory[1], Data.saveData.Inventory[11], Data.saveData.Inventory[21], Data.saveData.Inventory[61]);
                                                                             Console.WriteLine("1. Oak Sticks (Oak Wood: 1, Yield: 5) \nNo other options until after the tutorial. \n \n0. Go back \n");
                                                                             var craft = Console.ReadKey(true);
-                                                                            if (!menuOption.TryGetValue(craft.Key, out var option5))
-                                                                            {
-                                                                                Console.Clear();
-                                                                                Console.WriteLine($"{craft.Key} is an invalid input, try again. \n");
-                                                                            }
+                                                                            var option5 = Data.MenuCheck(craft.Key);
                                                                             switch (option5)
                                                                             {
                                                                                 case 1:
@@ -368,7 +339,7 @@ public class Game
                                                         Console.WriteLine("Wait until after the tutorial. \n"); continue;
                                                     default:
                                                         Console.Clear();
-                                                        Console.WriteLine($"{act.Key} is an invalid input, try again. \n"); continue;
+                                                        Console.WriteLine($"{action.Key} is an invalid input, try again. \n"); continue;
                                                 }
                                                 break;
                                             }
@@ -416,6 +387,6 @@ public class Game
         Console.Clear();
         Data.save();
         Console.WriteLine("Game saved! Press any key to exit. :3 \n");
-        Console.ReadKey();
+        Console.ReadKey(true);
     }
 }

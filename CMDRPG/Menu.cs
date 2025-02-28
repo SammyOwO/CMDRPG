@@ -18,7 +18,7 @@ namespace CMDRPG
                     case ConsoleKey.P:
                         Places(); break;
                     case ConsoleKey.I:
-                        Inventory(); break;
+                        Inv.Inventory(); break;
                     case ConsoleKey.Q:
                         Quests(); break;
                     case ConsoleKey.X:
@@ -39,12 +39,7 @@ namespace CMDRPG
                 Console.WriteLine("Where would you like to go? \n \nPlaces: \n");
                 Console.WriteLine("1. Village (Lvl 0-5) \n2. Caves (Lvl 5-15) \n3. Mines (Lvl 15-25) \n4. Mountains (Lvl 25-40) \n \n0. Go back | I: Inventory \n");
                 var place = Console.ReadKey(true);
-                if (!menuOption.TryGetValue(place.Key, out var option))
-                {
-                    Console.Clear();
-                    Console.WriteLine($"{place.Key} is not a valid key, try again.");
-                    continue;
-                }
+                var option = Data.MenuCheck(place.Key);
                 switch (option)
                 {
                     case 0:
@@ -58,11 +53,22 @@ namespace CMDRPG
                     case 4:
                         Mountains.Base(); break;
                     case 11:
-                        Inventory(); break;
+                        Inv.Inventory(); break;
                 }
                 break;
             }
         }
+        
+        public static void Quests()
+        {
+            Console.Clear();
+            Console.WriteLine("This doesn't exist, probably never will. \n");
+            Console.ReadKey(true);
+            MainM();
+        }
+    }
+    public class Inv
+    {
         public static void Inventory()
         {
             while (true)
@@ -72,17 +78,13 @@ namespace CMDRPG
                 Console.WriteLine("1. Select Item \n2. Show Equipped Items \n0. Go Back | X: Exit \n");
                 Data.InvList();
                 var key = Console.ReadKey(true);
-                if (!menuOption.TryGetValue(key.Key, out var option))
-                {
-                    Console.Clear();
-                    Console.WriteLine($"{key.Key} is not a valid key, try again. \n");
-                    continue;
-                }
+                var option = Data.MenuCheck(key.Key);
                 switch (option)
                 {
                     case 0:
                         Data.Back(); break;
                     case 1:
+                        Console.Clear();
                         SelectItems(); continue;
                     case 2:
                         EqippedItems(); break;
@@ -97,28 +99,45 @@ namespace CMDRPG
         }
         public static void SelectItems()
         {
-            Console.Clear();
+            Console.WriteLine("Select which item?: \n");
+            Data.InvList();
+            while (true)
+            {
+
+                string select = Console.ReadLine();
+                var item = InventorySearch(select);
+                if (item != null)
+                {
+                    Selected(item); break;
+                }
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine("{0} is not a valid option, try again. \n", select, item.Name); continue;
+                }
+            }
+        }
+        public static ItemData InventorySearch(string name)
+        {
+            int Id;
+            if (!int.TryParse(name, out Id))
+            {
+                Id = -1;
+            }
             for (int i = 0; i < Data.saveData.Inventory.Length; i++)
             {
-                Console.WriteLine("Select which item?: \n");
-                Data.InvList();
                 if (Data.saveData.Inventory[i] > 0)
                 {
                     if (Items.TryGetValue(i, out var item))
                     {
-                        string select = Console.ReadLine();
-                        if (select.ToLower() == item.Name.ToLower())
+                        if (name.ToLower() == item.Name.ToLower() || Id == item.Id)
                         {
-                            Selected(item); break;
-                        }
-                        else
-                        {
-                            Console.Clear();
-                            Console.WriteLine("{0} is not a valid option, try again. \n", select, item.Name); continue;
+                            return item;
                         }
                     }
                 }
             }
+            return null;
         }
         public static void Selected(ItemData item)
         {
@@ -130,13 +149,8 @@ namespace CMDRPG
                     Console.WriteLine("What would you like to do with {0}? \n", item.Name);
                     Console.WriteLine("1. Inspect \n2. Delete \n3. Equip \n \n0. Cancel \n");
                     var action = Console.ReadKey(true);
-                    if (!menuOption.TryGetValue(action.Key, out var option2))
-                    {
-                        Console.Clear();
-                        Console.WriteLine($"{action.Key} is not a valid key, try again. \n");
-                        continue;
-                    }
-                    switch (option2)
+                    var option = Data.MenuCheck(action.Key);
+                    switch (option)
                     {
                         case 0:
                             Console.Clear();
@@ -162,13 +176,8 @@ namespace CMDRPG
                     Console.WriteLine("What would you like to do with {0}? \n", item.Name);
                     Console.WriteLine("1. Inspect \n2. Delete \n \n0. Cancel \n");
                     var action = Console.ReadKey(true);
-                    if (!menuOption.TryGetValue(action.Key, out var option2))
-                    {
-                        Console.Clear();
-                        Console.WriteLine($"{action.Key} is not a valid key, try again. \n");
-                        continue;
-                    }
-                    switch (option2)
+                    var option = Data.MenuCheck(action.Key);
+                    switch (option)
                     {
                         case 0:
                             Console.Clear();
@@ -199,7 +208,7 @@ namespace CMDRPG
             Console.Clear();
             Console.WriteLine("Delete how many?: \n");
             string delamounts = Console.ReadLine();
-            int delamount = Convert.ToInt32(delamounts);
+            int.TryParse(delamounts, out int delamount);
             if (Data.saveData.Inventory[item.Id] - delamount <= 0)
             {
                 Data.saveData.Inventory[item.Id] = 0;
@@ -216,6 +225,7 @@ namespace CMDRPG
         public static void EqippedItems()
         {
             Console.Clear();
+            Console.WriteLine("1. Select Slot \n \n0. Go Back \n");
             Console.WriteLine("Equipped Items: \n");
             for (int i = 0; i < Data.saveData.Items.Length; i++)
             {
@@ -237,16 +247,8 @@ namespace CMDRPG
                     }
                 }
             }
-            Console.WriteLine("\nPress any key to go back.");
-            Console.ReadKey();
+            var select = Console.ReadKey(true);
             Inventory();
-        }
-        public static void Quests()
-        {
-            Console.Clear();
-            Console.WriteLine("This doesn't exist, probably never will. \n");
-            Console.ReadKey(true);
-            MainM();
         }
     }
     public class Village
@@ -260,13 +262,8 @@ namespace CMDRPG
                 Console.WriteLine("You arrive in the town square.");
                 Console.WriteLine("Where would you like to go? \n \nPlaces: \n");
                 Console.WriteLine("1. Forge \n2. Workbench \n3. Armourer \n4. Weaponsmith \n5. Tavern \n6. Woods \n \n0. Go back | I: Inventory \n");
-                var place = Console.ReadKey();
-                if (!menuOption.TryGetValue(place.Key, out var option))
-                {
-                    Console.Clear();
-                    Console.WriteLine($"{place.Key} is not a valid key, try again.");
-                    continue;
-                }
+                var place = Console.ReadKey(true);
+                var option = Data.MenuCheck(place.Key);
                 switch (option)
                 {
                     case 0:
@@ -284,7 +281,7 @@ namespace CMDRPG
                     case 6:
                         Woods(); break;
                     case 11:
-                        Menu.Inventory(); break;
+                        Inv.Inventory(); break;
                 }
                 break;
             }
@@ -322,13 +319,8 @@ namespace CMDRPG
             {
                 Console.WriteLine("Wandering in the woods you think of what to do: \n");
                 Console.WriteLine("1. Chop an Oak Tree \n2. Chop a Birch Tree \n3. Gather Sticks \n4. Pick up Stones \n5. Travel Deeper \n \n0. Go Back | I: Inventory \n");
-                var act = Console.ReadKey(true);
-                if (!menuOption.TryGetValue(act.Key, out var option))
-                {
-                    Console.Clear();
-                    Console.WriteLine($"{act.Key} is not a valid key, try again.");
-                    continue;
-                }
+                var action = Console.ReadKey(true);
+                var option = Data.MenuCheck(action.Key);
                 switch (option)
                 {
                     case 0:
@@ -344,7 +336,7 @@ namespace CMDRPG
                     case 5:
                         break;
                     case 11:
-                        Menu.Inventory(); break;
+                        Inv.Inventory(); break;
                     case 99:
                         Exit(); break;
                 }

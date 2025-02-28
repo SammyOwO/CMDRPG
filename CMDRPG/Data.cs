@@ -138,13 +138,8 @@ namespace CMDRPG
                                 string Name = Item.Name;
                                 Console.WriteLine("You already have {0} equipped in that slot. Would you like to replace it? \n \n1. Yes \n2. No", Name);
                             }
-                            var confirm = Console.ReadKey();
-                            if (!menuOption.TryGetValue(confirm.Key, out var option))
-                            {
-                                Console.Clear();
-                                Console.WriteLine($"{confirm.Key} is not a valid key, try again. \n");
-                                continue;
-                            }
+                            var confirm = Console.ReadKey(true);
+                            var option = MenuCheck(confirm.Key);
                             switch (option)
                             {
                                 case 1:
@@ -169,13 +164,8 @@ namespace CMDRPG
                     while (true)
                     {
                         Console.WriteLine("Equip in which slot, 1 or 2? \n");
-                        var eslot = Console.ReadKey();
-                        if (!menuOption.TryGetValue(eslot.Key, out var option))
-                        {
-                            Console.Clear();
-                            Console.WriteLine($"{eslot.Key} is not a valid key, try again. \n");
-                            continue;
-                        }
+                        var eslot = Console.ReadKey(true);
+                        var option = MenuCheck(eslot.Key);
                         switch (option)
                         {
                             case 1:
@@ -188,13 +178,8 @@ namespace CMDRPG
                                             string Name = Item.Name;
                                             Console.WriteLine("You already have {0} equipped in that slot. Would you like to replace it? \n \n1. Yes \n2. No", Name);
                                         }
-                                        var confirm = Console.ReadKey();
-                                        if (!menuOption.TryGetValue(confirm.Key, out var bracelet))
-                                        {
-                                            Console.Clear();
-                                            Console.WriteLine($"{confirm.Key} is not a valid key, try again. \n");
-                                            continue;
-                                        }
+                                        var confirm = Console.ReadKey(true);
+                                        var bracelet = MenuCheck(confirm.Key);
                                         switch (bracelet)
                                         {
                                             case 1:
@@ -225,13 +210,8 @@ namespace CMDRPG
                                             string Name = Item.Name;
                                             Console.WriteLine("You already have {0} equipped in that slot. Would you like to replace it? \n \n1. Yes \n2. No", Name);
                                         }
-                                        var confirm = Console.ReadKey();
-                                        if (!menuOption.TryGetValue(confirm.Key, out var bracelet))
-                                        {
-                                            Console.Clear();
-                                            Console.WriteLine($"{confirm.Key} is not a valid key, try again. \n");
-                                            continue;
-                                        }
+                                        var confirm = Console.ReadKey(true);
+                                        var bracelet = MenuCheck(confirm.Key);
                                         switch (bracelet)
                                         {
                                             case 1:
@@ -264,13 +244,8 @@ namespace CMDRPG
                     while (true)
                     {
                         Console.WriteLine("Equip in which slot, 1 or 2? \n");
-                        var eslot = Console.ReadKey();
-                        if (!menuOption.TryGetValue(eslot.Key, out var option))
-                        {
-                            Console.Clear();
-                            Console.WriteLine($"{eslot.Key} is not a valid key, try again. \n");
-                            continue;
-                        }
+                        var eslot = Console.ReadKey(true);
+                        var option = MenuCheck(eslot.Key);
                         switch (option)
                         {
                             case 1:
@@ -283,13 +258,8 @@ namespace CMDRPG
                                             string Name = Item.Name;
                                             Console.WriteLine("You already have {0} equipped in that slot. Would you like to replace it? \n \n1. Yes \n2. No", Name);
                                         }
-                                        var confirm = Console.ReadKey();
-                                        if (!menuOption.TryGetValue(confirm.Key, out var ring))
-                                        {
-                                            Console.Clear();
-                                            Console.WriteLine($"{confirm.Key} is not a valid key, try again. \n");
-                                            continue;
-                                        }
+                                        var confirm = Console.ReadKey(true);
+                                        var ring = MenuCheck(confirm.Key);
                                         switch (ring)
                                         {
                                             case 1:
@@ -320,13 +290,8 @@ namespace CMDRPG
                                             string Name = Item.Name;
                                             Console.WriteLine("You already have {0} equipped in that slot. Would you like to replace it? \n \n1. Yes \n2. No", Name);
                                         }
-                                        var confirm = Console.ReadKey();
-                                        if (!menuOption.TryGetValue(confirm.Key, out var ring))
-                                        {
-                                            Console.Clear();
-                                            Console.WriteLine($"{confirm.Key} is not a valid key, try again. \n");
-                                            continue;
-                                        }
+                                        var confirm = Console.ReadKey(true);
+                                        var ring = MenuCheck(confirm.Key);
                                         switch (ring)
                                         {
                                             case 1:
@@ -357,13 +322,8 @@ namespace CMDRPG
                                             string Name = Item.Name;
                                             Console.WriteLine("You already have {0} equipped in that slot. Would you like to replace it? \n \n1. Yes \n2. No", Name);
                                         }
-                                        var confirm = Console.ReadKey();
-                                        if (!menuOption.TryGetValue(confirm.Key, out var ring))
-                                        {
-                                            Console.Clear();
-                                            Console.WriteLine($"{confirm.Key} is not a valid key, try again. \n");
-                                            continue;
-                                        }
+                                        var confirm = Console.ReadKey(true);
+                                        var ring = MenuCheck(confirm.Key);
                                         switch (ring)
                                         {
                                             case 1:
@@ -394,13 +354,8 @@ namespace CMDRPG
                                             string Name = Item.Name;
                                             Console.WriteLine("You already have {0} equipped in that slot. Would you like to replace it? \n \n1. Yes \n2. No", Name);
                                         }
-                                        var confirm = Console.ReadKey();
-                                        if (!menuOption.TryGetValue(confirm.Key, out var ring))
-                                        {
-                                            Console.Clear();
-                                            Console.WriteLine($"{confirm.Key} is not a valid key, try again. \n");
-                                            continue;
-                                        }
+                                        var confirm = Console.ReadKey(true);
+                                        var ring = MenuCheck(confirm.Key);
                                         switch (ring)
                                         {
                                             case 1:
@@ -431,8 +386,15 @@ namespace CMDRPG
                     break;
             }
         }
+        public static int MenuCheck(ConsoleKey Key)
+        {
+            if (menuOption.TryGetValue(Key, out var option))
+            {
+                return option;
+            }
+            return -1;
+        }
     }
-
     public class SaveFile
     {
         public string Name { get; set; } = "";
