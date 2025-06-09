@@ -6,6 +6,7 @@ public class Game
     public static Random rnd = new Random();
     public static Dictionary<int, EnemyData> Enemies = new Dictionary<int, EnemyData>();
     public static Dictionary<int, ItemData> Items = new Dictionary<int, ItemData>();
+    public static Dictionary<int, Attack> Attacks = new Dictionary<int, Attack>();
     public static Dictionary<int, string> slotName = new Dictionary<int, string>()
     {
         { 0, "N/A" },
@@ -53,30 +54,36 @@ public class Game
     public static void DictAdd()
     {
         EnemyData[] enemies = {
-                new EnemyData(0, "Dummy", 1, [1,1,1,1,1,1,1,1], [0])
+                new EnemyData(0, "Dummy", 1, 0, [1,1,1,1,1,1,1], [0])
             };
         foreach (EnemyData enemy in enemies)
         {
-            Enemies.Add(enemy.EId, enemy);
+            Enemies.Add(enemy.Id, enemy);
         }
         ItemData[] items = {
-                new ItemData(0,"Dummy's Defense","+1,000,000 HP",1000000,1),
-                new ItemData(1,"Oak Wood","A simple material for crafting.",0,0),
-                new ItemData(11,"Oak Stick","A simple stick from the first available wood in the game.",0,0),
-                new ItemData(21,"Stone","A simple material for crafting.",0,0),
-                new ItemData(36,"Ore 1","The first ore used for crafting simple metal items.",0,0),
-                new ItemData(61,"Ore 1 Bar","An ingot form of the first ore",0,0)
+                new ItemData(0,"Dummy's Defense","+1,000,000 HP",1000000,1,[1000000,0,0,0,0,0,0]),
+                new ItemData(1,"Oak Wood","A simple material for crafting.",0,0,[0,0,0,0,0,0,0]),
+                new ItemData(11,"Oak Stick","A simple stick from the first available wood in the game.",1,8,[0,1,0,0,0,0,0]),
+                new ItemData(21,"Stone","A simple material for crafting.",0,0,[0,0,0,0,0,0,0]),
+                new ItemData(36,"Ore 1","The first ore used for crafting simple metal items.",0,0,[0,0,0,0,0,0,0]),
+                new ItemData(61,"Ore 1 Bar","An ingot form of the first ore",0,0,[0,0,0,0,0,0,0])
             };
         foreach (ItemData item in items)
         {
             Items.Add(item.Id, item);
         }
+        Attack[] attacks = {
+                new Attack(0, "Dummy's Laziness", 0, 0, 0)
+        };
     }
     public static void Main()
     {
         DictAdd();
         Console.Title = "CMDRPG";
         Directory.CreateDirectory(@"./Saves/");
+        Console.WriteLine("Hewwo :3 \nPress any key to continue ^w^ \n");
+        Console.ReadKey(true);
+        Console.Clear();
         StartUp();
     }
     public static void MakeNone()
@@ -88,9 +95,6 @@ public class Game
     }
     public static void StartUp()
     {
-        Console.WriteLine("Hewwo :3 \nPress any key to continue ^w^ \n");
-        Console.ReadKey(true);
-        Console.Clear();
         while (true)
         {
             Console.WriteLine("Load Game or start a new adventure? \n \n1. New Game \n2. Load Game \n");

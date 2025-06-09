@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Security.Cryptography.X509Certificates;
+using System.Text.Json;
 using static Game;
 
 namespace CMDRPG
@@ -17,6 +18,12 @@ namespace CMDRPG
             Console.Clear();
             string saveDir = @".\Saves\";
             var saveList = Directory.EnumerateFiles(saveDir);
+            if (saveList.Count() == 0)
+            {
+                Console.Clear();
+                Console.WriteLine("There are no saves found, try again. \n");
+                Game.StartUp();
+            }
             Console.WriteLine("Select a save to continue: \n");
             foreach (string saves in saveList)
             {
@@ -78,10 +85,31 @@ namespace CMDRPG
             await Task.Delay(Time);
             if (Items.ContainsKey(ID))
             {
-                saveData.Inventory[ID] += rnd.Next(Min, Max + 1);
+                 saveData.Inventory[ID] += rnd.Next(Min, Max + 1);
             }
-            saveData.Exp[Skill] += rnd.Next(EMin, EMax + 1);
+            ExpAward(Skill, EMin, EMax);
+            Console.Clear();
             Console.WriteLine("Done! You now have {0} {1}. \n", saveData.Inventory[ID], Item);
+        }
+        public static void ExpAward(int Skill, int Min, int Max)
+        {
+            saveData.Exp[Skill] += rnd.Next(Min, Max + 1);
+        }
+        public static void BattleReward(int Id, int Level)
+        {
+            Enemies.TryGetValue(Id, out var Enemy);
+            var Pmin = (Level * 1);
+            var Pmax = (Level * 2);
+            var Emin = (Level * 3) * Enemy.Type;
+            var Emax = (Level * 8) * (Enemy.Type + 1);
+            if (Enemy.Type == 0)
+            {
+                ExpAward(0, Pmin, Pmax);
+            }
+            else
+            {
+                ExpAward(0, Emin, Emax);
+            }
         }
         public static void InvList()
         {
@@ -94,10 +122,6 @@ namespace CMDRPG
                 }
             }
             Console.WriteLine();
-        }
-        public static void BattleData(int EId, int Level, int Items)
-        {
-
         }
         public static void Back()
         {
@@ -411,17 +435,22 @@ namespace CMDRPG
     }
     public class EnemyData
     {
-        public int EId;
+        public int Id;
         public string Name;
         public int Level;
+        //-1 Team, 0 Passive, 1 Normal, 2 Heavy, 3 Mini-Boss, 4 Boss, 5 God
+        public int Type;
+        //HP, Strength, Defense, Mana, Crit Chance, Crit Damage, HP Regen
         public int[] Stats;
+        //Equipped Items
         public int[] Items;
 
-        public EnemyData(int EId, string Name, int Level, int[] Stats, int[] Items)
+        public EnemyData(int Id, string Name, int Level, int Type, int[] Stats, int[] Items)
         {
-            this.EId = EId;
+            this.Id = Id;
             this.Name = Name;
             this.Level = Level;
+            this.Type = Type;
             this.Stats = Stats;
             this.Items = Items;
         }
@@ -432,15 +461,39 @@ namespace CMDRPG
         public string Name;
         public string Description;
         public int Level;
+        //0 none, 1 Head, 2 Neck, 3 Chest, 4 Belt, 5 Pants, 6 Boots, 7 Gloves, 8 Tool/Weapon, 9 Special, 10 Bracelet, 11 Ring
         public int ArmourType;
+        //HP, Strength, Defense, Mana, Crit Chance, Crit Damage, HP Regen
+        public int[] Stats;
 
-        public ItemData(int Id, string Name, string Description, int Level, int ArmourType)
+        public ItemData(int Id, string Name, string Description, int Level, int ArmourType, int[] Stats)
         {
             this.Id = Id;
             this.Name = Name;
             this.Description = Description;
             this.Level = Level;
             this.ArmourType = ArmourType;
+            this.Stats = Stats;
+        }
+    }
+    public class Attack
+    {
+        public int Id;
+        public string Name;
+        //0 Typeless, 1 Physical, 2 Magical
+        //Typeless damage gets no multipliers and has no pierce, base values only.
+        //Physical is amplified by Strength and Magical is amplified by max Mana. Both pierce their respective defense types and ignore eachothers'.
+        public int Type;
+        public int Damage;
+        public int Pierce;
+
+        public Attack(int Id, string Name, int Type, int Damage, int Pierce)
+        {
+            this.Id = Id;
+            this.Name = Name;
+            this.Type = Type;
+            this.Damage = Damage;
+            this.Pierce = Pierce;
         }
     }
 }

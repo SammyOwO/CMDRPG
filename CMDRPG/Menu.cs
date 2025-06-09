@@ -58,13 +58,34 @@ namespace CMDRPG
                 break;
             }
         }
-        
         public static void Quests()
         {
             Console.Clear();
             Console.WriteLine("This doesn't exist, probably never will. \n");
             Console.ReadKey(true);
             MainM();
+        }
+    }
+    public class Battle
+    {
+        public static void Fight(int Id, int Level, int[] Equip)
+        {
+            for (int i = 0; i < Equip.Length; i++)
+            {
+                Items.TryGetValue(i, out var item);
+            }
+            Enemies.TryGetValue(Id, out var enemy);
+            // var HP = enemy.Stats[0]
+            // var Str = enemy.Stats[1]
+            // var Def = enemy.Stats[2]
+            // var Mana = enemy.Stats[3]
+            // var CC = enemy.Stats[4]
+            // var CD = enemy.Stats[5]
+            // var Regen = enemy.Stats[6]
+        }
+        public static void Check(string Name, int Level, int HP, int Str, int Def)
+        {
+            Console.WriteLine("Enemy Name: {0}, Level: {1}, HP: {2}, Strength: {3}, Defense: {4}", Name, Level, HP, Str, Def);
         }
     }
     public class Inv
@@ -334,7 +355,9 @@ namespace CMDRPG
                     case 4:
                         break;
                     case 5:
-                        break;
+                        Console.Clear();
+                        Console.WriteLine("fuck You");
+                        continue;
                     case 11:
                         Inv.Inventory(); break;
                     case 99:
