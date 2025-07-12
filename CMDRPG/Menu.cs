@@ -1,4 +1,6 @@
-﻿using static Game;
+﻿using System.Reflection.Emit;
+using System.Text.RegularExpressions;
+using static Game;
 
 namespace CMDRPG
 {
@@ -11,7 +13,7 @@ namespace CMDRPG
             while (true)
             {
                 Console.WriteLine("Main Menu: \n");
-                Console.WriteLine("P: Places \nI: Inventory \nQ: Quests \nX: Exit \n");
+                Console.WriteLine("P: Places \nI: Inventory \nQ: Quests \nEnd: Exit");
                 var next = Console.ReadKey(true);
                 switch (next.Key)
                 {
@@ -21,8 +23,10 @@ namespace CMDRPG
                         Inv.Inventory(); break;
                     case ConsoleKey.Q:
                         Quests(); break;
-                    case ConsoleKey.X:
+                    case ConsoleKey.End:
                         Exit(); break;
+                    case ConsoleKey.Delete:
+                        break;
                     default:
                         Console.Clear();
                         Console.WriteLine($"{next.Key} is an invalid input, try again. \n"); continue;
@@ -36,8 +40,15 @@ namespace CMDRPG
             Console.Clear();
             while (true)
             {
+                options =
+                    [
+                    "Village (Lvl 0-5)",
+                    "Caves (Lvl 5-15)",
+                    "Mines (Lvl 15-25)",
+                    "Mountains (Lvl 25-40)"
+                    ];
                 Console.WriteLine("Where would you like to go? \n \nPlaces: \n");
-                Console.WriteLine("1. Village (Lvl 0-5) \n2. Caves (Lvl 5-15) \n3. Mines (Lvl 15-25) \n4. Mountains (Lvl 25-40) \n \n0. Go back | I: Inventory \n");
+                Options(options);
                 var place = Console.ReadKey(true);
                 var option = Data.MenuCheck(place.Key);
                 switch (option)
@@ -65,38 +76,101 @@ namespace CMDRPG
             Console.ReadKey(true);
             MainM();
         }
+        public static void Options(string[] options)
+        {
+            for (int i = 0; i < options.Length; i++)
+            {
+                Console.WriteLine("{0}. {1}", i + 1, options[i]);
+            }
+            Console.WriteLine("\n0. Go Back | I: Inventory | End: Exit \n");
+        }
     }
     public class Battle
     {
         public static void Fight(int Id, int Level, int[] Equip)
         {
+            Enemies.TryGetValue(Id, out var enemyOut);
+            var enemy = EnemyInit(enemyOut, Level, Equip);
+        }
+        public static void Check(EnemyData enemy)
+        {
+            Console.WriteLine("Enemy Name: {0}, Level: {1}, HP: {2}, Strength: {3}, Defense: {4}", enemy.Name, enemy.Level, enemy.Stats[0], enemy.Stats[1], enemy.Stats[3]);
+        }
+        public static EnemyData EnemyInit(EnemyData enemyData, int Level, int[] Equip)
+        {
+            var Equipped = new ItemData[Equip.Length];
+            var Stat = enemyData.Stats;
             for (int i = 0; i < Equip.Length; i++)
             {
-                Items.TryGetValue(i, out var item);
+                Items.TryGetValue(Equip[i], out var item);
+                Equipped[i] = item;
             }
-            Enemies.TryGetValue(Id, out var enemy);
-            // var HP = enemy.Stats[0]
-            // var Str = enemy.Stats[1]
-            // var Def = enemy.Stats[2]
-            // var Mana = enemy.Stats[3]
-            // var CC = enemy.Stats[4]
-            // var CD = enemy.Stats[5]
-            // var Regen = enemy.Stats[6]
+            var AdjStat = EnemyInit1(Stat, Equipped);
+            var HP = AdjStat[0];
+            var Str = AdjStat[1];
+            var Dam = AdjStat[2];
+            var PDef = AdjStat[3];
+            var MDef = AdjStat[4];
+            var TDef = AdjStat[5];
+            var Mana = AdjStat[6];
+            var CC = AdjStat[7];
+            var CD = AdjStat[8];
+            var Regen = AdjStat[9];
+            var MRegen = AdjStat[10];
+            EnemyData enemyOut = new EnemyData(enemyData.Id, enemyData.Name, Level, enemyData.Type, [HP, Str, Dam, PDef, MDef, TDef, Mana, CC, CD, Regen, MRegen]);
+            if (enemyOut != null)
+            {
+                return enemyOut;
+            }
+
+            return null;
         }
-        public static void Check(string Name, int Level, int HP, int Str, int Def)
+        public static int[] EnemyInit1(int[] Stat, ItemData[] Equip)
         {
-            Console.WriteLine("Enemy Name: {0}, Level: {1}, HP: {2}, Strength: {3}, Defense: {4}", Name, Level, HP, Str, Def);
+            if (Equip.Length != 0)
+            {
+                for (int i = 0; i < Equip.Length; i++)
+                {
+                    for (int j = 0; j < Equip[i].MultPercent.Length; j++)
+                    {
+                        switch (Equip[i].MultPercent[j])
+                        {
+                            case 0:
+                                Stat[j] += Equip[i].Stats[j];
+                                break;
+                            case 1:
+                                Stat[j] *= Equip[i].Stats[j];
+                                break;
+                            case 2:
+                                Stat[j] += (Stat[j] * Equip[i].Stats[j]) / 100;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+            }
+            if (Stat != null)
+            {
+                return Stat;
+            }
+            return null;
         }
     }
     public class Inv
     {
         public static void Inventory()
         {
+            Console.Clear();
             while (true)
             {
-                Console.Clear();
+                options = 
+                    [
+                    "Select Item",
+                    "Show Equipped Items"
+                    ];
                 Console.WriteLine("Inventory \n");
-                Console.WriteLine("1. Select Item \n2. Show Equipped Items \n0. Go Back | X: Exit \n");
+                Menu.Options(options);
                 Data.InvList();
                 var key = Console.ReadKey(true);
                 var option = Data.MenuCheck(key.Key);
@@ -124,7 +198,6 @@ namespace CMDRPG
             Data.InvList();
             while (true)
             {
-
                 string select = Console.ReadLine();
                 var item = InventorySearch(select);
                 if (item != null)
@@ -168,7 +241,7 @@ namespace CMDRPG
                 while (true)
                 {
                     Console.WriteLine("What would you like to do with {0}? \n", item.Name);
-                    Console.WriteLine("1. Inspect \n2. Delete \n3. Equip \n \n0. Cancel \n");
+                    Console.WriteLine("1. Inspect \n2. Delete \n3. Equip\n \n0. Cancel \n");
                     var action = Console.ReadKey(true);
                     var option = Data.MenuCheck(action.Key);
                     switch (option)
@@ -277,12 +350,21 @@ namespace CMDRPG
         public static void Square()
         {
             MenuID = 2;
+            options =
+                [
+                "Forge",
+                "Workbench",
+                "Armour Merchant",
+                "Weaponsmith",
+                "Tavern",
+                "Woods"
+                ];
             Console.Clear();
             while (true)
             {
                 Console.WriteLine("You arrive in the town square.");
                 Console.WriteLine("Where would you like to go? \n \nPlaces: \n");
-                Console.WriteLine("1. Forge \n2. Workbench \n3. Armourer \n4. Weaponsmith \n5. Tavern \n6. Woods \n \n0. Go back | I: Inventory \n");
+                Menu.Options(options);
                 var place = Console.ReadKey(true);
                 var option = Data.MenuCheck(place.Key);
                 switch (option)
@@ -300,7 +382,7 @@ namespace CMDRPG
                     case 5:
                         Tavern(); break;
                     case 6:
-                        Woods(); break;
+                        Woods0(); break;
                     case 11:
                         Inv.Inventory(); break;
                 }
@@ -310,36 +392,64 @@ namespace CMDRPG
         public static void Forge()
         {
             MenuID = 3;
+            options =
+                [
+
+                ];
             Console.Clear();
         }
         public static void Workbench()
         {
             MenuID = 4;
+            options =
+                [
+
+                ];
             Console.Clear();
         }
         public static void Armour()
         {
             MenuID = 5;
+            options =
+                [
+
+                ];
             Console.Clear();
         }
         public static void Weapons()
         {
             MenuID = 6;
+            options =
+                [
+
+                ];
             Console.Clear();
         }
         public static void Tavern()
         {
             MenuID = 7;
+            options =
+                [
+
+                ];
             Console.Clear();
         }
-        public static void Woods()
+        public static void Woods0()
         {
             MenuID = 8;
+            options =
+                [
+                "Chop an Oak Tree",
+                "Chop a Birch Tree",
+                "Gather Sticks",
+                "Pick up Stones",
+                "Travel Deeper"
+                ];
             Console.Clear();
             while (true)
             {
                 Console.WriteLine("Wandering in the woods you think of what to do: \n");
-                Console.WriteLine("1. Chop an Oak Tree \n2. Chop a Birch Tree \n3. Gather Sticks \n4. Pick up Stones \n5. Travel Deeper \n \n0. Go Back | I: Inventory \n");
+                Menu.Options(options);
                 var action = Console.ReadKey(true);
                 var option = Data.MenuCheck(action.Key);
                 switch (option)

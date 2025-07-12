@@ -2,6 +2,7 @@
 
 public class Game
 {
+    public static string[] options;
     public static int MenuID = 0;
     public static Random rnd = new Random();
     public static Dictionary<int, EnemyData> Enemies = new Dictionary<int, EnemyData>();
@@ -48,33 +49,40 @@ public class Game
         { ConsoleKey.NumPad9, 9 },
         { ConsoleKey.D0, 0 },
         { ConsoleKey.NumPad0, 0 },
+        { ConsoleKey.Escape, 0 },
         { ConsoleKey.I, 11 },
-        { ConsoleKey.X, 99 },
+        { ConsoleKey.End, 99 }
     };
     public static void DictAdd()
     {
         EnemyData[] enemies = {
-                new EnemyData(0, "Dummy", 1, 0, [1,1,1,1,1,1,1], [0])
+                new EnemyData(0, "Dummy", 1, 0, [1,1,1,1,1,1,1,1,1,1,1])
             };
         foreach (EnemyData enemy in enemies)
         {
             Enemies.Add(enemy.Id, enemy);
         }
         ItemData[] items = {
-                new ItemData(0,"Dummy's Defense","+1,000,000 HP",1000000,1,[1000000,0,0,0,0,0,0]),
-                new ItemData(1,"Oak Wood","A simple material for crafting.",0,0,[0,0,0,0,0,0,0]),
-                new ItemData(11,"Oak Stick","A simple stick from the first available wood in the game.",1,8,[0,1,0,0,0,0,0]),
-                new ItemData(21,"Stone","A simple material for crafting.",0,0,[0,0,0,0,0,0,0]),
-                new ItemData(36,"Ore 1","The first ore used for crafting simple metal items.",0,0,[0,0,0,0,0,0,0]),
-                new ItemData(61,"Ore 1 Bar","An ingot form of the first ore",0,0,[0,0,0,0,0,0,0])
+                new ItemData(0,"Dummy's Defense","+1,000,000,000 HP",1000000000,1,[1000000000],[0]),
+                new ItemData(1,"Oak Wood","A simple material for crafting.",0,0,[],[]),
+                new ItemData(11,"Oak Stick","A simple stick from the first available wood in the game.",1,8,[0,0,1],[0,0,0]),
+                new ItemData(21,"Stone 1","A simple material for crafting.",0,0,[],[]),
+                new ItemData(51,"Ore 1","The first ore used for crafting simple metal items.",0,0,[],[]),
+                new ItemData(76,"Ore 1 Bar","An ingot form of the first ore",0,0,[],[]),
+                new ItemData(101,"Oak Helmet","A basic helmet whittled from Oak Wood.",1,1,[0,0,0,5],[0,0,0,0])
             };
         foreach (ItemData item in items)
         {
             Items.Add(item.Id, item);
         }
         Attack[] attacks = {
-                new Attack(0, "Dummy's Laziness", 0, 0, 0)
+                new Attack(0,"Dummy's Laziness",0,0,0,100),
+                new Attack(1, "Whack", 0, 1000000, -1, 100)
         };
+        foreach (Attack attack in attacks)
+        {
+            Attacks.Add(attack.Id, attack);
+        }
     }
     public static void Main()
     {
@@ -103,31 +111,13 @@ public class Game
             switch (option)
             {
                 case 1:
-                    MakeNone();
                     Console.Clear();
-                    Console.WriteLine("Welcome 2 the game, hehe :3 \nYour goal is to just get better stuff! \nPress any key! \n");
-                    Console.ReadKey();
-                    Console.Clear();
-                    Console.WriteLine("First, let's get started by making a name for yourself! \nType your name below to continue: \n");
-                    var name = Console.ReadLine();
-                    Console.Clear();
-                    Data.saveData.Name = name;
-                    Console.Write("Hi " + Data.saveData.Name + "! \nWelcome to CMD RPG \nPress any key! \n \n");
-                    Console.ReadKey();
-                    Console.Clear();
-                    Console.WriteLine("In this game you have 7 main stats. HP or Hit/health Points, Strength which determines your damage, Defense for how much incoming damage you block and Mana for magic weapons. \nThen there is Crit Chance for how likely you are to score a critical hit and Crit Damage for how much more damage that hit does. \nLast but not least there is HP regen for how much HP you get back per turn. \n");
-                    Console.WriteLine("Beyond that you also have to work on leveling skills. There are 8 of them: Combat, Mining, Farming, Fishing, Foraging, Woodworking, Enchanting and Alchemy \nPress any key! \n");
-                    Console.ReadKey();
-                    Console.Clear();
-                    Console.WriteLine("Now, you might be asking, how do I get these skills leveled up? Good Question! It'll come with time to master, but starting off it's gonna be pretty easy. \nTo start off there will be basic tasks you can do in the first area, from there you'll be able to go and grind skills in their respective areas. \n");
-                    Console.WriteLine("When you get higher skill levels you'll be able to use better tools and such. \nNow when you get to the first screen there might look like there's a lot to do, which there is, but it's not as scary as it seems. \nThere will be a few main buttons for your inventory and such, but it should all be pretty intuitive. \n");
-                    Console.WriteLine("Now, when you get in, your first objective will be to get some wood to craft your first tools! \nKind of reminds me of some other game, but I'm not sure, hehe :3 \nPress any key to continue to the main attraction! \n");
-                    Data.save();
-                    Console.ReadKey();
-                    Tutorial(); break;
+                    NewPlayer();  break;
                 case 2:
+                    Console.Clear();
                     Data.load(); break;
                 case 11:
+                    Console.Clear();
                     Console.WriteLine("How did you find this...? \n"); continue;
                 case 99:
                     Exit(); break;
@@ -138,6 +128,30 @@ public class Game
             }
             break;
         }
+    }
+    public static void NewPlayer()
+    {
+        MakeNone();
+        Console.WriteLine("Welcome 2 the game, hehe :3 \nYour goal is to just get better stuff! \nPress any key! \n");
+        Console.ReadKey();
+        Console.Clear();
+        Console.WriteLine("First, let's get started by making a name for yourself! \nType your name below to continue: \n");
+        var name = Console.ReadLine();
+        Console.Clear();
+        Data.saveData.Name = name;
+        Console.Write("Hi " + Data.saveData.Name + "! \nWelcome to CMD RPG \nPress any key! \n \n");
+        Console.ReadKey();
+        Console.Clear();
+        Console.WriteLine("In this game you have 7 main stats. HP or Hit/health Points, Strength which determines your damage, Defense for how much incoming damage you block and Mana for magic weapons. \nThen there is Crit Chance for how likely you are to score a critical hit and Crit Damage for how much more damage that hit does. \nLast but not least there is HP regen for how much HP you get back per turn. \n");
+        Console.WriteLine("Beyond that you also have to work on leveling skills. There are 8 of them: Combat, Mining, Farming, Fishing, Foraging, Woodworking, Enchanting and Alchemy \nPress any key! \n");
+        Console.ReadKey();
+        Console.Clear();
+        Console.WriteLine("Now, you might be asking, how do I get these skills leveled up? Good Question! It'll come with time to master, but starting off it's gonna be pretty easy. \nTo start off there will be basic tasks you can do in the first area, from there you'll be able to go and grind skills in their respective areas. \n");
+        Console.WriteLine("When you get higher skill levels you'll be able to use better tools and such. \nNow when you get to the first screen there might look like there's a lot to do, which there is, but it's not as scary as it seems. \nThere will be a few main buttons for your inventory and such, but it should all be pretty intuitive. \n");
+        Console.WriteLine("Now, when you get in, your first objective will be to get some wood to craft your first tools! \nKind of reminds me of some other game, but I'm not sure, hehe :3 \nPress any key to continue to the main attraction! \n");
+        Data.save();
+        Console.ReadKey();
+        Tutorial();
     }
     public static void Welcome()
     {
@@ -157,7 +171,7 @@ public class Game
                         Tutorial(); break;
                     case ConsoleKey.N:
                         Menu.MainM(); break;
-                    case ConsoleKey.X:
+                    case ConsoleKey.End:
                         Exit(); break;
                     default:
                         Console.Clear();
@@ -183,7 +197,7 @@ public class Game
             Console.WriteLine("Here you will see a mock up of the main menu to get you used to the main controls.");
             Console.WriteLine("After that you can explore around for yourself. For now go to places and go to the woods in the village to chop some trees. \n");
             Console.WriteLine("Main Menu: \n");
-            Console.WriteLine("P: Places \nI: Inventory \nQ: Quests \nX: Exit \n");
+            Console.WriteLine("P: Places \nI: Inventory \nQ: Quests \nEnd: Exit \n");
             var next = Console.ReadKey(true);
             switch (next.Key)
             {
@@ -377,7 +391,7 @@ public class Game
                 case ConsoleKey.Q:
                     Console.Clear();
                     Console.WriteLine("Wait until after the tutorial goober. :3 \n"); continue;
-                case ConsoleKey.X:
+                case ConsoleKey.End:
                     Exit(); break;
                 default:
                     Console.Clear();
