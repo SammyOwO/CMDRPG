@@ -47,12 +47,19 @@ public class Game
         { ConsoleKey.NumPad8, 8 },
         { ConsoleKey.D9, 9 },
         { ConsoleKey.NumPad9, 9 },
+        { ConsoleKey.A, 10 },
+        { ConsoleKey.B, 11 },
+        { ConsoleKey.C, 12 },
+        { ConsoleKey.D, 13 },
+        { ConsoleKey.E, 14 },
+        { ConsoleKey.F, 15 },
         { ConsoleKey.D0, 0 },
         { ConsoleKey.NumPad0, 0 },
         { ConsoleKey.Escape, 0 },
-        { ConsoleKey.I, 11 },
+        { ConsoleKey.I, 88 },
         { ConsoleKey.End, 99 }
     };
+    public static int[] Consumable = [];
     public static void DictAdd()
     {
         EnemyData[] enemies = {
@@ -69,7 +76,8 @@ public class Game
                 new ItemData(21,"Stone 1","A simple material for crafting.",0,0,[],[]),
                 new ItemData(51,"Ore 1","The first ore used for crafting simple metal items.",0,0,[],[]),
                 new ItemData(76,"Ore 1 Bar","An ingot form of the first ore",0,0,[],[]),
-                new ItemData(101,"Oak Helmet","A basic helmet whittled from Oak Wood.",1,1,[0,0,0,5],[0,0,0,0])
+                new ItemData(101,"Oak Helmet","A basic helmet whittled from Oak Wood.",1,1,[0,0,0,5],[0,0,0,0]),
+                new ItemData(5000,"Kitchen Knife","I hope you don't think about doing anything bad.",0,0,[],[])
             };
         foreach (ItemData item in items)
         {
@@ -77,7 +85,9 @@ public class Game
         }
         Attack[] attacks = {
                 new Attack(0,"Dummy's Laziness",0,0,0,100),
-                new Attack(1, "Whack", 0, 1000000, -1, 100)
+                new Attack(1,"Whack",0,1000000,-1,100),
+                new Attack(2,"Suicide",0,1,10000,100),
+                new Attack(3,"Stab",1,10,0,100)
         };
         foreach (Attack attack in attacks)
         {
@@ -94,11 +104,11 @@ public class Game
         Console.Clear();
         StartUp();
     }
-    public static void MakeNone()
+    public static void UnequipAll()
     {
         for (int i = 0; i < Data.saveData.Items.Length; i++)
         {
-            Data.saveData.Items[i] = 99999;
+            Data.saveData.Items[i] = -1;
         }
     }
     public static void StartUp()
@@ -115,23 +125,22 @@ public class Game
                     NewPlayer();  break;
                 case 2:
                     Console.Clear();
-                    Data.load(); break;
-                case 11:
+                    Data.Load(); break;
+                case 88:
                     Console.Clear();
                     Console.WriteLine("How did you find this...? \n"); continue;
                 case 99:
                     Exit(); break;
                 default:
                     Console.Clear();
-                    Console.WriteLine($"{load.Key} is not a valid key, try again.");
-                    continue;
+                    Console.WriteLine($"{load.Key} is not a valid key, try again."); continue;
             }
             break;
         }
     }
     public static void NewPlayer()
     {
-        MakeNone();
+        UnequipAll();
         Console.WriteLine("Welcome 2 the game, hehe :3 \nYour goal is to just get better stuff! \nPress any key! \n");
         Console.ReadKey();
         Console.Clear();
@@ -149,7 +158,7 @@ public class Game
         Console.WriteLine("Now, you might be asking, how do I get these skills leveled up? Good Question! It'll come with time to master, but starting off it's gonna be pretty easy. \nTo start off there will be basic tasks you can do in the first area, from there you'll be able to go and grind skills in their respective areas. \n");
         Console.WriteLine("When you get higher skill levels you'll be able to use better tools and such. \nNow when you get to the first screen there might look like there's a lot to do, which there is, but it's not as scary as it seems. \nThere will be a few main buttons for your inventory and such, but it should all be pretty intuitive. \n");
         Console.WriteLine("Now, when you get in, your first objective will be to get some wood to craft your first tools! \nKind of reminds me of some other game, but I'm not sure, hehe :3 \nPress any key to continue to the main attraction! \n");
-        Data.save();
+        Data.Save();
         Console.ReadKey();
         Tutorial();
     }
@@ -170,6 +179,7 @@ public class Game
                     case ConsoleKey.T:
                         Tutorial(); break;
                     case ConsoleKey.N:
+                        Console.Clear();
                         Menu.MainM(); break;
                     case ConsoleKey.End:
                         Exit(); break;
@@ -183,6 +193,7 @@ public class Game
         }
         else
         {
+            Console.Clear();
             Menu.MainM();
         }
     }
@@ -297,7 +308,7 @@ public class Game
                                                                                         Console.WriteLine("Great Job, you finished the tutorial! \nNow time to play the real game, good luck and have fun.");
                                                                                         Console.WriteLine("Press any key to go to the main menu! \n");
                                                                                         Data.saveData.New = false;
-                                                                                        Data.save();
+                                                                                        Data.Save();
                                                                                         Console.ReadKey(true);
                                                                                         Console.Clear();
                                                                                         Welcome();
@@ -403,7 +414,7 @@ public class Game
     public static void Exit()
     {
         Console.Clear();
-        Data.save();
+        Data.Save();
         Console.WriteLine("Game saved! Press any key to exit. :3 \n");
         Console.ReadKey(true);
     }

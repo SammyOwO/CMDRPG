@@ -1,5 +1,4 @@
-﻿using System.Reflection.Emit;
-using System.Text.RegularExpressions;
+﻿using System;
 using static Game;
 
 namespace CMDRPG
@@ -9,7 +8,6 @@ namespace CMDRPG
         public static void MainM()
         {
             MenuID = 0;
-            Console.Clear();
             while (true)
             {
                 Console.WriteLine("Main Menu: \n");
@@ -18,10 +16,13 @@ namespace CMDRPG
                 switch (next.Key)
                 {
                     case ConsoleKey.P:
+                        Console.Clear();
                         Places(); break;
                     case ConsoleKey.I:
+                        Console.Clear();
                         Inv.Inventory(); break;
                     case ConsoleKey.Q:
+                        Console.Clear();
                         Quests(); break;
                     case ConsoleKey.End:
                         Exit(); break;
@@ -37,7 +38,6 @@ namespace CMDRPG
         public static void Places()
         {
             MenuID = 1;
-            Console.Clear();
             while (true)
             {
                 options =
@@ -54,16 +54,22 @@ namespace CMDRPG
                 switch (option)
                 {
                     case 0:
+                        Console.Clear();
                         MainM(); break;
                     case 1:
+                        Console.Clear();
                         Village.Square(); break;
                     case 2:
+                        Console.Clear();
                         Caves.Commune(); break;
                     case 3:
+                        Console.Clear();
                         Mines.Town(); break;
                     case 4:
+                        Console.Clear();
                         Mountains.Base(); break;
                     case 11:
+                        Console.Clear();
                         Inv.Inventory(); break;
                 }
                 break;
@@ -71,7 +77,6 @@ namespace CMDRPG
         }
         public static void Quests()
         {
-            Console.Clear();
             Console.WriteLine("This doesn't exist, probably never will. \n");
             Console.ReadKey(true);
             MainM();
@@ -84,6 +89,11 @@ namespace CMDRPG
             }
             Console.WriteLine("\n0. Go Back | I: Inventory | End: Exit \n");
         }
+        public static void Invalid(ConsoleKeyInfo option)
+        {
+            Console.Clear();
+            Console.WriteLine($"{option.Key} is not a valid key, try again. \n");
+        }
     }
     public class Battle
     {
@@ -91,10 +101,37 @@ namespace CMDRPG
         {
             Enemies.TryGetValue(Id, out var enemyOut);
             var enemy = EnemyInit(enemyOut, Level, Equip);
-        }
-        public static void Check(EnemyData enemy)
-        {
-            Console.WriteLine("Enemy Name: {0}, Level: {1}, HP: {2}, Strength: {3}, Defense: {4}", enemy.Name, enemy.Level, enemy.Stats[0], enemy.Stats[1], enemy.Stats[3]);
+            Console.Clear();
+            Console.WriteLine("The battle begins! Your enemy is a Lvl {0} {1}.\n", Level, enemy.Name);
+            while (true)
+            {
+                Console.WriteLine("1. Attack \n2. Use Item \n3. Check Enemy \n4. Flee \n");
+                var choice = Console.ReadKey(true);
+                var option = Data.MenuCheck(choice.Key);
+                if (enemy.Stats[0] > 0)
+                {
+                    switch (option)
+                    {
+                        case 1:
+                            Fight(); break;
+                        case 2:
+                            Item(); break;
+                        case 3:
+                            Console.Clear();
+                            Check(enemy); continue;
+                        case 4:
+                            Console.Clear();
+                            Flee(enemy.Type, Level); continue;
+                        default:
+                            Menu.Invalid(choice); continue;
+                    }
+                }
+                else
+                {
+                    Console.Clear();
+                    Win(enemy, Level);
+                }
+            }
         }
         public static EnemyData EnemyInit(EnemyData enemyData, int Level, int[] Equip)
         {
@@ -156,15 +193,78 @@ namespace CMDRPG
             }
             return null;
         }
+        public static void Fight()
+        {
+            //Yeah right, I have no clue.
+        }
+        public static void Item()
+        {
+            //See comment on line 195
+        }
+        public static void Check(EnemyData enemy)
+        {
+            Console.WriteLine("Enemy Name: {0}, Level: {1}, HP: {2}, Strength: {3}, Defense: {4}", enemy.Name, enemy.Level, enemy.Stats[0], enemy.Stats[1], enemy.Stats[3]);
+        }
+        public static void Flee(int EType, int ELevel)
+        {
+            int PLevel = Data.saveData.Levels[0];
+            int LevelDelta = (PLevel * 6) - ELevel;
+            int Min = 0 + (LevelDelta / 10);
+            int Max = 25 + LevelDelta - (EType * 4);
+            int Escape = 0;
+            switch (EType)
+            {
+                case 0:
+                    Escape = 0; break;
+                case 1:
+                    Escape = 20; break;
+                case 2:
+                    Escape = 40; break;
+                case 3:
+                    Escape = 60; break;
+                case 4:
+                    Escape = 80; break;
+                case 5:
+                    Escape = 9000; break;
+            }
+            if (Min < 0)
+            {
+                Min = 0;
+            }
+            if (Min > 100 && EType != 5)
+            {
+                Console.WriteLine("You successfully managed to escape.");
+                Data.Back();
+            }
+            if (Max > 100)
+            {
+                Max = 100;
+            }
+            int roll = rnd.Next(Min, Max);
+            if (roll > Escape)
+            {
+                Console.WriteLine("You successfully managed to escape.");
+                Data.Back();
+            }
+            else
+            {
+                Console.WriteLine("You tried your best, but failed to escape.");
+            }
+        }
+        public static void Win(EnemyData enemy, int Level)
+        {
+            Console.WriteLine("The {0} has been defeated!", enemy.Name);
+            Data.BattleReward(enemy.Id, Level);
+            Data.Back();
+        }
     }
     public class Inv
     {
         public static void Inventory()
         {
-            Console.Clear();
             while (true)
             {
-                options = 
+                options =
                     [
                     "Select Item",
                     "Show Equipped Items"
@@ -182,12 +282,12 @@ namespace CMDRPG
                         Console.Clear();
                         SelectItems(); continue;
                     case 2:
+                        Console.Clear();
                         EqippedItems(); break;
                     case 99:
                         Exit(); break;
                     default:
-                        Console.Clear();
-                        Console.WriteLine($"{key.Key} is not a valid key, try again. \n"); continue;
+                        Menu.Invalid(key); continue;
                 }
                 break;
             }
@@ -207,7 +307,7 @@ namespace CMDRPG
                 else
                 {
                     Console.Clear();
-                    Console.WriteLine("{0} is not a valid option, try again. \n", select, item.Name); continue;
+                    Console.WriteLine("{0} is not a valid option, try again. \n", select); continue;
                 }
             }
         }
@@ -256,9 +356,7 @@ namespace CMDRPG
                         case 3:
                             Data.Equip(item.Id, item.ArmourType); break;
                         default:
-                            Console.Clear();
-                            Console.WriteLine($"{action.Key} is not a valid key, try again. \n");
-                            continue;
+                            Menu.Invalid(action); continue;
                     }
                     break;
                 }
@@ -281,9 +379,7 @@ namespace CMDRPG
                         case 2:
                             Delete(item); break;
                         default:
-                            Console.Clear();
-                            Console.WriteLine($"{action.Key} is not a valid key, try again. \n");
-                            continue;
+                            Menu.Invalid(action); continue;
                     }
                     break;
                 }
@@ -294,8 +390,7 @@ namespace CMDRPG
             Console.Clear();
             Console.WriteLine("Level: {0}", item.Level);
             Console.WriteLine("Name: {0}", item.Name);
-            Console.WriteLine("Description: {0}", item.Description);
-            Console.WriteLine();
+            Console.WriteLine("Description: {0}\n", item.Description);
         }
         public static void Delete(ItemData item)
         {
@@ -318,31 +413,48 @@ namespace CMDRPG
         }
         public static void EqippedItems()
         {
-            Console.Clear();
-            Console.WriteLine("1. Select Slot \n \n0. Go Back \n");
-            Console.WriteLine("Equipped Items: \n");
-            for (int i = 0; i < Data.saveData.Items.Length; i++)
+            while (true)
             {
-                if (Data.saveData.Items[i] < 99999)
+                Console.WriteLine("1. Select Slot \n \n0. Go Back \n");
+                Console.WriteLine("Equipped Items: \n");
+                for (int i = 0; i < Data.saveData.Items.Length; i++)
                 {
-                    if (Items.TryGetValue(Data.saveData.Items[i], out var item))
+                    if (Data.saveData.Items[i] > -1)
+                    {
+                        if (Items.TryGetValue(Data.saveData.Items[i], out var item))
+                        {
+                            if (slotName.TryGetValue(i + 1, out var slot))
+                            {
+                                Console.WriteLine("{0}: {1}", slot, item.Name);
+                            }
+                        }
+                    }
+                    else
                     {
                         if (slotName.TryGetValue(i + 1, out var slot))
                         {
-                            Console.WriteLine("{0}: {1}", slot, item.Name);
+                            Console.WriteLine("{0}: None", slot);
                         }
                     }
                 }
-                else
+                var select = Console.ReadKey(true);
+                var option = Data.MenuCheck(select.Key);
+                switch (option)
                 {
-                    if (slotName.TryGetValue(i + 1, out var slot))
-                    {
-                        Console.WriteLine("{0}: None", slot);
-                    }
+                    case 0:
+                        Console.Clear();
+                        Inventory(); break;
+                    case 1:
+                        Console.Clear();
+                        SelectSlot(); break;
+                    default:
+                        Menu.Invalid(select); continue;
                 }
             }
-            var select = Console.ReadKey(true);
-            Inventory();
+        }
+        public static void SelectSlot()
+        {
+            //I have no clue how to do this anymore.
         }
     }
     public class Village
@@ -359,7 +471,6 @@ namespace CMDRPG
                 "Tavern",
                 "Woods"
                 ];
-            Console.Clear();
             while (true)
             {
                 Console.WriteLine("You arrive in the town square.");
@@ -370,21 +481,33 @@ namespace CMDRPG
                 switch (option)
                 {
                     case 0:
+                        Console.Clear();
                         Menu.Places(); break;
                     case 1:
+                        Console.Clear();
                         Forge(); break;
                     case 2:
+                        Console.Clear();
                         Workbench(); break;
                     case 3:
+                        Console.Clear();
                         Armour(); break;
                     case 4:
+                        Console.Clear();
                         Weapons(); break;
                     case 5:
+                        Console.Clear();
                         Tavern(); break;
                     case 6:
+                        Console.Clear();
                         Woods0(); break;
-                    case 11:
+                    case 88:
+                        Console.Clear();
                         Inv.Inventory(); break;
+                    case 99:
+                        Exit(); break;
+                    default:
+                        Menu.Invalid(place); continue;
                 }
                 break;
             }
@@ -396,7 +519,6 @@ namespace CMDRPG
                 [
 
                 ];
-            Console.Clear();
         }
         public static void Workbench()
         {
@@ -405,7 +527,6 @@ namespace CMDRPG
                 [
 
                 ];
-            Console.Clear();
         }
         public static void Armour()
         {
@@ -414,7 +535,6 @@ namespace CMDRPG
                 [
 
                 ];
-            Console.Clear();
         }
         public static void Weapons()
         {
@@ -423,7 +543,6 @@ namespace CMDRPG
                 [
 
                 ];
-            Console.Clear();
         }
         public static void Tavern()
         {
@@ -432,9 +551,8 @@ namespace CMDRPG
                 [
 
                 ];
-            Console.Clear();
         }
-        public static void Woods0()
+        public static void Woods()
         {
             MenuID = 8;
             options =
@@ -445,7 +563,6 @@ namespace CMDRPG
                 "Pick up Stones",
                 "Travel Deeper"
                 ];
-            Console.Clear();
             while (true)
             {
                 Console.WriteLine("Wandering in the woods you think of what to do: \n");
@@ -468,10 +585,12 @@ namespace CMDRPG
                         Console.Clear();
                         Console.WriteLine("fuck You");
                         continue;
-                    case 11:
+                    case 88:
                         Inv.Inventory(); break;
                     case 99:
                         Exit(); break;
+                    default:
+                        Menu.Invalid(action); continue;
                 }
                 break;
             }

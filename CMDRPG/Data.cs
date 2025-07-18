@@ -7,13 +7,13 @@ namespace CMDRPG
     internal class Data
     {
         public static SaveFile saveData = new();
-        public static void save()
+        public static void Save()
         {
             var json = JsonSerializer.Serialize(saveData);
             string fullPath = @".\Saves\" + saveData.Name + ".json";
             File.WriteAllText(fullPath, json);
         }
-        public static void load()
+        public static void Load()
         {
             string saveDir = @".\Saves\";
             var saveList = Directory.EnumerateFiles(saveDir);
@@ -122,6 +122,7 @@ namespace CMDRPG
         }
         public static void Back()
         {
+            Console.Clear();
             switch (MenuID)
             {
                 case 0:
@@ -141,7 +142,7 @@ namespace CMDRPG
                 case 7:
                     Village.Tavern(); break;
                 case 8:
-                    Village.Woods0(); break;
+                    Village.Woods(); break;
             }
         }
         public static void Equip(int Id, int Type)
@@ -459,7 +460,7 @@ namespace CMDRPG
         public int Id;
         public string Name;
         public int Level;
-        //-1 Team, 0 Passive, 1 Normal, 2 Heavy, 3 Mini-Boss, 4 Boss, 5 God
+        //-1 Team, 0 Passive, 1 Normal, 2 Mini-Boss, 3 Boss, 4 Super-Boss, 5 God
         public int Type;
         //HP, Strength, Damage, Physical Defense, Magic Defense, True Defense, Mana, Crit Chance, Crit Damage, HP Regen, Mana Regen
         public int[] Stats;
