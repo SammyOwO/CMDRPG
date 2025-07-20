@@ -1,5 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using System.Text.Json;
+﻿using System.Text.Json;
 using static Game;
 
 namespace CMDRPG
@@ -120,6 +119,29 @@ namespace CMDRPG
             }
             Console.WriteLine();
         }
+        public static void EquipList()
+        {
+            for (int i = 0; i < saveData.Items.Length; i++)
+            {
+                if (saveData.Items[i] > -1)
+                {
+                    if (Items.TryGetValue(saveData.Items[i], out var item))
+                    {
+                        if (slotName.TryGetValue(i + 1, out var slot))
+                        {
+                            Console.WriteLine("{0}: {1}", slot, item.Name);
+                        }
+                    }
+                }
+                else
+                {
+                    if (slotName.TryGetValue(i + 1, out var slot))
+                    {
+                        Console.WriteLine("{0}: None", slot);
+                    }
+                }
+            }
+        }
         public static void Back()
         {
             Console.Clear();
@@ -145,13 +167,13 @@ namespace CMDRPG
                     Village.Woods(); break;
             }
         }
-        public static void Equip(int Id, int Type)
+        public static void Equip(ItemData Item)
         {
-            Items.TryGetValue(Id, out var itemCheck);
-            var itemLevel = itemCheck.Level;
+            var Id = Item.Id;
+            var itemLevel = Item.Level;
             var playerLevel = saveData.Levels[0];
-            var Slot = Type - 1;
-            switch (Type)
+            var Slot = Item.ArmourType - 1;
+            switch (Item.ArmourType)
             {
                 case < 11:
                     if (itemLevel > playerLevel)
@@ -164,9 +186,9 @@ namespace CMDRPG
                         {
                             while (true)
                             {
-                                if (Items.TryGetValue(saveData.Items[Slot], out var Item))
+                                if (Items.TryGetValue(saveData.Items[Slot], out var EItem))
                                 {
-                                    string Name = Item.Name;
+                                    string Name = EItem.Name;
                                     Console.WriteLine("You already have {0} equipped in that slot. Would you like to replace it? \n \n1. Yes \n2. No", Name);
                                 }
                                 var confirm = Console.ReadKey(true);
@@ -211,9 +233,9 @@ namespace CMDRPG
                                     {
                                         while (true)
                                         {
-                                            if (Items.TryGetValue(saveData.Items[Slot], out var Item))
+                                            if (Items.TryGetValue(saveData.Items[Slot], out var EItem))
                                             {
-                                                string Name = Item.Name;
+                                                string Name = EItem.Name;
                                                 Console.WriteLine("You already have {0} equipped in that slot. Would you like to replace it? \n \n1. Yes \n2. No", Name);
                                             }
                                             var confirm = Console.ReadKey(true);
@@ -243,9 +265,9 @@ namespace CMDRPG
                                     {
                                         while (true)
                                         {
-                                            if (Items.TryGetValue(saveData.Items[Slot + 1], out var Item))
+                                            if (Items.TryGetValue(saveData.Items[Slot + 1], out var EItem))
                                             {
-                                                string Name = Item.Name;
+                                                string Name = EItem.Name;
                                                 Console.WriteLine("You already have {0} equipped in that slot. Would you like to replace it? \n \n1. Yes \n2. No", Name);
                                             }
                                             var confirm = Console.ReadKey(true);
@@ -298,9 +320,9 @@ namespace CMDRPG
                                     {
                                         while (true)
                                         {
-                                            if (Items.TryGetValue(saveData.Items[Slot], out var Item))
+                                            if (Items.TryGetValue(saveData.Items[Slot], out var EItem))
                                             {
-                                                string Name = Item.Name;
+                                                string Name = EItem.Name;
                                                 Console.WriteLine("You already have {0} equipped in that slot. Would you like to replace it? \n \n1. Yes \n2. No", Name);
                                             }
                                             var confirm = Console.ReadKey(true);
@@ -330,9 +352,9 @@ namespace CMDRPG
                                     {
                                         while (true)
                                         {
-                                            if (Items.TryGetValue(saveData.Items[Slot + 1], out var Item))
+                                            if (Items.TryGetValue(saveData.Items[Slot + 1], out var EItem))
                                             {
-                                                string Name = Item.Name;
+                                                string Name = EItem.Name;
                                                 Console.WriteLine("You already have {0} equipped in that slot. Would you like to replace it? \n \n1. Yes \n2. No", Name);
                                             }
                                             var confirm = Console.ReadKey(true);
@@ -362,9 +384,9 @@ namespace CMDRPG
                                     {
                                         while (true)
                                         {
-                                            if (Items.TryGetValue(saveData.Items[Slot + 2], out var Item))
+                                            if (Items.TryGetValue(saveData.Items[Slot + 2], out var EItem))
                                             {
-                                                string Name = Item.Name;
+                                                string Name = EItem.Name;
                                                 Console.WriteLine("You already have {0} equipped in that slot. Would you like to replace it? \n \n1. Yes \n2. No", Name);
                                             }
                                             var confirm = Console.ReadKey(true);
@@ -394,9 +416,9 @@ namespace CMDRPG
                                     {
                                         while (true)
                                         {
-                                            if (Items.TryGetValue(saveData.Items[Slot + 3], out var Item))
+                                            if (Items.TryGetValue(saveData.Items[Slot + 3], out var EItem))
                                             {
-                                                string Name = Item.Name;
+                                                string Name = EItem.Name;
                                                 Console.WriteLine("You already have {0} equipped in that slot. Would you like to replace it? \n \n1. Yes \n2. No", Name);
                                             }
                                             var confirm = Console.ReadKey(true);
@@ -431,6 +453,10 @@ namespace CMDRPG
                     }
                     break;
             }
+        }
+        public static void Unequip(ItemData Item)
+        {
+
         }
         public static int MenuCheck(ConsoleKey Key)
         {

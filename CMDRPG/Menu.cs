@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection.Metadata.Ecma335;
 using static Game;
 
 namespace CMDRPG
@@ -236,6 +237,10 @@ namespace CMDRPG
                 Console.WriteLine("You successfully managed to escape.");
                 Data.Back();
             }
+            if (Min > 9000 && EType == 5)
+            {
+                Console.WriteLine("Despite your immense strength, their godly powers keep you stuck here.");
+            }
             if (Max > 100)
             {
                 Max = 100;
@@ -333,6 +338,17 @@ namespace CMDRPG
             }
             return null;
         }
+        public static bool IsEquipped(ItemData Item)
+        {
+            for (int i = 0; i < Data.saveData.Items.Length; i++)
+            {
+                if (Data.saveData.Items[i] == Item.Id)
+                {
+                    return true;
+                }
+            }    
+            return false;
+        }
         public static void Selected(ItemData item)
         {
             Console.Clear();
@@ -341,7 +357,7 @@ namespace CMDRPG
                 while (true)
                 {
                     Console.WriteLine("What would you like to do with {0}? \n", item.Name);
-                    Console.WriteLine("1. Inspect \n2. Delete \n3. Equip\n \n0. Cancel \n");
+                    Console.WriteLine("1. Inspect \n2. Delete \n3. Equip/Unequip \n \n0. Cancel \n");
                     var action = Console.ReadKey(true);
                     var option = Data.MenuCheck(action.Key);
                     switch (option)
@@ -354,7 +370,16 @@ namespace CMDRPG
                         case 2:
                             Delete(item); break;
                         case 3:
-                            Data.Equip(item.Id, item.ArmourType); break;
+                            Console.Clear();
+                            if (!IsEquipped(item))
+                            {
+                                Data.Equip(item);
+                            }
+                            else
+                            {
+                                Data.Unequip(item);
+                            }
+                            break;
                         default:
                             Menu.Invalid(action); continue;
                     }
@@ -417,26 +442,7 @@ namespace CMDRPG
             {
                 Console.WriteLine("1. Select Slot \n \n0. Go Back \n");
                 Console.WriteLine("Equipped Items: \n");
-                for (int i = 0; i < Data.saveData.Items.Length; i++)
-                {
-                    if (Data.saveData.Items[i] > -1)
-                    {
-                        if (Items.TryGetValue(Data.saveData.Items[i], out var item))
-                        {
-                            if (slotName.TryGetValue(i + 1, out var slot))
-                            {
-                                Console.WriteLine("{0}: {1}", slot, item.Name);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (slotName.TryGetValue(i + 1, out var slot))
-                        {
-                            Console.WriteLine("{0}: None", slot);
-                        }
-                    }
-                }
+                Data.EquipList();
                 var select = Console.ReadKey(true);
                 var option = Data.MenuCheck(select.Key);
                 switch (option)
@@ -454,7 +460,40 @@ namespace CMDRPG
         }
         public static void SelectSlot()
         {
-            //I have no clue how to do this anymore.
+            while(true)
+            {
+                Console.WriteLine("Select which slot?: \n0. Cancel");
+                Data.EquipList();
+                var select = Console.ReadKey(true);
+                var option = Data.MenuCheck(select.Key);
+                switch (option)
+                {
+                    case 0:
+                        Console.Clear();
+                        Inventory(); break;
+                    case 1:
+                        Console.Clear();
+                        IsFilled(option); break;
+                    default:
+                        Menu.Invalid(select); continue;
+                }
+            }
+        }
+        public static bool IsFilled(int slot)
+        {
+            if (Data.saveData.Items[slot] > -1)
+            {
+                return true;
+            }
+            return false;
+        }
+        public static void SelectedItem(int slot)
+        {
+            bool SlotNotEmpty = IsFilled(slot);
+            if (SlotNotEmpty)
+            {
+                 
+            }
         }
     }
     public class Village
@@ -500,7 +539,7 @@ namespace CMDRPG
                         Tavern(); break;
                     case 6:
                         Console.Clear();
-                        Woods0(); break;
+                        Woods(); break;
                     case 88:
                         Console.Clear();
                         Inv.Inventory(); break;

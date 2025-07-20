@@ -29,6 +29,9 @@ public class Game
     };
     public static Dictionary<ConsoleKey, int> menuOption = new Dictionary<ConsoleKey, int>()
     {
+        { ConsoleKey.Escape, 0 },
+        { ConsoleKey.D0, 0 },
+        { ConsoleKey.NumPad0, 0 },
         { ConsoleKey.D1, 1 },
         { ConsoleKey.NumPad1, 1 },
         { ConsoleKey.D2, 2 },
@@ -53,9 +56,6 @@ public class Game
         { ConsoleKey.D, 13 },
         { ConsoleKey.E, 14 },
         { ConsoleKey.F, 15 },
-        { ConsoleKey.D0, 0 },
-        { ConsoleKey.NumPad0, 0 },
-        { ConsoleKey.Escape, 0 },
         { ConsoleKey.I, 88 },
         { ConsoleKey.End, 99 }
     };
