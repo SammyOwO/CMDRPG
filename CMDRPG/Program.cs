@@ -122,7 +122,7 @@ public class Game
             {
                 case 1:
                     Console.Clear();
-                    NewPlayer();  break;
+                    NewPlayer(); break;
                 case 2:
                     Console.Clear();
                     Data.Load(); break;
@@ -186,7 +186,7 @@ public class Game
                     default:
                         Console.Clear();
                         Console.WriteLine($"{tutorial.Key} is an invalid input, try again. \n");
-                        continue;  
+                        continue;
                 }
                 break;
             }
@@ -225,7 +225,7 @@ public class Game
                         {
                             case 1:
                                 Console.Clear();
-                                while(true)
+                                while (true)
                                 {
                                     Console.WriteLine("You arrive in the town square.");
                                     Console.WriteLine("Where would you like to go? \n \nPlaces: \n");

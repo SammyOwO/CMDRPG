@@ -83,7 +83,7 @@ namespace CMDRPG
             await Task.Delay(Time);
             if (Items.ContainsKey(ID))
             {
-                 saveData.Inventory[ID] += rnd.Next(Min, Max + 1);
+                saveData.Inventory[ID] += rnd.Next(Min, Max + 1);
             }
             ExpAward(Skill, EMin, EMax);
             Console.Clear();
@@ -101,11 +101,21 @@ namespace CMDRPG
             var Pmax = (Level * 2);
             var Emin = (Level * 3) * Enemy.Type;
             var Emax = (Level * 8) * (Enemy.Type + 1);
-            if (Enemy.Type != 0 || Enemy.Type != -1)
+            if (Enemy.Type <= 0)
+            {
+                if (Enemy.Type < 0)
+                {
+                    Console.WriteLine("What? You get no reward for this, how did you do this?")
+                }
+                else
+                {
+                    ExpAward(0, Pmin, Pmax);
+                }
+            }
+            else
             {
                 ExpAward(0, Emin, Emax);
             }
-            ExpAward(0, Pmin, Pmax);
         }
         public static void InvList()
         {
@@ -287,12 +297,12 @@ namespace CMDRPG
                                     }
                                     break;
                                 default:
-                                    Menu.Invalid(eslot);  continue;
+                                    Menu.Invalid(eslot); continue;
                             }
                             break;
                         }
                     }
-                        break;
+                    break;
                 case 12:
                     if (itemLevel > playerLevel)
                     {
@@ -442,7 +452,7 @@ namespace CMDRPG
             int Count = 0;
             var Id = Item.Id;
             var Type = Item.ArmourType;
-            for (int i = 0;  i < saveData.Items.Length; i++)
+            for (int i = 0; i < saveData.Items.Length; i++)
             {
                 if (saveData.Items[i] == Id)
                 {

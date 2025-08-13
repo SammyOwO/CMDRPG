@@ -85,7 +85,7 @@ namespace CMDRPG
                 {
                     return true;
                 }
-            }    
+            }
             return false;
         }
         public static void Selected(ItemData item)
@@ -199,7 +199,7 @@ namespace CMDRPG
         }
         public static void SelectSlot()
         {
-            while(true)
+            while (true)
             {
                 Console.WriteLine("Select which slot?: \nNote: For slots 10 to 15 use 'A' through 'F'. \n0. Cancel");
                 Data.EquipList();

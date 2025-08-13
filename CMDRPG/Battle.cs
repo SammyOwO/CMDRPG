@@ -12,6 +12,7 @@ namespace CMDRPG
             Console.WriteLine("The battle begins! Your enemy is a Lvl {0} {1}.\n", Level, enemy.Name);
             while (true)
             {
+                Console.WriteLine("Lvl. {0} {1} \n", Level, enemy.Name);
                 Console.WriteLine("1. Attack \n2. Use Item \n3. Check Enemy \n4. Flee \n");
                 var choice = Console.ReadKey(true);
                 var option = Data.MenuCheck(choice.Key);
@@ -106,7 +107,7 @@ namespace CMDRPG
         }
         public static void Item()
         {
-            //See comment on line 195
+            //See comment on line 105.
         }
         public static void Check(EnemyData enemy)
         {
