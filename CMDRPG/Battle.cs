@@ -107,7 +107,7 @@ namespace CMDRPG
         }
         public static void Item()
         {
-            //See comment on line 105.
+            //See comment on line 106.
         }
         public static void Check(EnemyData enemy)
         {

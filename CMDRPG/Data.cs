@@ -105,7 +105,7 @@ namespace CMDRPG
             {
                 if (Enemy.Type < 0)
                 {
-                    Console.WriteLine("What? You get no reward for this, how did you do this?")
+                    Console.WriteLine("What? You get no reward for this, how did you do this?");
                 }
                 else
                 {
@@ -180,8 +180,8 @@ namespace CMDRPG
         public static void Equip(ItemData Item)
         {
             var Id = Item.Id;
-            var itemLevel = Item.Level;
-            var playerLevel = saveData.Levels[0];
+            var itemLevels = Item.Levels[];
+            var playerLevels = saveData.Levels[];
             var Slot = Item.ArmourType - 1;
             switch (Item.ArmourType)
             {
@@ -600,7 +600,8 @@ namespace CMDRPG
         public int Id;
         public string Name;
         public string Description;
-        public int Level;
+        //Combat, Mining, Farming, Fishing, Foraging, Woodworking, Enchanting and Alchemy
+        public int Levels[];
         //0 none, 1 Head, 2 Neck, 3 Chest, 4 Belt, 5 Pants, 6 Boots, 7 Gloves, 8 Tool/Weapon, 9 Special, 10 Bracelet, 11 Ring
         public int ArmourType;
         //HP, Strength, Damage, Physical Defense, Magic Defense, True Defense, Mana, Crit Chance, Crit Damage, HP Regen, Mana Regen
@@ -608,12 +609,12 @@ namespace CMDRPG
         //0 Flat Increase, 1 Multiplicitive Increase, 2 Percentage Increase
         public int[] MultPercent;
 
-        public ItemData(int Id, string Name, string Description, int Level, int ArmourType, int[] Stats, int[] MultPercent)
+        public ItemData(int Id, string Name, string Description, int[] Levels, int ArmourType, int[] Stats, int[] MultPercent)
         {
             this.Id = Id;
             this.Name = Name;
             this.Description = Description;
-            this.Level = Level;
+            this.Levels = Levels;
             this.ArmourType = ArmourType;
             this.Stats = Stats;
             this.MultPercent = MultPercent;

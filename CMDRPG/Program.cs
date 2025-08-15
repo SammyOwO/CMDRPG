@@ -70,14 +70,14 @@ public class Game
             Enemies.Add(enemy.Id, enemy);
         }
         ItemData[] items = {
-                new ItemData(0,"Dummy's Defense","+1,000,000,000 HP",1000000000,1,[1000000000],[0]),
-                new ItemData(1,"Oak Wood","A simple material for crafting.",0,0,[],[]),
-                new ItemData(11,"Oak Stick","A simple stick from the first available wood in the game.",1,8,[0,0,1],[0,0,0]),
-                new ItemData(21,"Stone 1","A simple material for crafting.",0,0,[],[]),
-                new ItemData(51,"Ore 1","The first ore used for crafting simple metal items.",0,0,[],[]),
-                new ItemData(76,"Ore 1 Bar","An ingot form of the first ore",0,0,[],[]),
-                new ItemData(101,"Oak Helmet","A basic helmet whittled from Oak Wood.",1,1,[0,0,0,5],[0,0,0,0]),
-                new ItemData(5000,"Kitchen Knife","I hope you don't think about doing anything bad.",0,0,[],[])
+                new ItemData(0,"Dummy's Defense","+1,000,000,000 HP",[1000000000],1,[1000000000],[0]),
+                new ItemData(1,"Oak Wood","A simple material for crafting.",[],0,[],[]),
+                new ItemData(11,"Oak Stick","A simple stick from the first available wood in the game.",[1,0,0,0,1],8,[0,0,1],[0,0,0]),
+                new ItemData(21,"Stone 1","A simple material for crafting.",[],0,[],[]),
+                new ItemData(51,"Ore 1","The first ore used for crafting simple metal items.",[],0,[],[]),
+                new ItemData(76,"Ore 1 Bar","An ingot form of the first ore",[],0,[],[]),
+                new ItemData(101,"Oak Helmet","A basic helmet whittled from Oak Wood.",[1,0,0,0,1],1,[0,0,0,5],[0,0,0,0]),
+                new ItemData(5000,"Kitchen Knife","I hope you don't think about doing anything bad.",[35],0,[],[])
             };
         foreach (ItemData item in items)
         {

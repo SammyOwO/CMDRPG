@@ -227,7 +227,10 @@ namespace CMDRPG
             {
                 Console.WriteLine($"Slot {slot} not selected due to it being empty.");
             }
-            Selected(Item);
+            else
+            {
+                Selected(Item);
+            }
         }
     }
 }
