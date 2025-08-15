@@ -180,15 +180,15 @@ namespace CMDRPG
         public static void Equip(ItemData Item)
         {
             var Id = Item.Id;
-            var itemLevels = Item.Levels[];
-            var playerLevels = saveData.Levels[];
+            var itemLevels = Item.Levels;
+            var playerLevels = saveData.Levels;
             var Slot = Item.ArmourType - 1;
             switch (Item.ArmourType)
             {
                 case < 11:
-                    if (itemLevel > playerLevel)
+                    if (itemLevels > playerLevels)
                     {
-                        Console.WriteLine("You are not a high enough level to use that, you must have combat level {0} to equip it.", itemLevel);
+                        Console.WriteLine("You are not a high enough level to use that, you must have combat level {0} to equip it.", itemLevels);
                     }
                     else
                     {
@@ -223,9 +223,9 @@ namespace CMDRPG
                     }
                     break;
                 case 11:
-                    if (itemLevel > playerLevel)
+                    if (itemLevels > playerLevels)
                     {
-                        Console.WriteLine("You are not a high enough level to use that, you must have combat level {0} to equip it.", itemLevel);
+                        Console.WriteLine("You are not a high enough level to use that, you must have combat level {0} to equip it.", itemLevels);
                     }
                     else
                     {
@@ -304,9 +304,9 @@ namespace CMDRPG
                     }
                     break;
                 case 12:
-                    if (itemLevel > playerLevel)
+                    if (itemLevels > playerLevels)
                     {
-                        Console.WriteLine("You are not a high enough level to use that, you must have combat level {0} to equip it.", itemLevel);
+                        Console.WriteLine("You are not a high enough level to use that, you must have combat level {0} to equip it.", itemLevels);
                     }
                     else
                     {
@@ -601,7 +601,7 @@ namespace CMDRPG
         public string Name;
         public string Description;
         //Combat, Mining, Farming, Fishing, Foraging, Woodworking, Enchanting and Alchemy
-        public int Levels[];
+        public int[] Levels;
         //0 none, 1 Head, 2 Neck, 3 Chest, 4 Belt, 5 Pants, 6 Boots, 7 Gloves, 8 Tool/Weapon, 9 Special, 10 Bracelet, 11 Ring
         public int ArmourType;
         //HP, Strength, Damage, Physical Defense, Magic Defense, True Defense, Mana, Crit Chance, Crit Damage, HP Regen, Mana Regen

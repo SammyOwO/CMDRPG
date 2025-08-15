@@ -152,7 +152,7 @@ namespace CMDRPG
         public static void Inspect(ItemData item)
         {
             Console.Clear();
-            Console.WriteLine("Level: {0}", item.Level);
+            Console.WriteLine("Level: {0}", item.Levels);
             Console.WriteLine("Name: {0}", item.Name);
             Console.WriteLine("Description: {0}\n", item.Description);
         }
