@@ -112,7 +112,7 @@ namespace CMDRPG
                             Console.Clear();
                             if (!IsEquipped(item))
                             {
-                                Data.Equip(item);
+                                Data.PreEquip(item);
                             }
                             else
                             {

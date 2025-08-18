@@ -177,275 +177,52 @@ namespace CMDRPG
                     Village.Woods(); break;
             }
         }
-        public static void Equip(ItemData Item)
+        public static void PreEquip(ItemData Item)
         {
             var Id = Item.Id;
-            var itemLevels = Item.Levels;
-            var playerLevels = saveData.Levels;
             var Slot = Item.ArmourType - 1;
-            switch (Item.ArmourType)
+            var Count = 0;
+            bool isEquipped = false;
+            for (int i = 0; i < saveData.Items.Length; i++)
             {
-                case < 11:
-                    if (itemLevels > playerLevels)
-                    {
-                        Console.WriteLine("You are not a high enough level to use that, you must have combat level {0} to equip it.", itemLevels);
-                    }
-                    else
-                    {
-                        if (saveData.Items[Slot] > -1)
-                        {
-                            while (true)
-                            {
-                                if (Items.TryGetValue(saveData.Items[Slot], out var EItem))
-                                {
-                                    string Name = EItem.Name;
-                                    Console.WriteLine("You already have {0} equipped in that slot. Would you like to replace it? \n \n1. Yes \n2. No", Name);
-                                }
-                                var confirm = Console.ReadKey(true);
-                                var option = MenuCheck(confirm.Key);
-                                switch (option)
-                                {
-                                    case 1:
-                                        saveData.Items[Slot] = Id;
-                                        break;
-                                    case 2:
-                                        break;
-                                    default:
-                                        Menu.Invalid(confirm); continue;
-                                }
-                                break;
-                            }
-                        }
-                        else
-                        {
-                            saveData.Items[Slot] = Id;
-                        }
-                    }
+                if (saveData.Items[i] == Id)
+                {
+                    Count++;
+                }
+            }
+            if (Count > 0)
+            {
+                isEquipped = true;
+            }
+            switch (Slot)
+            {
+                case < 8:
+                    EquippedCheck(0, isEquipped, Item);
                     break;
-                case 11:
-                    if (itemLevels > playerLevels)
-                    {
-                        Console.WriteLine("You are not a high enough level to use that, you must have combat level {0} to equip it.", itemLevels);
-                    }
-                    else
-                    {
-                        while (true)
-                        {
-                            Console.WriteLine("Equip in which slot, 1 or 2? \n");
-                            var eslot = Console.ReadKey(true);
-                            var option = MenuCheck(eslot.Key);
-                            switch (option)
-                            {
-                                case 1:
-                                    if (saveData.Items[Slot] > -1)
-                                    {
-                                        while (true)
-                                        {
-                                            if (Items.TryGetValue(saveData.Items[Slot], out var EItem))
-                                            {
-                                                string Name = EItem.Name;
-                                                Console.WriteLine("You already have {0} equipped in that slot. Would you like to replace it? \n \n1. Yes \n2. No", Name);
-                                            }
-                                            var confirm = Console.ReadKey(true);
-                                            var bracelet = MenuCheck(confirm.Key);
-                                            switch (bracelet)
-                                            {
-                                                case 1:
-                                                    saveData.Items[Slot] = Id;
-                                                    break;
-                                                case 2:
-                                                    break;
-                                                default:
-                                                    Menu.Invalid(confirm); continue;
-                                            }
-                                            break;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        saveData.Items[Slot] = Id;
-                                    }
-                                    break;
-                                case 2:
-                                    if (saveData.Items[Slot + 1] > -1)
-                                    {
-                                        while (true)
-                                        {
-                                            if (Items.TryGetValue(saveData.Items[Slot + 1], out var EItem))
-                                            {
-                                                string Name = EItem.Name;
-                                                Console.WriteLine("You already have {0} equipped in that slot. Would you like to replace it? \n \n1. Yes \n2. No", Name);
-                                            }
-                                            var confirm = Console.ReadKey(true);
-                                            var bracelet = MenuCheck(confirm.Key);
-                                            switch (bracelet)
-                                            {
-                                                case 1:
-                                                    saveData.Items[Slot + 1] = Id;
-                                                    break;
-                                                case 2:
-                                                    break;
-                                                default:
-                                                    Menu.Invalid(confirm); continue;
-                                            }
-                                            break;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        saveData.Items[Slot + 1] = Id;
-                                    }
-                                    break;
-                                default:
-                                    Menu.Invalid(eslot); continue;
-                            }
-                            break;
-                        }
-                    }
+                case 9:
+                    EquippedCheck(1, isEquipped, Item);
                     break;
-                case 12:
-                    if (itemLevels > playerLevels)
-                    {
-                        Console.WriteLine("You are not a high enough level to use that, you must have combat level {0} to equip it.", itemLevels);
-                    }
-                    else
-                    {
-                        while (true)
-                        {
-                            Console.WriteLine("Equip in which slot, 1 or 2? \n");
-                            var eslot = Console.ReadKey(true);
-                            var option = MenuCheck(eslot.Key);
-                            switch (option)
-                            {
-                                case 1:
-                                    if (saveData.Items[Slot] > -1)
-                                    {
-                                        while (true)
-                                        {
-                                            if (Items.TryGetValue(saveData.Items[Slot], out var EItem))
-                                            {
-                                                string Name = EItem.Name;
-                                                Console.WriteLine("You already have {0} equipped in that slot. Would you like to replace it? \n \n1. Yes \n2. No", Name);
-                                            }
-                                            var confirm = Console.ReadKey(true);
-                                            var ring = MenuCheck(confirm.Key);
-                                            switch (ring)
-                                            {
-                                                case 1:
-                                                    saveData.Items[Slot] = Id;
-                                                    break;
-                                                case 2:
-                                                    break;
-                                                default:
-                                                    Menu.Invalid(confirm); continue;
-                                            }
-                                            break;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        saveData.Items[Slot] = Id;
-                                    }
-                                    break;
-                                case 2:
-                                    if (saveData.Items[Slot + 1] > -1)
-                                    {
-                                        while (true)
-                                        {
-                                            if (Items.TryGetValue(saveData.Items[Slot + 1], out var EItem))
-                                            {
-                                                string Name = EItem.Name;
-                                                Console.WriteLine("You already have {0} equipped in that slot. Would you like to replace it? \n \n1. Yes \n2. No", Name);
-                                            }
-                                            var confirm = Console.ReadKey(true);
-                                            var ring = MenuCheck(confirm.Key);
-                                            switch (ring)
-                                            {
-                                                case 1:
-                                                    saveData.Items[Slot + 1] = Id;
-                                                    break;
-                                                case 2:
-                                                    break;
-                                                default:
-                                                    Menu.Invalid(confirm); continue;
-                                            }
-                                            break;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        saveData.Items[Slot + 1] = Id;
-                                    }
-                                    break;
-                                case 3:
-                                    if (saveData.Items[Slot + 2] > -1)
-                                    {
-                                        while (true)
-                                        {
-                                            if (Items.TryGetValue(saveData.Items[Slot + 2], out var EItem))
-                                            {
-                                                string Name = EItem.Name;
-                                                Console.WriteLine("You already have {0} equipped in that slot. Would you like to replace it? \n \n1. Yes \n2. No", Name);
-                                            }
-                                            var confirm = Console.ReadKey(true);
-                                            var ring = MenuCheck(confirm.Key);
-                                            switch (ring)
-                                            {
-                                                case 1:
-                                                    saveData.Items[Slot + 2] = Id;
-                                                    break;
-                                                case 2:
-                                                    break;
-                                                default:
-                                                    Menu.Invalid(confirm); continue;
-                                            }
-                                            break;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        saveData.Items[Slot + 2] = Id;
-                                    }
-                                    break;
-                                case 4:
-                                    if (saveData.Items[Slot + 3] > -1)
-                                    {
-                                        while (true)
-                                        {
-                                            if (Items.TryGetValue(saveData.Items[Slot + 3], out var EItem))
-                                            {
-                                                string Name = EItem.Name;
-                                                Console.WriteLine("You already have {0} equipped in that slot. Would you like to replace it? \n \n1. Yes \n2. No", Name);
-                                            }
-                                            var confirm = Console.ReadKey(true);
-                                            var ring = MenuCheck(confirm.Key);
-                                            switch (ring)
-                                            {
-                                                case 1:
-                                                    saveData.Items[Slot + 3] = Id;
-                                                    break;
-                                                case 2:
-                                                    break;
-                                                default:
-                                                    Menu.Invalid(confirm); continue;
-                                            }
-                                            break;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        saveData.Items[Slot + 3] = Id;
-                                    }
-                                    break;
-                                default:
-                                    Menu.Invalid(eslot); continue;
-                            }
-                            break;
-                        }
-                    }
+                case 10:
+                    EquippedCheck(2, isEquipped, Item);
                     break;
             }
         }
+        public static void EquippedCheck(int Type, bool isEquipped, ItemData Item)
+        {
+            if (isEquipped)
+            {
+                Console.WriteLine("You already have ");
+            }
+            else
+            {
+                Equip(Type, Item);
+            }
+        }
+        public static void Equip(int Type, ItemData Item)
+        {
+
+        }
+
         public static void Unequip(ItemData Item)
         {
             bool Many = false;
