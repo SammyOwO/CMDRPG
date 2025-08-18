@@ -47,7 +47,7 @@ namespace CMDRPG
                     "Mountains (Lvl 25-40)"
                     ];
                 Console.WriteLine("Where would you like to go? \n \nPlaces: \n");
-                Options(options);
+                MenuList.Options(options);
                 var place = Console.ReadKey(true);
                 var option = Data.MenuCheck(place.Key);
                 switch (option)
@@ -80,14 +80,6 @@ namespace CMDRPG
             Console.ReadKey(true);
             MainM();
         }
-        public static void Options(string[] options)
-        {
-            for (int i = 0; i < options.Length; i++)
-            {
-                Console.WriteLine("{0}. {1}", i + 1, options[i]);
-            }
-            Console.WriteLine("\n0. Go Back | I: Inventory | End: Exit \n");
-        }
         public static void Invalid(ConsoleKeyInfo option)
         {
             Console.Clear();
@@ -112,7 +104,7 @@ namespace CMDRPG
             {
                 Console.WriteLine("You arrive in the town square.");
                 Console.WriteLine("Where would you like to go? \n \nPlaces: \n");
-                Menu.Options(options);
+                MenuList.Options(options);
                 var place = Console.ReadKey(true);
                 var option = Data.MenuCheck(place.Key);
                 switch (option)
@@ -203,7 +195,7 @@ namespace CMDRPG
             while (true)
             {
                 Console.WriteLine("Wandering in the woods you think of what to do: \n");
-                Menu.Options(options);
+                MenuList.Options(options);
                 var action = Console.ReadKey(true);
                 var option = Data.MenuCheck(action.Key);
                 switch (option)

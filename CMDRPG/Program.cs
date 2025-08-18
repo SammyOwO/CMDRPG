@@ -294,7 +294,7 @@ public class Game
                                                                                     if (Data.saveData.Inventory[1] != 0)
                                                                                     {
                                                                                         Data.saveData.Inventory[1] -= 1;
-                                                                                        Task.Run(() => Data.Skill(5, 5000, 11, 5, 5, 10, 10)).Wait();
+                                                                                        Task.Run(() => Skills.Skill(5, 5000, 11, 5, 5, 10, 10)).Wait();
                                                                                     }
                                                                                     else
                                                                                     {
@@ -353,7 +353,7 @@ public class Game
                                                         break;
                                                     case 1:
                                                         Console.Clear();
-                                                        Task.Run(() => Data.Skill(4, 10000, 1, 1, 3, 10, 15)).Wait(); continue;
+                                                        Task.Run(() => Skills.Skill(4, 10000, 1, 1, 3, 10, 15)).Wait(); continue;
                                                     case 2:
                                                         Console.Clear();
                                                         Console.WriteLine("Wait until after the tutorial. \n"); continue;

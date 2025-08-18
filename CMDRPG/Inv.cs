@@ -14,8 +14,8 @@ namespace CMDRPG
                     "Show Equipped Items"
                     ];
                 Console.WriteLine("Inventory \n");
-                Menu.Options(options);
-                Data.InvList();
+                MenuList.Options(options);
+                MenuList.Inv();
                 var key = Console.ReadKey(true);
                 var option = Data.MenuCheck(key.Key);
                 switch (option)
@@ -39,7 +39,7 @@ namespace CMDRPG
         public static void SelectItems()
         {
             Console.WriteLine("Select which item?: \n");
-            Data.InvList();
+            MenuList.Inv();
             while (true)
             {
                 string select = Console.ReadLine();
@@ -112,11 +112,11 @@ namespace CMDRPG
                             Console.Clear();
                             if (!IsEquipped(item))
                             {
-                                Data.PreEquip(item);
+                                Equip.PreEquip(item);
                             }
                             else
                             {
-                                Data.Unequip(item);
+                                Equip.Unequip(item);
                             }
                             break;
                         default:
@@ -181,7 +181,7 @@ namespace CMDRPG
             {
                 Console.WriteLine("1. Select Slot \n \n0. Go Back \n");
                 Console.WriteLine("Equipped Items: \n");
-                Data.EquipList();
+                MenuList.Equips();
                 var select = Console.ReadKey(true);
                 var option = Data.MenuCheck(select.Key);
                 switch (option)
@@ -202,7 +202,7 @@ namespace CMDRPG
             while (true)
             {
                 Console.WriteLine("Select which slot?: \nNote: For slots 10 to 15 use 'A' through 'F'. \n0. Cancel");
-                Data.EquipList();
+                MenuList.Equips();
                 var select = Console.ReadKey(true);
                 var option = Data.MenuCheck(select.Key);
                 if (option == 0)

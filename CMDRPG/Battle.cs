@@ -166,7 +166,7 @@ namespace CMDRPG
         public static void Win(EnemyData enemy, int Level)
         {
             Console.WriteLine("The {0} has been defeated!", enemy.Name);
-            Data.BattleReward(enemy.Id, Level);
+            Skills.BattleReward(enemy.Id, Level);
             Data.Back();
         }
     }
