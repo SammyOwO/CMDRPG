@@ -6,6 +6,7 @@ namespace CMDRPG
     {
         public static void PreEquip(ItemData Item)
         {
+            Console.Clear();
             var Id = Item.Id;
             var Slot = Item.ArmourType - 1; 
             bool isEquipped = false;
@@ -31,7 +32,6 @@ namespace CMDRPG
         }
         public static void EquippedCheck(int Type, bool isEquipped, ItemData Item)
         {
-            Console.Clear();
             var Name = Item.Name;
             while (2 < 3)
             {
@@ -44,8 +44,10 @@ namespace CMDRPG
                     switch (choice)
                     {
                         case 1:
+                            Console.Clear();
                             Init(Type, Item); break;
                         case 2:
+                            Console.Clear();
                             Console.WriteLine("Equipping canceled."); break;
                         default:
                             Menu.Invalid(option); break;
@@ -60,14 +62,27 @@ namespace CMDRPG
         }
         public static void Init(int Type, ItemData Item)
         {
+            var Slot = Item.ArmourType - 1;
             Console.Clear();
+            switch (Type)
+            {
+                case 0:
+                    //Slot
+                    break;
+                case 1:
+                    //2 Slots (10, 11)
+                    break;
+                case 2:
+                    //4 Slots (12, 13, 14, 15)
+                    break;
+            }
         }
         public static void Unequip(ItemData Item)
         {
             bool Many = false;
             int Count = 0;
             var Id = Item.Id;
-            var Type = Item.ArmourType;
+            var Type = Item.ArmourType - 1;
             for (int i = 0; i < Data.saveData.Items.Length; i++)
             {
                 if (Data.saveData.Items[i] == Id)
@@ -81,7 +96,7 @@ namespace CMDRPG
             }
             switch (Type)
             {
-                case < 11:
+                case < 9:
                     for (int i = 0; i < Data.saveData.Items.Length; i++)
                     {
                         if (Data.saveData.Items[i] == Id)
@@ -92,23 +107,7 @@ namespace CMDRPG
                     Console.Clear();
                     Console.WriteLine("You unequipped your {0}.", Item.Name);
                     break;
-                case 11:
-                    if (Many)
-                    {
-                        Multiple(Item);
-                    }
-                    else
-                    {
-                        for (int i = 0; i < Data.saveData.Items.Length; i++)
-                        {
-                            if (Data.saveData.Items[i] == Id)
-                            {
-                                Data.saveData.Items[i] = 0;
-                            }
-                        }
-                    }
-                    break;
-                case 12:
+                case >= 9:
                     if (Many)
                     {
                         Multiple(Item);
@@ -133,7 +132,8 @@ namespace CMDRPG
             bool All = false;
             while (true)
             {
-                Console.WriteLine("You have more than 1 {0} equipped, would you like to unequip them all?", Item.Name);
+                Console.WriteLine("You have more than 1 {0} equipped, would you like to unequip them all?\n", Item.Name);
+                Console.WriteLine("1. Unequip All \n2. Unequip 1 \n \n0. Cancel");
                 var choice = Console.ReadKey(true);
                 var option = Data.MenuCheck(choice.Key);
                 switch (option)
