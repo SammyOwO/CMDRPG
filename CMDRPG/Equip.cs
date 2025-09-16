@@ -7,19 +7,14 @@ namespace CMDRPG
         public static void PreEquip(ItemData Item)
         {
             var Id = Item.Id;
-            var Slot = Item.ArmourType - 1;
-            var Count = 0;
+            var Slot = Item.ArmourType - 1; 
             bool isEquipped = false;
             for (int i = 0; i < Data.saveData.Items.Length; i++)
             {
-                if (Data.saveData.Items[i] == Id)
+                if (Data.saveData.Items[i] == Id && Item.ArmourType != 10 && Item.ArmourType != 11)
                 {
-                    Count++;
+                    isEquipped = true;
                 }
-            }
-            if (Count > 0)
-            {
-                isEquipped = true;
             }
             switch (Slot)
             {
@@ -36,18 +31,36 @@ namespace CMDRPG
         }
         public static void EquippedCheck(int Type, bool isEquipped, ItemData Item)
         {
-            if (isEquipped)
+            Console.Clear();
+            var Name = Item.Name;
+            while (2 < 3)
             {
-                Console.WriteLine("You already have ");
-            }
-            else
-            {
-                Init(Type, Item);
+                if (isEquipped)
+                {
+                    Console.WriteLine($"You already have {Name} equipped. Would you like to remove or replace it?");
+                    Console.WriteLine("1. Yes \n2. No \n");
+                    var option = Console.ReadKey(true);
+                    var choice = Data.MenuCheck(option.Key);
+                    switch (choice)
+                    {
+                        case 1:
+                            Init(Type, Item); break;
+                        case 2:
+                            Console.WriteLine("Equipping canceled."); break;
+                        default:
+                            Menu.Invalid(option); break;
+                    }
+                }
+                else
+                {
+                    Init(Type, Item);
+                }
+                break;
             }
         }
         public static void Init(int Type, ItemData Item)
         {
-
+            Console.Clear();
         }
         public static void Unequip(ItemData Item)
         {
