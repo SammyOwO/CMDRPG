@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using System.Numerics;
 using static Game;
 
 namespace CMDRPG
@@ -94,7 +95,7 @@ namespace CMDRPG
         public int[] Levels { get; set; } = [1, 1, 1, 1, 1, 1, 1, 1];
         public int[] Exp { get; set; } = [0, 0, 0, 0, 0, 0, 0, 0];
         //Quantities of which item IDs the player has.
-        public int[] Inventory { get; set; } = new int[5001];
+        public List<Int128> Inventory { get; set; } = new();
         //Equipped Items
         public int[] Items { get; set; } = new int[15];
         public bool New { get; set; } = true;

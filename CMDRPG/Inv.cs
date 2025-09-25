@@ -62,7 +62,7 @@ namespace CMDRPG
             {
                 Id = -1;
             }
-            for (int i = 0; i < Data.saveData.Inventory.Length; i++)
+            for (int i = 0; i < Data.saveData.Inventory.Count; i++)
             {
                 if (Data.saveData.Inventory[i] > 0)
                 {
@@ -181,7 +181,7 @@ namespace CMDRPG
             {
                 Console.WriteLine("1. Select Slot \n \n0. Go Back \n");
                 Console.WriteLine("Equipped Items: \n");
-                MenuList.Equips();
+                MenuList.Equips(true, false);
                 var select = Console.ReadKey(true);
                 var option = Data.MenuCheck(select.Key);
                 switch (option)
@@ -202,7 +202,7 @@ namespace CMDRPG
             while (true)
             {
                 Console.WriteLine("Select which slot?: \nNote: For slots 10 to 15 use 'A' through 'F'. \n0. Cancel");
-                MenuList.Equips();
+                MenuList.Equips(true, false);
                 var select = Console.ReadKey(true);
                 var option = Data.MenuCheck(select.Key);
                 if (option == 0)

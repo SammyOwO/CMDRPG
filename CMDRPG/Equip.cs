@@ -20,17 +20,17 @@ namespace CMDRPG
             switch (Slot)
             {
                 case < 8:
-                    EquippedCheck(0, isEquipped, Item);
+                    NEquippedCheck(0, isEquipped, Item);
                     break;
                 case 9:
-                    EquippedCheck(1, isEquipped, Item);
+                    NEquippedCheck(1, isEquipped, Item);
                     break;
                 case 10:
-                    EquippedCheck(2, isEquipped, Item);
+                    NEquippedCheck(2, isEquipped, Item);
                     break;
             }
         }
-        public static void EquippedCheck(int Type, bool isEquipped, ItemData Item)
+        public static void NEquippedCheck(int Type, bool isEquipped, ItemData Item)
         {
             var Name = Item.Name;
             while (2 < 3)
@@ -63,18 +63,76 @@ namespace CMDRPG
         public static void Init(int Type, ItemData Item)
         {
             var Slot = Item.ArmourType - 1;
+            var Neck = Item.ArmourType + 1;
             Console.Clear();
             switch (Type)
             {
                 case 0:
-                    //Slot
+                    Data.saveData.Items[Slot] = Item.Id;
                     break;
                 case 1:
-                    //2 Slots (10, 11)
-                    break;
+                    if (Data.saveData.Items[Slot] != 0)
+                    {
+                        if (Data.saveData.Items[Slot + 1] == 0)
+                        {
+                            Data.saveData.Items[Slot + 1] = Item.Id;
+                        }
+                        else
+                        {
+                            Full(false);
+                        }
+                    }
+                    else
+                    {
+                        Data.saveData.Items[Slot] = Item.Id;
+                    }
+
+                        break;
                 case 2:
-                    //4 Slots (12, 13, 14, 15)
+                    if (Data.saveData.Items[Neck] != 0)
+                    {
+                        if (Data.saveData.Items[Neck + 1] != 0)
+                        {
+                            if (Data.saveData.Items[Neck +2] != 0)
+                            {
+                                if (Data.saveData.Items[Neck + 3] == 0)
+                                {
+                                    Data.saveData.Items[Neck + 3] = Item.Id;
+                                }
+                                else
+                                {
+                                    Full(true);
+                                }
+                            }
+                            else
+                            {
+                                Data.saveData.Items[Neck + 2] = Item.Id;
+                            }
+                        }
+                        else
+                        {
+                            Data.saveData.Items[Neck + 1] = Item.Id;
+                        }
+                    }
+                    else
+                    {
+                        Data.saveData.Items[Neck] = Item.Id;
+                    }
                     break;
+            }
+        }
+        public static void Full(bool Ring)
+        {
+            Console.Clear();
+            if (!Ring)
+            {
+                Console.WriteLine("All Neck slots are full.");
+                MenuList.Equips(false, false);
+            }
+            else
+            {
+                Console.WriteLine("All Ring slots are full.");
+                MenuList.Equips(false, true);
             }
         }
         public static void Unequip(ItemData Item)
