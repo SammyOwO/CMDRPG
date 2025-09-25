@@ -8,7 +8,7 @@ namespace CMDRPG
         {
             Console.Clear();
             var Id = Item.Id;
-            var Slot = Item.ArmourType - 1; 
+            var Slot = Item.ArmourType - 1;
             bool isEquipped = false;
             for (int i = 0; i < Data.saveData.Items.Length; i++)
             {
@@ -63,7 +63,7 @@ namespace CMDRPG
         public static void Init(int Type, ItemData Item)
         {
             var Slot = Item.ArmourType - 1;
-            var Neck = Item.ArmourType + 1;
+            var Ring = Item.ArmourType;
             Console.Clear();
             switch (Type)
             {
@@ -79,7 +79,7 @@ namespace CMDRPG
                         }
                         else
                         {
-                            Full(false);
+                            Full(false, Item);
                         }
                     }
                     else
@@ -87,54 +87,103 @@ namespace CMDRPG
                         Data.saveData.Items[Slot] = Item.Id;
                     }
 
-                        break;
+                    break;
                 case 2:
-                    if (Data.saveData.Items[Neck] != 0)
+                    if (Data.saveData.Items[Ring] != 0)
                     {
-                        if (Data.saveData.Items[Neck + 1] != 0)
+                        if (Data.saveData.Items[Ring + 1] != 0)
                         {
-                            if (Data.saveData.Items[Neck +2] != 0)
+                            if (Data.saveData.Items[Ring + 2] != 0)
                             {
-                                if (Data.saveData.Items[Neck + 3] == 0)
+                                if (Data.saveData.Items[Ring + 3] == 0)
                                 {
-                                    Data.saveData.Items[Neck + 3] = Item.Id;
+                                    Data.saveData.Items[Ring + 3] = Item.Id;
                                 }
                                 else
                                 {
-                                    Full(true);
+                                    Full(true, Item);
                                 }
                             }
                             else
                             {
-                                Data.saveData.Items[Neck + 2] = Item.Id;
+                                Data.saveData.Items[Ring + 2] = Item.Id;
                             }
                         }
                         else
                         {
-                            Data.saveData.Items[Neck + 1] = Item.Id;
+                            Data.saveData.Items[Ring + 1] = Item.Id;
                         }
                     }
                     else
                     {
-                        Data.saveData.Items[Neck] = Item.Id;
+                        Data.saveData.Items[Ring] = Item.Id;
                     }
                     break;
             }
         }
-        public static void Full(bool Ring)
+        public static void Full(bool Ring, ItemData Item)
         {
             Console.Clear();
             if (!Ring)
             {
-                Console.WriteLine("All Neck slots are full.");
-                MenuList.Equips(false, false);
+                while (2 < 3)
+                {
+                    Console.WriteLine("All Neck slots are full. Which slot would you like to replace with {0}? \n", Item.Name);
+                    MenuList.Equips(false, false);
+                    Console.WriteLine("0. Cancel");
+                    var slot = Console.ReadKey(true);
+                    var option = Data.MenuCheck(slot.Key)
+                   switch (option)
+                    {
+                        case 0:
+                            Console.WriteLine("Action Canceled.");
+                            break;
+                        case 1:
+                            Data.saveData.Items[9];
+                            break;
+                        case 2:
+                            Data.saveData.Items[10];
+                            break;
+                        default:
+                            Menu.Invalid(slot);
+                            continue;
+                    }
+                }
             }
             else
             {
-                Console.WriteLine("All Ring slots are full.");
-                MenuList.Equips(false, true);
+
+                while (5 > 4)
+
+                {
+
+                    Console.WriteLine("All Ring slots are full. Which slot would you like to replace with {0}? \n", Item.Name);
+                    MenuList.Equips(false, false);
+                    Console.WriteLine("0. Cancel");
+                    var slot = Console.ReadKey(true);
+                    var option = Data.MenuCheck(slot.Key)
+                    switch (option)
+                    {
+                        case 0:
+                            Console.WriteLine("Action Canceled.");
+                            break;
+                        case 1:
+                            Data.saveData.Items[11];
+                            break;
+                        case 2:
+                            Data.saveData.Items[12];
+                            break;
+                        case 3:
+                            Data.saveData.Items[13];
+                            break;
+                        case 4:
+                            Data.saveData.Items[14];
+                        default:
+                            Menu.Invalid(slot);
+                            continue;
+                    }
+                }
             }
-        }
         public static void Unequip(ItemData Item)
         {
             bool Many = false;

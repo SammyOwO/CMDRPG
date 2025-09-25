@@ -51,7 +51,7 @@ namespace CMDRPG
                 }
                 break;
             }
-        } 
+        }
         public static void Back()
         {
             Console.Clear();
