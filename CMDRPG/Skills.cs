@@ -58,7 +58,7 @@ namespace CMDRPG
             {
                 if (Enemy.Type < 0)
                 {
-                    Console.WriteLine("What? You get no reward for this, how did you do this?");
+                    Console.WriteLine("What? You get no reward for this, how did you do this? \n");
                 }
                 else
                 {
@@ -68,6 +68,11 @@ namespace CMDRPG
             else
             {
                 ExpAward(0, Emin, Emax);
+            }
+            var Pwnage = rnd.Next(1, 100001);
+            if (Pwnage == 23478)
+            {
+                Data.saveData.Items[2147000000] += 1;
             }
         }
     }

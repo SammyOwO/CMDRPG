@@ -32,7 +32,7 @@ namespace CMDRPG
             }
             for (int i = x; i < y; i++)
             {
-                if (Data.saveData.Items[i] > -1)
+                if (Data.saveData.Items[i] != 0)
                 {
                     if (Items.TryGetValue(Data.saveData.Items[i], out var item))
                     {

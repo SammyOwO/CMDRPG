@@ -77,7 +77,8 @@ public class Game
                 new ItemData(21,"Stone 1","A simple material for crafting.",[],0,[],[]),
                 new ItemData(51,"Ore 1","The first ore used for crafting simple metal items.",[],0,[],[]),
                 new ItemData(76,"Ore 1 Bar","An ingot form of the first ore",[],0,[],[]),
-                new ItemData(101,"Oak Helmet","A basic helmet whittled from Oak Wood.",[1,0,0,0,1],1,[0,0,0,5],[0,0,0,0])
+                new ItemData(101,"Oak Helmet","A basic helmet whittled from Oak Wood.",[1,0,0,0,1],1,[0,0,0,5],[0,0,0,0]),
+                new ItemData(2147000000,"Crasher","Get Fucked",[],0,[],[])
 
             };
         foreach (ItemData item in items)

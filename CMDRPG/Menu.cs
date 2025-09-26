@@ -85,6 +85,12 @@ namespace CMDRPG
             Console.Clear();
             Console.WriteLine($"{option.Key} is not a valid key, try again. \n");
         }
+        public static void Canceled()
+        {
+            Console.Clear(); 
+            Console.WriteLine("Action Canceled. \nPress any key to continue...");
+            Console.ReadKey(true);
+        }
     }
     public class Village
     {

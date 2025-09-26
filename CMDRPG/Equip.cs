@@ -123,6 +123,7 @@ namespace CMDRPG
         }
         public static void Full(bool Ring, ItemData Item)
         {
+            var id = Item.Id;
             Console.Clear();
             if (!Ring)
             {
@@ -132,17 +133,17 @@ namespace CMDRPG
                     MenuList.Equips(false, false);
                     Console.WriteLine("0. Cancel");
                     var slot = Console.ReadKey(true);
-                    var option = Data.MenuCheck(slot.Key)
-                   switch (option)
+                    var option = Data.MenuCheck(slot.Key);
+                    switch (option)
                     {
                         case 0:
-                            Console.WriteLine("Action Canceled.");
+                            Menu.Canceled();
                             break;
                         case 1:
-                            Data.saveData.Items[9];
+                            Data.saveData.Items[9] = id;
                             break;
                         case 2:
-                            Data.saveData.Items[10];
+                            Data.saveData.Items[10] = id;
                             break;
                         default:
                             Menu.Invalid(slot);
@@ -161,29 +162,31 @@ namespace CMDRPG
                     MenuList.Equips(false, false);
                     Console.WriteLine("0. Cancel");
                     var slot = Console.ReadKey(true);
-                    var option = Data.MenuCheck(slot.Key)
+                    var option = Data.MenuCheck(slot.Key);
                     switch (option)
                     {
                         case 0:
-                            Console.WriteLine("Action Canceled.");
+                            Menu.Canceled();
                             break;
                         case 1:
-                            Data.saveData.Items[11];
+                            Data.saveData.Items[11] = id;
                             break;
                         case 2:
-                            Data.saveData.Items[12];
+                            Data.saveData.Items[12] = id;
                             break;
                         case 3:
-                            Data.saveData.Items[13];
+                            Data.saveData.Items[13] = id;
                             break;
                         case 4:
-                            Data.saveData.Items[14];
+                            Data.saveData.Items[14] = id;
+                            break;
                         default:
                             Menu.Invalid(slot);
                             continue;
                     }
                 }
             }
+        }
         public static void Unequip(ItemData Item)
         {
             bool Many = false;
@@ -273,6 +276,45 @@ namespace CMDRPG
                         break;
                     default:
                         Menu.Invalid(choice); continue;
+                }
+            }
+        }
+        public static void AdjStat(ItemData Item, bool Equip)
+        {
+            var Type = Item.MultPercent;
+            var Stats = Data.saveData.Stats;
+            var itemStats = Item.Stats;
+            for (int i = 0; i < Stats.Length; i++)
+            {
+                if (Equip)
+                {
+                    switch (Type[i])
+                    {
+                        case 0:
+                            Stats[i] += itemStats[i];
+                            break;
+                        case 1:
+                            Stats[i] *= itemStats[i];
+                            break;
+                        case 2:
+                            Stats[i] = ((Stats[i] * 100) + (itemStats[i] * 100)) / 100;
+                            break;
+                    }
+                }
+                else
+                {
+                    switch (Type[i])
+                    {
+                        case 0: 
+                            Stats[i] -= itemStats[i];
+                            break;
+                        case 1:
+                            Stats[i] /= itemStats[i];
+                            break;
+                        case 2:
+                            Stats[i] = ((Stats[i] * 100) - (itemStats[i] * 100)) / 100;
+                            break;
+                    }
                 }
             }
         }
