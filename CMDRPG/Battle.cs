@@ -1,4 +1,6 @@
-﻿using static Game;
+﻿using System.Text;
+using System.Xml;
+using static Game;
 
 namespace CMDRPG
 {
@@ -23,7 +25,7 @@ namespace CMDRPG
                         case 1:
                             Fight(); break;
                         case 2:
-                            Item(); break;
+                            Item(0); break;
                         case 3:
                             Console.Clear();
                             Check(enemy); continue;
@@ -105,9 +107,37 @@ namespace CMDRPG
         {
             //Yeah right, I have no clue.
         }
-        public static void Item()
+        public static void Item(int Page)
         {
-            //See comment on line 106.
+            List<int> Owned = new();
+            for (int i = 0; i < Consumable.Count; i++)
+                if (Data.saveData.Items[Consumable[i]] > 0)
+                {
+                    Owned.Add(Consumable[i]);
+                }
+            decimal Length = Convert.ToDecimal(Owned.Count);
+            decimal Fourteen = 14;
+            int Pages = (int)Math.Ceiling(Length / Fourteen);
+            int Index = 0;
+            if (Page > 0)
+            {
+                Index = (Page * 14);
+            }
+            Console.Clear();
+            Console.WriteLine("Use which item? (Use A-F for 10-16) \n");
+            for (int i = Index; i < Owned.Count; i++)
+            {
+                Items.TryGetValue(Owned[i], out var Consume);
+                if (i % 14 != 0)
+                {
+                    Console.WriteLine($"{(i % 14) + 1}. {Consume.Name}: {Data.saveData.Items[Consume.Id]}");
+                }
+                else
+                {
+                    Console.ReadKey(true);
+                }
+            }
+            Console.ReadKey(true);
         }
         public static void Check(EnemyData enemy)
         {

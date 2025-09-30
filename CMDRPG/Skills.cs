@@ -72,7 +72,7 @@ namespace CMDRPG
             var Pwnage = rnd.Next(1, 100001);
             if (Pwnage == 23478)
             {
-                Data.saveData.Items[2147000000] += 1;
+                Data.saveData.Items[2147483647] += 1;
             }
         }
     }

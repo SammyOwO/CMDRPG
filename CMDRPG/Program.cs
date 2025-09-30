@@ -59,12 +59,12 @@ public class Game
         { ConsoleKey.I, 88 },
         { ConsoleKey.End, 99 }
     };
-    public static int[] Consumable = [];
+    public static List<int> Consumable = new();
     public static void DictAdd()
     {
         EnemyData[] enemies = {
                 new EnemyData(0, "Dummy", 1, 0, [1,1,1,1,1,1,1,1,1,1,1])
-            };
+        };
         foreach (EnemyData enemy in enemies)
         {
             Enemies.Add(enemy.Id, enemy);
@@ -78,9 +78,8 @@ public class Game
                 new ItemData(51,"Ore 1","The first ore used for crafting simple metal items.",[],0,[],[]),
                 new ItemData(76,"Ore 1 Bar","An ingot form of the first ore",[],0,[],[]),
                 new ItemData(101,"Oak Helmet","A basic helmet whittled from Oak Wood.",[1,0,0,0,1],1,[0,0,0,5],[0,0,0,0]),
-                new ItemData(2147000000,"Crasher","Get Fucked",[],0,[],[])
-
-            };
+                new ItemData(2147483647,"Crasher","Get Fucked",[],0,[],[])
+        };
         foreach (ItemData item in items)
         {
             Items.Add(item.Id, item);
