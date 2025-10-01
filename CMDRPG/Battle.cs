@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Reflection.Metadata.Ecma335;
+using System.Text;
 using System.Xml;
 using static Game;
 
@@ -138,6 +139,55 @@ namespace CMDRPG
                 }
             }
             Console.ReadKey(true);
+        }
+        public static void ItemSelect(int[] Owned, int Index)
+        {
+            while (true)
+            {
+                var choice = Console.ReadKey(true);
+                var option = Data.MenuCheck(choice.Key);
+                switch (option)
+                {
+                    case 0:
+                        Menu.Canceled();
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        break;
+                    case 5:
+                        break;
+                    case 6:
+                        break;
+                    case 7:
+                        break;
+                    case 8:
+                        break;
+                    case 9:
+                        break;
+                    case 10:
+                        break;
+                    case 11:
+                        break;
+                    case 12:
+                        break;
+                    case 13:
+                        break;
+                    case 14:
+                        break;
+                    case 15:
+                        break;
+                    case 16:
+                        break;
+                    default:
+                        Menu.Invalid(choice);
+                        continue;
+                }
+            }
         }
         public static void Check(EnemyData enemy)
         {
