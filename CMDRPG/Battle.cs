@@ -129,15 +129,20 @@ namespace CMDRPG
                 {
                     Console.WriteLine($"{(i % 14) + 1}. {Consume.Name}: {Data.saveData.Items[Consume.Id]}");
                 }
-                else
-                {
-                    Console.ReadKey(true);
-                }
+            }
+            if (Page > 0)
+            {
+                Console.WriteLine("15. Previous Page");
+            }
+            if (Page < Pages)
+            {
+                Console.WriteLine("16. Next Page");
             }
             Console.ReadKey(true);
         }
         public static void ItemSelect(int[] Owned, int Page, int Pages)
         {
+            int Length = Owned.Length;
             int Index = Page * 14
             while (true)
             {
@@ -149,50 +154,158 @@ namespace CMDRPG
                         Menu.Canceled();
                         break;
                     case 1:
-                        if (Index % 14 > Owned.Length % 14)
+                        if (!ItemOption(option, Length))
                         {
                             Menu.Invalid(choice);
                             continue;
                         }
                         else
                         {
-                            Data.ConsumeItem(Owned[Index])
+                            Data.ConsumeItem(Owned[Index]);
                         }
                         break;
                     case 2:
-                        if (Index % 14 > Owned.Length % 14)
+                        if (!ItemOption(option, Length))
                         {
                             Menu.Invalid(choice);
                             continue;
                         }
                         else
                         {
-                            Data.ConsumeItem(Owned[Index])
+                            Data.ConsumeItem(Owned[Index + 1]);
                         }
                         break;
                     case 3:
+                        if (!ItemOption(option, Length))
+                        {
+                            Menu.Invalid(choice);
+                            continue;
+                        }
+                        else
+                        {
+                            Data.ConsumeItem(Owned[Index + 2]);
+                        }
                         break;
                     case 4:
+                        if (!ItemOption(option, Length))
+                        {
+                            Menu.Invalid(choice);
+                            continue;
+                        }
+                        else
+                        {
+                            Data.ConsumeItem(Owned[Index + 3]);
+                        }
                         break;
                     case 5:
+                        if (!ItemOption(option, Length))
+                        {
+                            Menu.Invalid(choice);
+                            continue;
+                        }
+                        else
+                        {
+                            Data.ConsumeItem(Owned[Index + 4]);
+                        }
                         break;
                     case 6:
+                        if (!ItemOption(option, Length))
+                        {
+                            Menu.Invalid(choice);
+                            continue;
+                        }
+                        else
+                        {
+                            Data.ConsumeItem(Owned[Index + 5]);
+                        }
                         break;
                     case 7:
+                        if (!ItemOption(option, Length))
+                        {
+                            Menu.Invalid(choice);
+                            continue;
+                        }
+                        else
+                        {
+                            Data.ConsumeItem(Owned[Index + 6]);
+                        }
                         break;
                     case 8:
+                        if (!ItemOption(option, Length))
+                        {
+                            Menu.Invalid(choice);
+                            continue;
+                        }
+                        else
+                        {
+                            Data.ConsumeItem(Owned[Index + 7]);
+                        }
                         break;
                     case 9:
+                        if (!ItemOption(option, Length))
+                        {
+                            Menu.Invalid(choice);
+                            continue;
+                        }
+                        else
+                        {
+                            Data.ConsumeItem(Owned[Index + 8]);
+                        }
                         break;
                     case 10:
+                        if (!ItemOption(option, Length))
+                        {
+                            Menu.Invalid(choice);
+                            continue;
+                        }
+                        else
+                        {
+                            Data.ConsumeItem(Owned[Index + 9]);
+                        }
                         break;
                     case 11:
+                        if (!ItemOption(option, Length))
+                        {
+                            Menu.Invalid(choice);
+                            continue;
+                        }
+                        else
+                        {
+                            Data.ConsumeItem(Owned[Index + 10]);
+                        }
                         break;
                     case 12:
+                        if (!ItemOption(option, Length))
+                        {
+                            Menu.Invalid(choice);
+                            continue;
+                        }
+                        else
+                        {
+                            Data.ConsumeItem(Owned[Index + 11]);
+                        }
                         break;
                     case 13:
+                        if (!ItemOption(option, Length))
+                        {
+                            Menu.Invalid(choice);
+                            continue;
+                        }
+                        else
+                        {
+                            Data.ConsumeItem(Owned[Index + 12]);
+                        }
                         break;
                     case 14:
+                        if (!ItemOption(option, Length))
+                        {
+                            Menu.Invalid(choice);
+                            continue;
+                        }
+                        else
+                        {
+                            Data.ConsumeItem(Owned[Index + 13]);
+                        }
                         break;
                     case 15:
                         if (Page <= 0)
@@ -220,6 +333,22 @@ namespace CMDRPG
                         Menu.Invalid(choice);
                         continue;
                 }
+            }
+        }
+        public static bool ItemOption(int Case, int Length)
+        {
+            int x = 1
+            if (Length % 14 == 0 && Length != 0)
+            {
+                x = 14
+            }
+            if (Case <= (Length % 14) + x)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
         public static void Check(EnemyData enemy)

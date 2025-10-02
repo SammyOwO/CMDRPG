@@ -88,6 +88,16 @@ namespace CMDRPG
         {
             Items.TryGetValue(Id, out var Item);
         }
+        public static void Modifiers()
+        {
+            //
+            //Possibly gonna use enums, modifiers for stats. 3 types I want for now:
+            //
+            //Battle modifiers that last until the end of a fight
+            //Skill modifiers that last x actions
+            //Instant boosts to stats. HP heal potions, Mana restore potions, Terraria heart crystal type items.
+            //
+        }
     }
     public class SaveFile
     {
