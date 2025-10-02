@@ -84,6 +84,10 @@ namespace CMDRPG
             }
             return -1;
         }
+        public static void ConsumeItem(int Id)
+        {
+            Items.TryGetValue(Id, out var Item);
+        }
     }
     public class SaveFile
     {

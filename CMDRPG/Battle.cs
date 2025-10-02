@@ -116,14 +116,10 @@ namespace CMDRPG
                 {
                     Owned.Add(Consumable[i]);
                 }
-            decimal Length = Convert.ToDecimal(Owned.Count);
+            decimal Length = Convert.ToDecimal(Owned.Count) - 1;
             decimal Fourteen = 14;
             int Pages = (int)Math.Ceiling(Length / Fourteen);
-            int Index = 0;
-            if (Page > 0)
-            {
-                Index = (Page * 14);
-            }
+            int Index = Page * 14;
             Console.Clear();
             Console.WriteLine("Use which item? (Use A-F for 10-16) \n");
             for (int i = Index; i < Owned.Count; i++)
@@ -140,8 +136,9 @@ namespace CMDRPG
             }
             Console.ReadKey(true);
         }
-        public static void ItemSelect(int[] Owned, int Index)
+        public static void ItemSelect(int[] Owned, int Page, int Pages)
         {
+            int Index = Page * 14
             while (true)
             {
                 var choice = Console.ReadKey(true);
@@ -152,8 +149,26 @@ namespace CMDRPG
                         Menu.Canceled();
                         break;
                     case 1:
+                        if (Index % 14 > Owned.Length % 14)
+                        {
+                            Menu.Invalid(choice);
+                            continue;
+                        }
+                        else
+                        {
+                            Data.ConsumeItem(Owned[Index])
+                        }
                         break;
                     case 2:
+                        if (Index % 14 > Owned.Length % 14)
+                        {
+                            Menu.Invalid(choice);
+                            continue;
+                        }
+                        else
+                        {
+                            Data.ConsumeItem(Owned[Index])
+                        }
                         break;
                     case 3:
                         break;
@@ -180,8 +195,26 @@ namespace CMDRPG
                     case 14:
                         break;
                     case 15:
+                        if (Page <= 0)
+                        {
+                            Menu.Invalid(choice);
+                            continue;
+                        }
+                        else
+                        {
+                            Item(Page - 1);
+                        }
                         break;
                     case 16:
+                        if (Page == Pages)
+                        {
+                            Menu.Invalid(choice);
+                            continue;
+                        }
+                        else
+                        {
+                            Item(Page + 1);
+                        }
                         break;
                     default:
                         Menu.Invalid(choice);
