@@ -91,7 +91,7 @@ namespace CMDRPG
         public static void Selected(ItemData item)
         {
             Console.Clear();
-            if (item.ArmourType > 0)
+            if (item.ItemType > 0)
             {
                 while (true)
                 {

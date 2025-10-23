@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Numerics;
+using System.Text.Json;
 using static Game;
 
 namespace CMDRPG
@@ -87,6 +88,7 @@ namespace CMDRPG
         public static void ConsumeItem(int Id)
         {
             Items.TryGetValue(Id, out var Item);
+            var Modifiers = Item.Modifiers;
         }
         public static void Modifiers()
         {
@@ -145,8 +147,9 @@ namespace CMDRPG
         public int[] Stats;
         //0 Flat Increase, 1 Multiplicitive Increase, 2 Percentage Increase
         public int[] MultPercent;
+        public int[] Modifiers;
 
-        public ItemData(int Id, string Name, string Description, int ItemType, int[] Levels, int[] Stats, int[] MultPercent)
+        public ItemData(int Id, string Name, string Description, int ItemType, int[] Levels, int[] Stats, int[] MultPercent, int[] Modifiers)
         {
             this.Id = Id;
             this.Name = Name;
@@ -155,6 +158,7 @@ namespace CMDRPG
             this.Levels = Levels;
             this.Stats = Stats;
             this.MultPercent = MultPercent;
+            this.Modifiers = Modifiers;
         }
     }
     public class Attack
@@ -177,6 +181,26 @@ namespace CMDRPG
             this.Damage = Damage;
             this.Pierce = Pierce;
             this.Accuracy = Accuracy;
+        }
+    }
+    public class Modifier
+    {
+        public int Id;
+        public string Name;
+        //0 perma, 1 restore, 2 x actions left, 3 until end of battle, 4 While equipped
+        public int DurationType;
+        public int TurnDuration;
+        public int[] Stats;
+        public int[] MultPercent;
+
+        public Modifier(int Id, string Name, int DurationType, int TurnDuration, int[] Stats, int[] MultPercent)
+        {
+            this.Id = Id;
+            this.Name = Name;
+            this.DurationType = DurationType;
+            this.TurnDuration = TurnDuration;
+            this.Stats = Stats;
+            this.MultPercent = MultPercent;
         }
     }
 }

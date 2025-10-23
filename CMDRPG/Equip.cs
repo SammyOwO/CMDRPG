@@ -8,11 +8,11 @@ namespace CMDRPG
         {
             Console.Clear();
             var Id = Item.Id;
-            var Slot = Item.ArmourType - 1;
+            var Slot = Item.ItemType - 1;
             bool isEquipped = false;
             for (int i = 0; i < Data.saveData.Items.Length; i++)
             {
-                if (Data.saveData.Items[i] == Id && Item.ArmourType != 10 && Item.ArmourType != 11)
+                if (Data.saveData.Items[i] == Id && Item.ItemType != 10 && Item.ItemType != 11)
                 {
                     isEquipped = true;
                 }
@@ -62,8 +62,8 @@ namespace CMDRPG
         }
         public static void Init(int Type, ItemData Item)
         {
-            var Slot = Item.ArmourType - 1;
-            var Ring = Item.ArmourType;
+            var Slot = Item.ItemType - 1;
+            var Ring = Item.ItemType;
             Console.Clear();
             switch (Type)
             {
@@ -192,7 +192,7 @@ namespace CMDRPG
             bool Many = false;
             int Count = 0;
             var Id = Item.Id;
-            var Type = Item.ArmourType - 1;
+            var Type = Item.ItemType - 1;
             for (int i = 0; i < Data.saveData.Items.Length; i++)
             {
                 if (Data.saveData.Items[i] == Id)

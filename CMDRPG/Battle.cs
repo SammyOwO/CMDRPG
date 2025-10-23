@@ -121,7 +121,7 @@ namespace CMDRPG
             int Pages = (int)Math.Ceiling(Length / Fourteen);
             int Index = Page * 14;
             Console.Clear();
-            Console.WriteLine("Use which item? (Use A-F for 10-16) \n");
+            Console.WriteLine("Use which item? (Use A-E for 10-16) \n");
             for (int i = Index; i < Owned.Count; i++)
             {
                 Items.TryGetValue(Owned[i], out var Consume);
@@ -143,7 +143,7 @@ namespace CMDRPG
         public static void ItemSelect(int[] Owned, int Page, int Pages)
         {
             int Length = Owned.Length;
-            int Index = Page * 14
+            int Index = Page * 14;
             while (true)
             {
                 var choice = Console.ReadKey(true);
@@ -337,10 +337,10 @@ namespace CMDRPG
         }
         public static bool ItemOption(int Case, int Length)
         {
-            int x = 1
+            int x = 1;
             if (Length % 14 == 0 && Length != 0)
             {
-                x = 14
+                x = 14;
             }
             if (Case <= (Length % 14) + x)
             {
