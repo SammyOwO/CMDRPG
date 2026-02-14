@@ -104,6 +104,8 @@ namespace CMDRPG
     }
     public class SaveFile
     {
+        //0 = RPG, 1 = Survivalcraft, space for more
+        public int Gamemode { get; set; } = 0;
         public string Name { get; set; } = "";
         //HP, Strength, Damage, Physical Defense, Magic Defense, True Defense, Mana, Crit Chance, Crit Damage, HP Regen, Mana Regen
         public int[] Stats { get; set; } = [100, 25, 0, 0, 0, 50, 20, 150, 0, 5];

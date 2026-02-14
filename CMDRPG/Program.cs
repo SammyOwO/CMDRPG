@@ -104,7 +104,7 @@ public class Game
         Console.WriteLine("Hewwo :3 \nPress any key to continue ^w^ \n");
         Console.ReadKey(true);
         Console.Clear();
-        StartUp();
+        RPGStartUp();
     }
     public static void UnequipAll()
     {
@@ -113,7 +113,7 @@ public class Game
             Data.saveData.Items[i] = -1;
         }
     }
-    public static void StartUp()
+    public static void RPGStartUp()
     {
         while (true)
         {
