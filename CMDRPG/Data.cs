@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.Data.SqlTypes;
+using System.Numerics;
 using System.Text.Json;
 using static Game;
 
@@ -109,6 +110,8 @@ namespace CMDRPG
         //Combat, Mining, Farming, Fishing, Foraging, Woodworking, Enchanting and Alchemy
         public int[] Levels { get; set; } = [1, 1, 1, 1, 1, 1, 1, 1];
         public int[] Exp { get; set; } = [0, 0, 0, 0, 0, 0, 0, 0];
+        //Max value of 179769313486231590772930519078902473361797697894230657273430081157732675805500963132708477322407536021120113879871393357658789768814416622492847430639474124377767893424865485276302219601246094119453082952085005768838150682342462881473913110540827237163350510684586298239947245938479716304835356329624224137215  (UInt1024)
+        public BigInteger Money { get; set; } = 0;
         //Quantities of which item IDs the player has.
         public List<Int128> Inventory { get; set; } = new();
         //Equipped Items
@@ -141,6 +144,7 @@ namespace CMDRPG
         public string Description;
         //0 General, 1 Head, 2 Neck, 3 Chest, 4 Belt, 5 Pants, 6 Boots, 7 Gloves, 8 Tool/Weapon, 9 Special, 10 Bracelet, 11 Ring, 12 Consumable
         public int ItemType;
+        
         ////Combat, Mining, Farming, Fishing, Foraging, Woodworking, Enchanting and Alchemy
         public int[] Levels;
         //HP, Strength, Damage, Physical Defense, Magic Defense, True Defense, Mana, Crit Chance, Crit Damage, HP Regen, Mana Regen
