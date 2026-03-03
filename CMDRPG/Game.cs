@@ -2,13 +2,14 @@
 
 public class Game
 {
-    public static string[] options;
-    public static int MenuID = 0;
-    public static Random rnd = new Random();
-    public static Dictionary<int, EnemyData> Enemies = new Dictionary<int, EnemyData>();
-    public static Dictionary<int, ItemData> Items = new Dictionary<int, ItemData>();
-    public static Dictionary<int, Attack> Attacks = new Dictionary<int, Attack>();
-    public static Dictionary<int, string> slotName = new Dictionary<int, string>()
+    internal static SaveFile saveData = new();
+    internal static string[] options;
+    internal static int MenuID = 0;
+    internal static Random rnd = new();
+    internal static Dictionary<int, EnemyData> Enemies = new();
+    internal static Dictionary<int, ItemData> Items = new();
+    internal static Dictionary<int, Attack> Attacks = new();
+    internal static Dictionary<int, string> slotName = new()
     {
         { 0, "N/A" },
         { 1, "Head" },
@@ -27,7 +28,7 @@ public class Game
         { 14, "Ring 3" },
         { 15, "Ring 4" },
     };
-    public static Dictionary<ConsoleKey, int> menuOption = new Dictionary<ConsoleKey, int>()
+    internal static Dictionary<ConsoleKey, int> menuOption = new()
     {
         { ConsoleKey.Escape, 0 },
         { ConsoleKey.D0, 0 },
@@ -56,28 +57,29 @@ public class Game
         { ConsoleKey.D, 13 },
         { ConsoleKey.E, 14 },
         { ConsoleKey.F, 15 },
+        { ConsoleKey.G, 16 },
         { ConsoleKey.I, 88 },
         { ConsoleKey.End, 99 }
     };
-    public static List<int> Consumable = new();
+    internal static List<int> Consumable = new();
     public static void DictAdd()
     {
         EnemyData[] enemies = {
-                new EnemyData(0, "Dummy", 1, 0, [1,1,1,1,1,1,1,1,1,1,1])
+                new(0, "Dummy", 1, 0, [1,1,1,1,1,1,1,1,1,1,1])
         };
         foreach (EnemyData enemy in enemies)
         {
             Enemies.Add(enemy.Id, enemy);
         }
         ItemData[] items = {
-                new ItemData(0,"Dummy's Defense","+1,000,000,000 HP",1,[1000000000],[1000000000],[0],[]),
-                new ItemData(1,"Oak Wood","A simple material for crafting.",0,[],[],[],[]),
-                new ItemData(11,"Oak Stick","A simple stick from the first available wood in the game.",8,[1,0,0,0,1],[0,0,1],[0,0,0],[]),
-                new ItemData(21,"Stone 1","A simple material for crafting.",0,[],[],[],[]),
-                new ItemData(51,"Ore 1","The first ore used for crafting simple metal items.",0,[],[],[],[]),
-                new ItemData(76,"Ore 1 Bar","An ingot form of the first ore",0,[],[],[],[]),
-                new ItemData(101,"Oak Helmet","A basic helmet whittled from Oak Wood.",1,[1,0,0,0,1],[0,0,0,5],[0,0,0,0],[]),
-                new ItemData(2147483647,"Crasher","Get Fucked",0,[],[],[],[])
+                new(0,"Dummy's Defense","+1,000,000,000 HP",1,[1000000000],[1000000000],[0],[]),
+                new(1,"Oak Wood","A simple material for crafting.",0,[],[],[],[]),
+                new(11,"Oak Stick","A simple stick from the first available wood in the game.",8,[1,0,0,0,1],[0,0,1],[0,0,0],[]),
+                new(21,"Stone 1","A simple material for crafting.",0,[],[],[],[]),
+                new(51,"Ore 1","The first ore used for crafting simple metal items.",0,[],[],[],[]),
+                new(76,"Ore 1 Bar","An ingot form of the first ore",0,[],[],[],[]),
+                new(101,"Oak Helmet","A basic helmet whittled from Oak Wood.",1,[1,0,0,0,1],[0,0,0,5],[0,0,0,0],[]),
+                new(2147483647,"Crasher","Get Fucked",0,[],[],[],[])
         };
         foreach (ItemData item in items)
         {
@@ -88,8 +90,8 @@ public class Game
             }
         }
         Attack[] attacks = {
-                new Attack(0,"Dummy's Laziness",0,0,0,100),
-                new Attack(1,"Whack",0,1000000,-1,100)
+                new(0,"Dummy's Laziness",0,0,0,100),
+                new(1,"Whack",0,1000000,-1,100)
         };
         foreach (Attack attack in attacks)
         {
@@ -104,16 +106,16 @@ public class Game
         Console.WriteLine("Hewwo :3 \nPress any key to continue ^w^ \n");
         Console.ReadKey(true);
         Console.Clear();
-        RPGStartUp();
+        StartUp();
     }
     public static void UnequipAll()
     {
-        for (int i = 0; i < Data.saveData.Items.Length; i++)
+        for (int i = 0; i < saveData.Items.Length; i++)
         {
-            Data.saveData.Items[i] = -1;
+            saveData.Items[i] = -1;
         }
     }
-    public static void RPGStartUp()
+    public static void StartUp()
     {
         while (true)
         {
@@ -124,7 +126,7 @@ public class Game
             {
                 case 1:
                     Console.Clear();
-                    NewPlayer(); break;
+                    NewPlr(); break;
                 case 2:
                     Console.Clear();
                     Data.Load(); break;
@@ -140,7 +142,36 @@ public class Game
             break;
         }
     }
-    public static void NewPlayer()
+    public static void NewPlr()
+    {
+        options =
+            [
+            "RPG",
+            "Survival (Warning: There is no tutorial for this mode! You WILL be on your own.)"
+            ];
+        while (true)
+        {
+            Console.WriteLine("Select Gamemode:");
+            MenuList.Options(options);
+            var action = Console.ReadKey(true);
+            var option = Data.MenuCheck(action.Key);
+            switch (option)
+            {
+                case 1:
+                    saveData.Gamemode = 0;
+                    Console.Clear();
+                    NewRPG(); break;
+                case 2:
+                    saveData.Gamemode = 1;
+                    Console.Clear();
+                    NewSurv(); break;
+                default:
+                    Menu.Invalid(action); continue;
+            } 
+            break;
+        }
+    }
+    public static void NewRPG()
     {
         UnequipAll();
         Console.WriteLine("Welcome 2 the game, hehe :3 \nYour goal is to just get better stuff! \nPress any key! \n");
@@ -149,8 +180,8 @@ public class Game
         Console.WriteLine("First, let's get started by making a name for yourself! \nType your name below to continue: \n");
         var name = Console.ReadLine();
         Console.Clear();
-        Data.saveData.Name = name;
-        Console.Write("Hi " + Data.saveData.Name + "! \nWelcome to CMD RPG \nPress any key! \n \n");
+        saveData.Name = name;
+        Console.Write("Hi " + saveData.Name + "! \nWelcome to CMD RPG \nPress any key! \n \n");
         Console.ReadKey();
         Console.Clear();
         Console.WriteLine("In this game you have 7 main stats. HP or Hit/health Points, Strength which determines your damage, Defense for how much incoming damage you block and Mana for magic weapons. \nThen there is Crit Chance for how likely you are to score a critical hit and Crit Damage for how much more damage that hit does. \nLast but not least there is HP regen for how much HP you get back per turn. \n");
@@ -164,11 +195,15 @@ public class Game
         Console.ReadKey();
         Tutorial();
     }
+    public static void NewSurv()
+    {
+        Console.WriteLine("test");
+    }
     public static void Welcome()
     {
-        Console.WriteLine($"Welcome back {Data.saveData.Name}! \nPress any key to continue UwU \n");
+        Console.WriteLine($"Welcome back {saveData.Name}! \nPress any key to continue UwU \n");
         Console.ReadKey(true);
-        bool newPlayer = Data.saveData.New;
+        bool newPlayer = saveData.New;
         if (newPlayer)
         {
             Console.Clear();
@@ -264,7 +299,7 @@ public class Game
                                                 {
                                                     case 0:
                                                         Console.Clear();
-                                                        if (Data.saveData.Inventory[1] > 0)
+                                                        if (saveData.Inventory[1] > 0)
                                                         {
                                                             while (true)
                                                             {
@@ -285,7 +320,7 @@ public class Game
                                                                         while (true)
                                                                         {
                                                                             Console.WriteLine("Sitting in front of the workbench you think of what to craft:");
-                                                                            Console.WriteLine("Oak Wood: {0}, Oak Sticks: {1}, Stone: {2}, Metal 1: {3} \n", Data.saveData.Inventory[1], Data.saveData.Inventory[11], Data.saveData.Inventory[21], Data.saveData.Inventory[61]);
+                                                                            Console.WriteLine("Oak Wood: {0}, Oak Sticks: {1}, Stone: {2}, Metal 1: {3} \n", saveData.Inventory[1], saveData.Inventory[11], saveData.Inventory[21], saveData.Inventory[61]);
                                                                             Console.WriteLine("1. Oak Sticks (Oak Wood: 1, Yield: 5) \nNo other options until after the tutorial. \n \n0. Go back \n");
                                                                             var craft = Console.ReadKey(true);
                                                                             var option5 = Data.MenuCheck(craft.Key);
@@ -293,9 +328,9 @@ public class Game
                                                                             {
                                                                                 case 1:
                                                                                     Console.Clear();
-                                                                                    if (Data.saveData.Inventory[1] != 0)
+                                                                                    if (saveData.Inventory[1] != 0)
                                                                                     {
-                                                                                        Data.saveData.Inventory[1] -= 1;
+                                                                                        saveData.Inventory[1] -= 1;
                                                                                         Task.Run(() => Skills.Skill(5, 5000, 11, 5, 5, 10, 10)).Wait();
                                                                                     }
                                                                                     else
@@ -305,11 +340,11 @@ public class Game
                                                                                     continue;
                                                                                 case 0:
                                                                                     Console.Clear();
-                                                                                    if (Data.saveData.Inventory[11] >= 5)
+                                                                                    if (saveData.Inventory[11] >= 5)
                                                                                     {
                                                                                         Console.WriteLine("Great Job, you finished the tutorial! \nNow time to play the real game, good luck and have fun.");
                                                                                         Console.WriteLine("Press any key to go to the main menu! \n");
-                                                                                        Data.saveData.New = false;
+                                                                                        saveData.New = false;
                                                                                         Data.Save();
                                                                                         Console.ReadKey(true);
                                                                                         Console.Clear();

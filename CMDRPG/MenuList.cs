@@ -6,12 +6,12 @@ namespace CMDRPG
     {
         public static void Inv()
         {
-            for (int i = 0; i < Data.saveData.Inventory.Count; i++)
+            for (int i = 0; i < saveData.Inventory.Count; i++)
             {
-                if (Data.saveData.Inventory[i] <= 0) continue;
+                if (saveData.Inventory[i] <= 0) continue;
                 if (Items.TryGetValue(i, out var item))
                 {
-                    Console.WriteLine("{0}: {1}", item.Name, Data.saveData.Inventory[i]);
+                    Console.WriteLine("{0}: {1}", item.Name, saveData.Inventory[i]);
                 }
             }
             Console.WriteLine();
@@ -19,7 +19,7 @@ namespace CMDRPG
         public static void Equips(bool All, bool Ring)
         {
             int x = 0;
-            int y = Data.saveData.Items.Length;
+            int y = saveData.Items.Length;
             if (All == false && Ring == false)
             {
                 x = 10;
@@ -32,9 +32,9 @@ namespace CMDRPG
             }
             for (int i = x; i < y; i++)
             {
-                if (Data.saveData.Items[i] != 0)
+                if (saveData.Items[i] != 0)
                 {
-                    if (Items.TryGetValue(Data.saveData.Items[i], out var item))
+                    if (Items.TryGetValue(saveData.Items[i], out var item))
                     {
                         if (slotName.TryGetValue(i + 1, out var slot))
                         {

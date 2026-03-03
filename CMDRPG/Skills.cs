@@ -8,7 +8,7 @@ namespace CMDRPG
         {
             Items.TryGetValue(ID, out var itemName);
             var Item = itemName.Name;
-            var Time = Duration - ((Duration * Data.saveData.Levels[Skill]) / 100) + (Duration / 100);
+            var Time = Duration - ((Duration * saveData.Levels[Skill]) / 100) + (Duration / 100);
             switch (Skill)
             {
                 case 1:
@@ -36,15 +36,15 @@ namespace CMDRPG
             await Task.Delay(Time);
             if (Items.ContainsKey(ID))
             {
-                Data.saveData.Inventory[ID] += rnd.Next(Min, Max + 1);
+                saveData.Inventory[ID] += rnd.Next(Min, Max + 1);
             }
             ExpAward(Skill, EMin, EMax);
             Console.Clear();
-            Console.WriteLine("Done! You now have {0} {1}. \n", Data.saveData.Inventory[ID], Item);
+            Console.WriteLine("Done! You now have {0} {1}. \n", saveData.Inventory[ID], Item);
         }
         public static void ExpAward(int Skill, int Min, int Max)
         {
-            Data.saveData.Exp[Skill] += rnd.Next(Min, Max + 1);
+            saveData.Exp[Skill] += rnd.Next(Min, Max + 1);
         }
         public static void BattleReward(int Id, int Level)
         {
@@ -72,7 +72,7 @@ namespace CMDRPG
             var Pwnage = rnd.Next(1, 100001);
             if (Pwnage == 23478)
             {
-                Data.saveData.Items[2147483647] += 1;
+                saveData.Items[2147483647] += 1;
             }
         }
     }

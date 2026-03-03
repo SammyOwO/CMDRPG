@@ -1,7 +1,4 @@
-﻿using System.Reflection.Metadata.Ecma335;
-using System.Text;
-using System.Xml;
-using static Game;
+﻿using static Game;
 
 namespace CMDRPG
 {
@@ -65,7 +62,7 @@ namespace CMDRPG
             var CD = AdjStat[8];
             var Regen = AdjStat[9];
             var MRegen = AdjStat[10];
-            EnemyData enemyOut = new EnemyData(enemyData.Id, enemyData.Name, Level, enemyData.Type, [HP, Str, Dam, PDef, MDef, TDef, Mana, CC, CD, Regen, MRegen]);
+            EnemyData enemyOut = new(enemyData.Id, enemyData.Name, Level, enemyData.Type, [HP, Str, Dam, PDef, MDef, TDef, Mana, CC, CD, Regen, MRegen]);
             if (enemyOut != null)
             {
                 return enemyOut;
@@ -112,7 +109,7 @@ namespace CMDRPG
         {
             List<int> Owned = new();
             for (int i = 0; i < Consumable.Count; i++)
-                if (Data.saveData.Items[Consumable[i]] > 0)
+                if (saveData.Items[Consumable[i]] > 0)
                 {
                     Owned.Add(Consumable[i]);
                 }
@@ -121,13 +118,13 @@ namespace CMDRPG
             int Pages = (int)Math.Ceiling(Length / Fourteen);
             int Index = Page * 14;
             Console.Clear();
-            Console.WriteLine("Use which item? (Use A-E for 10-16) \n");
+            Console.WriteLine("Use which item? (Use A-G for 10-16) \n");
             for (int i = Index; i < Owned.Count; i++)
             {
                 Items.TryGetValue(Owned[i], out var Consume);
                 if (i % 14 != 0)
                 {
-                    Console.WriteLine($"{(i % 14) + 1}. {Consume.Name}: {Data.saveData.Items[Consume.Id]}");
+                    Console.WriteLine($"{(i % 14) + 1}. {Consume.Name}: {saveData.Items[Consume.Id]}");
                 }
             }
             if (Page > 0)
@@ -357,7 +354,7 @@ namespace CMDRPG
         }
         public static void Flee(int EType, int ELevel)
         {
-            int PLevel = Data.saveData.Levels[0];
+            int PLevel = saveData.Levels[0];
             int LevelDelta = (PLevel * 6) - ELevel;
             int Min = 0 + (LevelDelta / 10);
             int Max = 25 + LevelDelta - (EType * 4);

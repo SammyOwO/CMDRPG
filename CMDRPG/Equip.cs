@@ -10,9 +10,9 @@ namespace CMDRPG
             var Id = Item.Id;
             var Slot = Item.ItemType - 1;
             bool isEquipped = false;
-            for (int i = 0; i < Data.saveData.Items.Length; i++)
+            for (int i = 0; i < saveData.Items.Length; i++)
             {
-                if (Data.saveData.Items[i] == Id && Item.ItemType != 10 && Item.ItemType != 11)
+                if (saveData.Items[i] == Id && Item.ItemType != 10 && Item.ItemType != 11)
                 {
                     isEquipped = true;
                 }
@@ -68,14 +68,14 @@ namespace CMDRPG
             switch (Type)
             {
                 case 0:
-                    Data.saveData.Items[Slot] = Item.Id;
+                    saveData.Items[Slot] = Item.Id;
                     break;
                 case 1:
-                    if (Data.saveData.Items[Slot] != 0)
+                    if (saveData.Items[Slot] != 0)
                     {
-                        if (Data.saveData.Items[Slot + 1] == 0)
+                        if (saveData.Items[Slot + 1] == 0)
                         {
-                            Data.saveData.Items[Slot + 1] = Item.Id;
+                            saveData.Items[Slot + 1] = Item.Id;
                         }
                         else
                         {
@@ -84,20 +84,20 @@ namespace CMDRPG
                     }
                     else
                     {
-                        Data.saveData.Items[Slot] = Item.Id;
+                        saveData.Items[Slot] = Item.Id;
                     }
 
                     break;
                 case 2:
-                    if (Data.saveData.Items[Ring] != 0)
+                    if (saveData.Items[Ring] != 0)
                     {
-                        if (Data.saveData.Items[Ring + 1] != 0)
+                        if (saveData.Items[Ring + 1] != 0)
                         {
-                            if (Data.saveData.Items[Ring + 2] != 0)
+                            if (saveData.Items[Ring + 2] != 0)
                             {
-                                if (Data.saveData.Items[Ring + 3] == 0)
+                                if (saveData.Items[Ring + 3] == 0)
                                 {
-                                    Data.saveData.Items[Ring + 3] = Item.Id;
+                                    saveData.Items[Ring + 3] = Item.Id;
                                 }
                                 else
                                 {
@@ -106,17 +106,17 @@ namespace CMDRPG
                             }
                             else
                             {
-                                Data.saveData.Items[Ring + 2] = Item.Id;
+                                saveData.Items[Ring + 2] = Item.Id;
                             }
                         }
                         else
                         {
-                            Data.saveData.Items[Ring + 1] = Item.Id;
+                            saveData.Items[Ring + 1] = Item.Id;
                         }
                     }
                     else
                     {
-                        Data.saveData.Items[Ring] = Item.Id;
+                        saveData.Items[Ring] = Item.Id;
                     }
                     break;
             }
@@ -140,10 +140,10 @@ namespace CMDRPG
                             Menu.Canceled();
                             break;
                         case 1:
-                            Data.saveData.Items[9] = id;
+                            saveData.Items[9] = id;
                             break;
                         case 2:
-                            Data.saveData.Items[10] = id;
+                            saveData.Items[10] = id;
                             break;
                         default:
                             Menu.Invalid(slot);
@@ -169,16 +169,16 @@ namespace CMDRPG
                             Menu.Canceled();
                             break;
                         case 1:
-                            Data.saveData.Items[11] = id;
+                            saveData.Items[11] = id;
                             break;
                         case 2:
-                            Data.saveData.Items[12] = id;
+                            saveData.Items[12] = id;
                             break;
                         case 3:
-                            Data.saveData.Items[13] = id;
+                            saveData.Items[13] = id;
                             break;
                         case 4:
-                            Data.saveData.Items[14] = id;
+                            saveData.Items[14] = id;
                             break;
                         default:
                             Menu.Invalid(slot);
@@ -193,9 +193,9 @@ namespace CMDRPG
             int Count = 0;
             var Id = Item.Id;
             var Type = Item.ItemType - 1;
-            for (int i = 0; i < Data.saveData.Items.Length; i++)
+            for (int i = 0; i < saveData.Items.Length; i++)
             {
-                if (Data.saveData.Items[i] == Id)
+                if (saveData.Items[i] == Id)
                 {
                     Count++;
                 }
@@ -207,11 +207,11 @@ namespace CMDRPG
             switch (Type)
             {
                 case < 9:
-                    for (int i = 0; i < Data.saveData.Items.Length; i++)
+                    for (int i = 0; i < saveData.Items.Length; i++)
                     {
-                        if (Data.saveData.Items[i] == Id)
+                        if (saveData.Items[i] == Id)
                         {
-                            Data.saveData.Items[i] = 0;
+                            saveData.Items[i] = 0;
                         }
                     }
                     Console.Clear();
@@ -224,11 +224,11 @@ namespace CMDRPG
                     }
                     else
                     {
-                        for (int i = 0; i < Data.saveData.Items.Length; i++)
+                        for (int i = 0; i < saveData.Items.Length; i++)
                         {
-                            if (Data.saveData.Items[i] == Id)
+                            if (saveData.Items[i] == Id)
                             {
-                                Data.saveData.Items[i] = 0;
+                                saveData.Items[i] = 0;
                             }
                         }
                     }
@@ -249,24 +249,24 @@ namespace CMDRPG
                 switch (option)
                 {
                     case 1:
-                        for (int i = 0; i < Data.saveData.Items.Length; i++)
+                        for (int i = 0; i < saveData.Items.Length; i++)
                         {
-                            if (Data.saveData.Items[i] == Id)
+                            if (saveData.Items[i] == Id)
                             {
-                                Data.saveData.Items[i] = 0;
+                                saveData.Items[i] = 0;
                             }
                         }
                         Console.Clear();
                         Console.WriteLine("You unequipped all of your {0}.", Item.Name);
                         break;
                     case 2:
-                        for (int i = 0; i < Data.saveData.Items.Length; i++)
+                        for (int i = 0; i < saveData.Items.Length; i++)
                         {
                             if (!All)
                             {
-                                if (Data.saveData.Items[i] == Id)
+                                if (saveData.Items[i] == Id)
                                 {
-                                    Data.saveData.Items[i] = 0;
+                                    saveData.Items[i] = 0;
                                     All = true;
                                 }
                             }
@@ -282,7 +282,7 @@ namespace CMDRPG
         public static void AdjStat(ItemData Item, bool Equip)
         {
             var Type = Item.MultPercent;
-            var Stats = Data.saveData.Stats;
+            var Stats = saveData.Stats;
             var itemStats = Item.Stats;
             for (int i = 0; i < Stats.Length; i++)
             {

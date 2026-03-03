@@ -57,14 +57,13 @@ namespace CMDRPG
         }
         public static ItemData InventorySearch(string name)
         {
-            int Id;
-            if (!int.TryParse(name, out Id))
+            if (!int.TryParse(name, out int Id))
             {
                 Id = -1;
             }
-            for (int i = 0; i < Data.saveData.Inventory.Count; i++)
+            for (int i = 0; i < saveData.Inventory.Count; i++)
             {
-                if (Data.saveData.Inventory[i] > 0)
+                if (saveData.Inventory[i] > 0)
                 {
                     if (Items.TryGetValue(i, out var item))
                     {
@@ -79,9 +78,9 @@ namespace CMDRPG
         }
         public static bool IsEquipped(ItemData Item)
         {
-            for (int i = 0; i < Data.saveData.Items.Length; i++)
+            for (int i = 0; i < saveData.Items.Length; i++)
             {
-                if (Data.saveData.Items[i] == Item.Id)
+                if (saveData.Items[i] == Item.Id)
                 {
                     return true;
                 }
@@ -162,15 +161,15 @@ namespace CMDRPG
             Console.WriteLine("Delete how many?: \n");
             string delamounts = Console.ReadLine();
             int.TryParse(delamounts, out int delamount);
-            if (Data.saveData.Inventory[item.Id] - delamount <= 0)
+            if (saveData.Inventory[item.Id] - delamount <= 0)
             {
-                Data.saveData.Inventory[item.Id] = 0;
+                saveData.Inventory[item.Id] = 0;
                 Console.Clear();
                 Console.WriteLine("You deleted all of your {0}! \n", item.Name);
             }
             else
             {
-                Data.saveData.Inventory[item.Id] -= delamount;
+                saveData.Inventory[item.Id] -= delamount;
                 Console.Clear();
                 Console.WriteLine("You deleted {0} of your {1}! \n", delamount, item.Name);
             }
@@ -223,7 +222,7 @@ namespace CMDRPG
         }
         public static void SelectedItem(int slot)
         {
-            if (!Items.TryGetValue(Data.saveData.Items[slot], out var Item))
+            if (!Items.TryGetValue(saveData.Items[slot], out var Item))
             {
                 Console.WriteLine($"Slot {slot} not selected due to it being empty.");
             }
